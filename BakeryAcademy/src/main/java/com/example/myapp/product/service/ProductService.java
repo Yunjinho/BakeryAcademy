@@ -1,5 +1,24 @@
 package com.example.myapp.product.service;
 
-public class ProductService {
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.myapp.product.dao.IProductRepository;
+import com.example.myapp.product.model.Product;
+
+public class ProductService implements IProductService {
+	@Autowired
+	IProductRepository productRepository;
+
+	@Override
+	public List<Product> selectProductListByCategory(int categoryId, int page) {
+		int start = (page - 1) * 10 + 1;
+		return productRepository.getProductListByCategory(categoryId, start, start + 9);
+	}
+
+	@Override
+	public int selectTotalProductCountByCategory(int categoryId) {
+		return productRepository.selectTotalProductCountByCategoryId(categoryId);
+	}
 }

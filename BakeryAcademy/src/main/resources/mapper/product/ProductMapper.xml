@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.example.myapp.product.dao.IProductRepository">
+
+	<select id="getProductListByCategory" parameterType="hashmap"
+		resultType="com.example.myapp.product.model.Product">
+<![CDATA[
+	SELECT
+		product_id,
+		category_id,
+		product_name,
+		product_price,
+		product_content,
+		product_stock,
+		product_status
+	FROM
+		product
+	WHERE
+		category_id=#{categoryId} AND ROWNUM BETWEEN #{start} AND #{end}
+]]>
+	</select>
+
+	<select id="selectTotalProductCountByCategoryId" parameterType="int" resultType="int">
+<![CDATA[
+	SELECT
+		COUNT(category_id)
+	FROM
+		product
+	WHERE
+		category_id=#{categoryId}
+]]>
+	</select>
+
+</mapper>
