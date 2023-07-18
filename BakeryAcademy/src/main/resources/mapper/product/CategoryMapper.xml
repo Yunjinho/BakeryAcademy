@@ -25,7 +25,7 @@
 </select>
 <select id="selectAllCategory" resultType="com.example.myapp.product.model.Category">
 <![CDATA[
-	SELECT category_id AS "categoryId" , category_name AS "categoryName" FROM category ORDER BY category_id
+	SELECT rownum AS "rowNum", category_id AS "categoryId" , category_name AS "categoryName" FROM category ORDER BY category_id
 ]]>
 </select>
 </mapper>

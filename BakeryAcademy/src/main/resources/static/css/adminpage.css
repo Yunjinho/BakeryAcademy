@@ -6,3 +6,15 @@
 .product-infomation-label{
 	margin: 5px 0px; 
 }
+/*카테고리*/
+.table{
+	text-align:center;
+}
+.category-register-button{
+	display: inline-block; 
+	margin: 0 5px;  
+	float: right;
+}
+#categoryName{
+	width:80%;
+}
