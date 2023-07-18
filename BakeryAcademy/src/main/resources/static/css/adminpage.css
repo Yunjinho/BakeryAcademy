@@ -1,0 +1,8 @@
+@charset "UTF-8";
+.product-infomation-box{
+	border: 1px solid black;
+	width:50%;
+}
+.product-infomation-label{
+	margin: 5px 0px; 
+}
