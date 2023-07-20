@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<!-- 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css"> -->
+	
+	
+</head>
+<body>
+ <table class="table table-hover table-bordered">
+		<thead>
+		<tr>
+			<td>[[#{BOARD_ID}]]</td>
+			<td class="pc">[[#{WRITER}]]</td>
+			<td>[[#{SUBJECT}]]</td>
+			<td class="pc">[[#{WRITE_DATE}]]</td>
+			<td class="pc">[[#{READ_COUNT}]]</td>
+		</tr>
+		</thead>
+		<tr th:each="board : ${boardList}">
+			<td>[[${board.boardId}]]</td>
+			<td class="pc">[[${board.writer}]]</td>
+			<td>
+			<span th:if="${board.replyNumber>0}">
+				<span th:each="num : ${#numbers.sequence(1,board.replyStep)}">&nbsp;</span>
+				<span>└</span>
+			</span>
+			<a th:href="@{/board/__${board.boardId}__/__${session.page}__}">[[${board.title}]]</a>
+			</td>
+			<td class="pc" th:text="${#dates.format(board.writeDate, 'YYYY-MM-dd')}"></td>
+			<td class="pc" th:text="${board.readCount}"></td>
+		</tr>
+		</table>
+		<table class="table">
+		<tr>
+			<td align="left">
+				<div th:replace="~{/include/paging :: paging}"></div>
+			</td>
+			<td align="right">
+				<a th:href="@{/board/write/__${categoryId}__}"><button type="button" class="btn btn-info">[[#{WRITE_NEW_ARTICLE}]]</button></a>
+			</td>
+		</tr>
+		</table>
+
+</body>
+</html>
