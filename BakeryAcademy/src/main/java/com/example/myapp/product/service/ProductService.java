@@ -1,6 +1,7 @@
 package com.example.myapp.product.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ public class ProductService implements IProductService{
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
 				productImage.setProductImage(mfile.getBytes());
+				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
+				productImage.setProductImageType(mfile.getContentType());
 				productRepository.insertProductImage(productImage);
 			}
 			
@@ -35,6 +38,8 @@ public class ProductService implements IProductService{
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
 				productImage.setProductImage(mfile.getBytes());
+				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
+				productImage.setProductImageType(mfile.getContentType());
 				productRepository.insertProductImage(productImage);
 			}
 			
@@ -42,6 +47,8 @@ public class ProductService implements IProductService{
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
 				productImage.setProductImage(mfile.getBytes());
+				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
+				productImage.setProductImageType(mfile.getContentType());
 				productRepository.insertProductImage(productImage);
 			}
 		} catch (IOException e) {
@@ -63,6 +70,8 @@ public class ProductService implements IProductService{
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
 				productImage.setProductImage(mfile.getBytes());
+				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
+				productImage.setProductImageType(mfile.getContentType());
 				productRepository.updateProductImage(productImage);
 			}
 			
@@ -70,6 +79,8 @@ public class ProductService implements IProductService{
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
 				productImage.setProductImage(mfile.getBytes());
+				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
+				productImage.setProductImageType(mfile.getContentType());
 				productRepository.updateProductImage(productImage);
 			}
 			
@@ -77,6 +88,8 @@ public class ProductService implements IProductService{
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
 				productImage.setProductImage(mfile.getBytes());
+				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
+				productImage.setProductImageType(mfile.getContentType());
 				productRepository.updateProductImage(productImage);
 			}
 		} catch (IOException e) {
@@ -85,9 +98,33 @@ public class ProductService implements IProductService{
 		}
 		
 	}
-
 	@Override
 	public Product selectProduct(int productId) {
 		return productRepository.selectProduct(productId);
+	}
+
+	@Override
+	public List<Product> selectSearchKeywordProduct(String keyword, int start, int end) {
+		return productRepository.selectKeywordProductList(keyword, start, end);
+	}
+
+	@Override
+	public List<Product> selectProductAtModal(int start,int end) {
+		return productRepository.selectProductListAtModal(start,end);
+	}
+
+	@Override
+	public int countProductList() {
+		return productRepository.countProductList();
+	}
+
+	@Override
+	public int countKeyWordProductList(String keyword) {
+		return productRepository.countKeywordProductList(keyword);
+	}
+
+	@Override
+	public List<Product> selectProductListInBaord(List<Integer> list) {
+		return productRepository.selectProductListInBoard(list);
 	}
 }

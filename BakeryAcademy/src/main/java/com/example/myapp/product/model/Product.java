@@ -22,6 +22,6 @@ public class Product {
 	private MultipartFile image;
 	private MultipartFile image2;
 	private MultipartFile image3;
-	
+	private int rowNumber;
 	
 }
