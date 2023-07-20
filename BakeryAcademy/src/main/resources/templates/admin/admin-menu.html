@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="admin-menu">
+	<div class="side-menu">
+		<div class="p-t-55">
+			<h4 class="mtext-112 cl2 p-b-33">
+				목록
+			</h4>
+
+			<ul>
+				<li class="bor18">
+					<a href="#" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+						상품 관리
+					</a>
+				</li>
+				<li class="bor18">
+					<a th:href="@{/admin/category}" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+						카테고리 관리
+					</a>
+				</li>
+
+				<li class="bor18">
+					<a th:href="@{/board/insert-product-register}" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+						결제 내역 관리
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+</body>
+</html>

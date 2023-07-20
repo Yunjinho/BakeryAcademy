@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myapp.product.dao.IProductRepository">
+<insert id="insertProduct" parameterType="com.example.myapp.product.model.Product">
+<![CDATA[
+	INSERT INTO product VALUES(SEQ_PRODUCT_ID.NEXTVAL,#{categoryId},#{productName},#{productPrice},#{productContent},#{productStock},#{productStatus})
+]]>
+</insert>
+
+<insert id="insertProductImage" parameterType="com.example.myapp.product.model.ProductImage">
+	INSERT INTO product_image VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,SEQ_PRODUCT_ID.CURRVAL,#{productImage},#{imageName},#{productImageSize},#{productImageType})
+</insert>
+
+<insert id="updateProductImage" parameterType="com.example.myapp.product.model.ProductImage">
+	INSERT INTO product_image VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,#{productId},#{productImage},#{imageName},#{productImageSize},#{productImageType})
+</insert>
+
+<update id="updateProduct"> 
+<![CDATA[
+	UPDATE product
+	SET category_id=#{categoryId}, product_name=#{productName}, product_price=#{productPrice}, product_content=#{productContent}, product_stock=#{productStock}, product_status=#{productStatus}
+	WHERE product_id=#{productId}
+]]>
+</update>
+
+<select id="selectProduct" parameterType="Integer" resultType="com.example.myapp.product.model.Product">
+<![CDATA[
+	SELECT product_id AS productId, category_id AS categoryId, product_name AS productName, product_price AS productPrice, product_content AS productContent, product_stock AS productStock, product_status AS productStatus 
+	FROM product 
+	WHERE product_id=#{productId}
+]]>
+</select>
+
+<delete id="deleteProductImage" parameterType="Integer">
+<![CDATA[
+	DELETE FROM product_image
+	WHERE product_id=#{productId}
+]]>
+</delete>
+<select id="selectKeywordProductList" parameterType="hashmap" resultType="com.example.myapp.product.model.Product">
+<![CDATA[
+	SELECT rowNumber, product_id AS productId, category_id AS categoryId, product_name AS productName, product_price AS productPrice, product_stock AS productStock
+	FROM ( SELECT rownum AS rowNumber, product_id, category_id, product_name, product_price, product_stock
+        	FROM product WHERE product_status=1 AND product_name LIKE '%'||#{keyword}||'%')
+	WHERE rowNumber BETWEEN #{start} AND #{end} 	
+]]>
+</select>
+
+<select id="selectProductListAtModal" parameterType="hashmap" resultType="com.example.myapp.product.model.Product">
+<![CDATA[
+	SELECT rowNumber, product_id AS productId, category_id AS categoryId, product_name AS productName, product_price AS productPrice, product_stock AS productStock
+	FROM ( SELECT rownum AS rowNumber, product_id, category_id, product_name, product_price, product_stock
+        	FROM product WHERE product_status=1)
+	WHERE rowNumber BETWEEN #{start} AND #{end}  
+]]>
+</select>
+<select id="countProductList" resultType="Integer">
+<![CDATA[
+	SELECT COUNT(*) FROM product
+]]>
+</select>
+
+<select id="countKeywordProductList" resultType="Integer">
+<![CDATA[
+	SELECT COUNT(*) FROM product WHERE product_name LIKE'%'||#{keyword}||'%'
+]]>
+</select>
+
+<select id="selectProductListInBoard" parameterType="hashmap" resultType="com.example.myapp.product.model.Product" >
+	SELECT rowNumber, product_id AS productId, category_id AS categoryId, product_name AS productName, product_price AS productPrice, product_stock AS productStock
+	FROM ( SELECT rownum AS rowNumber, product_id, category_id, product_name, product_price, product_stock
+        	FROM product WHERE product_status=1)
+	WHERE product_id 
+	IN 
+	<foreach collection="productList" item="list" open="(" close=")" separator=",">
+ 		#{list}
+	</foreach>
+</select>
+</mapper>
