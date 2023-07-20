@@ -1,8 +1,6 @@
 package com.example.myapp.board.dao;
 
 
-
-
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -19,9 +17,6 @@ public interface IBoardRepository {
 
 	BoardImage getFile(int boardImageId); 
 	
-	
-	
-	
 	void insertArticle(Board board);
 	void insertArticle(Board board, BoardImage file);
 
@@ -29,8 +24,6 @@ public interface IBoardRepository {
 
 	void insertBoardImage(BoardImage file);
 	void insertFileData(BoardImage file);
-	
-	
 	/*
 	 * List<Board> selectArticleListByCategory(@Param("boardId") int
 	 * boardId, @Param("start") int start, @Param("end") int end); void
@@ -38,6 +31,4 @@ public interface IBoardRepository {
 	 * boardId); void updateReadCount(int boardId); BoardImage getFile(int
 	 * boardImageId);
 	 */
-	
-	
 }
