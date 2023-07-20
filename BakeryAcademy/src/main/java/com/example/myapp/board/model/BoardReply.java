@@ -9,6 +9,6 @@ public class BoardReply {
 	private int boardReplyId;
 	private int boardId;
 	private String memberId;
-	private String baordReplyContent;
+	private String boardReplyContent;
 	private Date boardReplyWriteDate;
 }
