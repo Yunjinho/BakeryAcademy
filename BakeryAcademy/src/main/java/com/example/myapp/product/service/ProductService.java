@@ -3,10 +3,13 @@ package com.example.myapp.product.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.myapp.product.dao.IProductRepository;
 import com.example.myapp.product.model.Product;
+import com.example.myapp.product.model.ProductImage;
 
+@Service
 public class ProductService implements IProductService {
 	@Autowired
 	IProductRepository productRepository;
@@ -20,5 +23,10 @@ public class ProductService implements IProductService {
 	@Override
 	public int selectTotalProductCountByCategory(int categoryId) {
 		return productRepository.selectTotalProductCountByCategoryId(categoryId);
+	}
+
+	@Override
+	public ProductImage getProductThumbnail(int productId) {
+		return productRepository.getProductImageMinId(productId);
 	}
 }

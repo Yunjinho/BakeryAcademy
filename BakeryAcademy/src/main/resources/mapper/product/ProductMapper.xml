@@ -3,33 +3,83 @@
 <mapper
 	namespace="com.example.myapp.product.dao.IProductRepository">
 
-	<select id="getProductListByCategory" parameterType="hashmap"
-		resultType="com.example.myapp.product.model.Product">
+	<select id="getProductListByCategory" parameterType="hashmap" resultType="com.example.myapp.product.model.Product">
 <![CDATA[
 	SELECT
-		product_id,
-		category_id,
-		product_name,
-		product_price,
-		product_content,
-		product_stock,
-		product_status
+		product_id as "productId",
+		product_name as "productName",
+		product_price as "productPrice",
+		product_content as "productContent",
+		product_stock as "productStock"
 	FROM
-		product
+		(
+		SELECT
+			product_id,
+			product_name,
+			product_price,
+			product_content,
+			product_stock,
+			ROWNUM as rnum
+		FROM
+		(
+			SELECT
+				product_id,
+				product_name,
+				product_price,
+				product_content,
+				product_stock
+			FROM
+				product
+			WHERE
+				category_id=#{categoryId}
+			ORDER BY
+				product_id DESC
+		)
+		)
 	WHERE
-		category_id=#{categoryId} AND ROWNUM BETWEEN #{start} AND #{end}
+		rnum BETWEEN #{start} AND #{end}
 ]]>
 	</select>
 
-	<select id="selectTotalProductCountByCategoryId" parameterType="int" resultType="int">
-<![CDATA[
+<select id="selectTotalProductCountByCategoryId" parameterType="int" resultType="int">
+	<![CDATA[
+		SELECT
+			COUNT(category_id)
+		FROM
+			product
+		WHERE
+			category_id=#{categoryId}
+	]]>
+</select>
+
+
+
+<select id="getProductImageMinId" parameterType="int" resultType="com.example.myapp.product.model.ProductImage">
+	<![CDATA[
 	SELECT
-		COUNT(category_id)
+		product_image_id	as productImageId,
+		product_Id			as productId,
+		product_image		as productImage,
+		product_image_name	as productImageName,
+		product_image_size	as productImageSize,
+		product_image_type	as productImageType
 	FROM
-		product
+		product_image
 	WHERE
-		category_id=#{categoryId}
-]]>
-	</select>
+		product_id=#{productId} AND
+		product_image_id = (
+			SELECT MIN(product_image_id)
+			FROM product_image
+			WHERE product_id = #{productId}
+		)
+	]]>
+</select>
+
+<select id="getProductImageList" parameterType="int" resultType="com.example.myapp.product.model.ProductImage">
+	<![CDATA[
+		SELECT * FROM product_image where product_id=#{productId};
+	]]>
+</select>
+
 
 </mapper>
