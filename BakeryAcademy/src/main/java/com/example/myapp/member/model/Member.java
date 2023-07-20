@@ -16,5 +16,4 @@ public class Member {
 	private String memberEmail;
 	private String memberNickName;
 	private int isAdmin;
-	
 }

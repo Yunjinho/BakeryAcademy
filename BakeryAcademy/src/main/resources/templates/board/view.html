@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<!-- <a th:href="@{/board/write/{categoryId}(categoryId=${categoryId})}"><button type="button" class="btn btn-info">새글쓰기</button></a> -->
+<table class ="table_bordered" border="1">
+<tr>
+	<td>글번호</td>
+	<td th:text="${board.boardId}"></td>
+</tr>
+
+<tr>
+	<td>작성자</td>
+	<td th:text ="${board.memberNickname}"></td>
+</tr>
+
+<tr>
+	<td>작성일</td>
+	<td th:text ="${board.boardWriteDate}"></td>
+</tr>
+
+
+
+<tr>
+	<td>조회수</td>
+	<td th:text ="${board.visitCount}"></td>
+</tr>
+
+<tr>
+	<td>제목</td>
+	<td th:text ="${board.boardTitle}"></td>
+</tr>
+
+<tr>
+	<td>내용</td>
+	<td th:text ="${board.boardContent}"></td>
+</tr>
+
+<tr>
+	<td>첨부파일</td>
+<!-- 	<td>
+		<img th:src="@{/file/__${board.boardImageId}__}" th:if="${fileType=='.JPG' || fileType=='.JPEG' || fileType=='.PNG' || fileType=='.GIF'}" alt="" width="200">	
+	</td>  -->
+</tr>
+
+
+</table>
+
+</body>
+</html>
