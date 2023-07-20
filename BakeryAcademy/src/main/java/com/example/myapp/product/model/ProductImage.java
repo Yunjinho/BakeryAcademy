@@ -15,6 +15,8 @@ public class ProductImage {
 	private String directoryName;
 	private String imageName;
 	private byte[] productImage;
+	private String productImageSize;
+	private String productImageType;
 	
 	@Override
 	public String toString() {

@@ -8,11 +8,11 @@
 </insert>
 
 <insert id="insertProductImage" parameterType="com.example.myapp.product.model.ProductImage">
-	INSERT INTO product_image VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,SEQ_PRODUCT_ID.CURRVAL,#{productImage},#{imageName},#{imageName})
+	INSERT INTO product_image VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,SEQ_PRODUCT_ID.CURRVAL,#{productImage},#{imageName},#{productImageSize},#{productImageType})
 </insert>
 
 <insert id="updateProductImage" parameterType="com.example.myapp.product.model.ProductImage">
-	INSERT INTO product_image VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,#{productId},#{productImage},#{imageName},#{imageName})
+	INSERT INTO product_image VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,#{productId},#{productImage},#{imageName},#{productImageSize},#{productImageType})
 </insert>
 
 <update id="updateProduct"> 
@@ -37,5 +37,43 @@
 	WHERE product_id=#{productId}
 ]]>
 </delete>
+<select id="selectKeywordProductList" parameterType="hashmap" resultType="com.example.myapp.product.model.Product">
+<![CDATA[
+	SELECT rowNumber, product_id AS productId, category_id AS categoryId, product_name AS productName, product_price AS productPrice, product_stock AS productStock
+	FROM ( SELECT rownum AS rowNumber, product_id, category_id, product_name, product_price, product_stock
+        	FROM product WHERE product_status=1 AND product_name LIKE '%'||#{keyword}||'%')
+	WHERE rowNumber BETWEEN #{start} AND #{end} 	
+]]>
+</select>
 
+<select id="selectProductListAtModal" parameterType="hashmap" resultType="com.example.myapp.product.model.Product">
+<![CDATA[
+	SELECT rowNumber, product_id AS productId, category_id AS categoryId, product_name AS productName, product_price AS productPrice, product_stock AS productStock
+	FROM ( SELECT rownum AS rowNumber, product_id, category_id, product_name, product_price, product_stock
+        	FROM product WHERE product_status=1)
+	WHERE rowNumber BETWEEN #{start} AND #{end}  
+]]>
+</select>
+<select id="countProductList" resultType="Integer">
+<![CDATA[
+	SELECT COUNT(*) FROM product
+]]>
+</select>
+
+<select id="countKeywordProductList" resultType="Integer">
+<![CDATA[
+	SELECT COUNT(*) FROM product WHERE product_name LIKE'%'||#{keyword}||'%'
+]]>
+</select>
+
+<select id="selectProductListInBoard" parameterType="hashmap" resultType="com.example.myapp.product.model.Product" >
+	SELECT rowNumber, product_id AS productId, category_id AS categoryId, product_name AS productName, product_price AS productPrice, product_stock AS productStock
+	FROM ( SELECT rownum AS rowNumber, product_id, category_id, product_name, product_price, product_stock
+        	FROM product WHERE product_status=1)
+	WHERE product_id 
+	IN 
+	<foreach collection="productList" item="list" open="(" close=")" separator=",">
+ 		#{list}
+	</foreach>
+</select>
 </mapper>
