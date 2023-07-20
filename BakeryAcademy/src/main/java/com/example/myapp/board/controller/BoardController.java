@@ -124,10 +124,6 @@ static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 		 return "redirect:/board/" +  board.getBoardId();
 
 	 }
-	 
-	
-	
-	
 
 	 
 	 @RequestMapping("/file/{boardImageId}")

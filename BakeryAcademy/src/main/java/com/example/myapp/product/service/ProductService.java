@@ -13,6 +13,7 @@ import com.example.myapp.product.model.ProductImage;
 
 import jakarta.transaction.Transactional;
 
+
 @Service
 public class ProductService implements IProductService{
 	@Autowired
@@ -137,5 +138,10 @@ public class ProductService implements IProductService{
 	@Override
 	public int selectTotalProductCountByCategory(int categoryId) {
 		return productRepository.selectTotalProductCountByCategoryId(categoryId);
+	}
+
+	@Override
+	public ProductImage getProductThumbnail(int productId) {
+		return productRepository.getProductImageMinId(productId);
 	}
 }
