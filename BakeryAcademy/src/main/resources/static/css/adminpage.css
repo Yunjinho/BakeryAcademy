@@ -1,0 +1,20 @@
+@charset "UTF-8";
+.product-infomation-box{
+	border: 1px solid black;
+	width:50%;
+}
+.product-infomation-label{
+	margin: 5px 0px; 
+}
+/*카테고리*/
+.table{
+	text-align:center;
+}
+.category-register-button{
+	display: inline-block; 
+	margin: 0 5px;  
+	float: right;
+}
+#categoryName{
+	width:80%;
+}
