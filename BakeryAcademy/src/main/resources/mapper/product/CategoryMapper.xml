@@ -1,8 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.myapp.product.dao.ICategoryRepository">
+
 <insert id="insertCategory" parameterType="com.example.myapp.product.model.Category">
+<![CDATA[
 	INSERT INTO category
-	VALUES(0,#{categoryName})
+	VALUES(SEQ_CATEGORY_ID.NEXTVAL,#{categoryName})
+]]>
 </insert>
+<delete id="deleteCategory" parameterType="Integer">
+<![CDATA[
+	DELETE FROM category WHERE category_id=#{categoryId}
+]]>
+</delete>
+<update id="updateCategory" parameterType="com.example.myapp.product.model.Category">
+<![CDATA[
+	UPDATE category SET category_name=#{categoryName}
+]]>
+</update>
+<select id="selectCategory" parameterType="com.example.myapp.product.model.Category">
+<![CDATA[
+	SELECT category_id AS categoryId, category_name AS categoryName FROM category WHERE category_id=#{categoryId}
+]]>
+</select>
+<select id="selectAllCategory" resultType="com.example.myapp.product.model.Category">
+<![CDATA[
+	SELECT rownum AS "rowNum", category_id AS "categoryId" , category_name AS "categoryName" FROM category ORDER BY category_id
+]]>
+</select>
 </mapper>
