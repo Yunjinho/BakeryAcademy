@@ -1,8 +1,5 @@
 package com.example.myapp.board.controller;
 
-
-
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -22,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.myapp.board.model.Board;
@@ -29,34 +27,69 @@ import com.example.myapp.board.model.BoardImage;
 import com.example.myapp.board.service.IBoardService;
 import jakarta.servlet.http.HttpSession;
 
-
-
-
-
-
 @Controller
 public class BoardController {
 static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	
 	@Autowired
 	IBoardService boardService;
-	
+	//게시물 전체 조회
+	@RequestMapping("/board")
+	public String board(@RequestParam int page,Model model,HttpSession session) {
+		session.setAttribute("page", page);
+		List<Board> list=boardService.selectAllBoardList(page);
+		model.addAttribute("boardList", list);
+		int bbsCount = boardService.countBoard();
+		int totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) (Math.ceil(page / 10.0));
+		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		return "board/board";
+	}
 
-
-    
-    
-	
-//	//게시글 리스트 조회
-//	@RequestMapping("/board/cat")
-//	public String getListByCategory(HttpSession session, Model model) {
-//		return getListByCategory(session, model);
-//	}
-	
-
-	
-	
-	
-	
+	//게시물 전체 조회
+	@RequestMapping("/search-board")
+	public String searchboard(@RequestParam int page,@RequestParam String keyword,Model model,HttpSession session) {
+		session.setAttribute("page", page);
+		List<Board> list=boardService.selectKeywordBoardList(keyword,page);
+		model.addAttribute("boardList", list);
+		int bbsCount = boardService.countKeywordBoard(keyword);
+		int totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) (Math.ceil(page / 10.0));
+		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		return "board/search-board";
+	}
 	
 	//게시글 상세조회
 	@RequestMapping("/board/{boardId}")
