@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+//import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import com.example.myapp.product.model.Product;
@@ -14,6 +15,9 @@ import com.example.myapp.product.model.ProductImage;
 public interface IProductRepository {
 	Product selectProduct(int productId);
 	void insertProduct(Product product);
+	
+	List<Product> getProductListByCategory(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end);
+	int selectTotalProductCountByCategoryId(int categoryId);
 	void insertProductImage(ProductImage productImage);
 	void updateProductImage(ProductImage productImage);
 
@@ -29,6 +33,6 @@ public interface IProductRepository {
 	int countProductList();
 	int countKeywordProductList(@Param("keyword")String keyword);
 	
-	
-	
+	ProductImage getProductImageMinId(int productId);
+	List<ProductImage> getProductImageList(int productId);//아직 mapper에 미구현
 }

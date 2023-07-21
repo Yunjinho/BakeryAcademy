@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myapp.board.dao.IBoardReplyRepository">
+
+<insert id="insertBoardReply" parameterType="com.example.myapp.board.model.BoardReply">
+<![CDATA[
+INSERT INTO board_reply 
+VALUES(SEQ_BOARD_REPLY_ID.NEXTVAL,#{boardId},#{memberId},#{boardReplyContent},SYSDATE)
+]]>
+</insert>
+
+<select id="selectBoardReplyList" parameterType="Integer" resultType="com.example.myapp.board.model.BoardReply">
+<![CDATA[
+SELECT board_reply_id AS "boardReplyId", board_id AS "boardId", member_id AS "memberId"
+		, board_reply_content AS "boardReplyContent", board_reply_write_date AS "boardReplyWriteDate"
+FROM board_reply
+WHERE board_id=#{boardId}
+]]>
+</select>
+
+<update id="updateBoardReply" parameterType="com.example.myapp.board.model.BoardReply">
+<![CDATA[
+UPDATE board_reply SET board_reply_content=#{boardReplyContent},board_reply_write_date=SYSDATE
+WHERE board_reply_id=#{boardReplyId}
+]]>
+</update>
+
+<delete id="deleteBoardReply" parameterType="Integer">
+<![CDATA[
+DELETE FROM board_reply WHERE board_reply_id=#{boardReplyId}
+]]>
+</delete>
+
+<delete id="deleteAllBoardReply" parameterType="Integer">
+<![CDATA[
+DELETE FROM board_reply WHERE board_id=#{boardId}
+]]>
+</delete>
+</mapper>

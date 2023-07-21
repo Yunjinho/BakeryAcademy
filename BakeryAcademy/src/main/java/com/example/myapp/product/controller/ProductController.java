@@ -1,13 +1,22 @@
 package com.example.myapp.product.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.myapp.product.dao.ICategoryRepository;
 import com.example.myapp.product.model.Category;
 import com.example.myapp.product.model.Product;
+import com.example.myapp.product.model.ProductImage;
 import com.example.myapp.product.service.IProductService;
+//import com.example.myapp.product.service.ProductService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -24,9 +35,41 @@ import jakarta.servlet.http.HttpSession;
 public class ProductController {
 	@Autowired
 	ICategoryRepository categoryService;
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	IProductService productService;
 	
+	//카테고리와 페이지에 따른 상품 목록으로 이동
+	@RequestMapping("/product/{categoryId}/{page}")
+	public String getProductListByCategory(@PathVariable int categoryId, @PathVariable int page, HttpSession session,
+			Model model) {
+		session.setAttribute("page", page);
+		model.addAttribute("categoryId", categoryId);
+		List<Product> productList = productService.selectProductListByCategory(categoryId, page);
+		model.addAttribute("productList", productList);
+		int bbsCount = productService.selectTotalProductCountByCategory(categoryId);
+		int totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) Math.ceil(page / 10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int endPage = 0;
+		if (totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		return "product";
+	}
 	
 	//상품 등록페이지로 이동
 	@RequestMapping(value="/admin/insert-product",method=RequestMethod.GET)
@@ -192,4 +235,63 @@ public class ProductController {
 		}
 		return result;
 	}
+	
+	//상품 목록 1 페이지로 이동
+	@RequestMapping("/product/{categoryId}")
+	public String getProductListByCategory(@PathVariable int categoryId, HttpSession session, Model model) {
+		return "redirect:/product/{categoryId}/1";
+	}
+
+	//카테고리 1의 1페이지로 이동
+	@RequestMapping("/product")
+	public String getProductListByCategory(HttpSession session, Model model) {
+		return "redirect:/product/1/1";
+	}
+
+	//상품 id의 썸네일 반환
+	@RequestMapping("/file/{productId}")
+	public ResponseEntity<byte[]> getProductThumbnail(@PathVariable int productId) {
+		ProductImage file = productService.getProductThumbnail(productId);
+
+		if (file == null) {
+			productId = 0;
+			file = productService.getProductThumbnail(productId);
+		}
+
+		logger.info("getFile " + file.toString());
+		final HttpHeaders headers = new HttpHeaders();
+		String[] mtypes = file.getProductImageType().split("/");
+		headers.setContentType(new MediaType(mtypes[0], mtypes[1]));
+		headers.setContentLength(Long.parseLong(file.getProductImageSize()));
+		try {
+			String encodedFileName = URLEncoder.encode(file.getProductImageName(), "UTF-8");
+			headers.setContentDispositionFormData("attachment", encodedFileName);
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
+	}
+
+	//상품 id에 해당하는 모든 이미지 반환
+	@RequestMapping("/product-detail/{productId}")
+	public String getProductDetail(int productId) {
+		return "product-detail";
+	}
+//	@RequestMapping("/files/{productId}")
+//	public List<ProductImage> getFileList(@PathVariable int productId) {
+////	public List<ResponseEntity<byte[]>> getFileList(@PathVariable int productId) {
+//		List<ProductImage> productImageList = productService.getProductImageList(productId);
+//		logger.info("getImageList : " + productImageList.size());
+//		final HttpHeaders headers = new HttpHeaders();
+//		String[] mtypes = productImageList.get(0).getProductImageType().split("/");
+//		headers.setContentType(new MediaType(mtypes[0], mtypes[1]));
+//		headers.setContentLength(Long.parseLong(productImageList.get(0).getProductImageSize()));
+//		try {
+//			String encodedFileName = URLEncoder.encode(productImageList.get(0).getProductImageName(), "UTF-8");
+//			headers.setContentDispositionFormData("attachment", encodedFileName);
+//		} catch (UnsupportedEncodingException e) {
+//			throw new RuntimeException(e);
+//		}
+//		return productImageList;
+//	}
 }

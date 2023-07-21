@@ -14,18 +14,18 @@ import com.example.myapp.product.model.ProductImage;
 import jakarta.transaction.Transactional;
 
 @Service
-public class ProductService implements IProductService{
+public class ProductService implements IProductService {
 	@Autowired
 	IProductRepository productRepository;
-	
+
 	@Override
 	@Transactional
 	public void insertProduct(Product product) {
 		try {
 			productRepository.insertProduct(product);
-			
+
 			MultipartFile mfile = product.getImage();
-			ProductImage productImage=new ProductImage();
+			ProductImage productImage = new ProductImage();
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
 				productImage.setProductImage(mfile.getBytes());
@@ -33,7 +33,7 @@ public class ProductService implements IProductService{
 				productImage.setProductImageType(mfile.getContentType());
 				productRepository.insertProductImage(productImage);
 			}
-			
+
 			mfile = product.getImage2();
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
@@ -42,7 +42,7 @@ public class ProductService implements IProductService{
 				productImage.setProductImageType(mfile.getContentType());
 				productRepository.insertProductImage(productImage);
 			}
-			
+
 			mfile = product.getImage3();
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
@@ -63,9 +63,9 @@ public class ProductService implements IProductService{
 		try {
 			productRepository.updateProduct(product);
 			productRepository.deleteProductImage(product.getProductId());
-			
+
 			MultipartFile mfile = product.getImage();
-			ProductImage productImage=new ProductImage();
+			ProductImage productImage = new ProductImage();
 			productImage.setProductId(product.getProductId());
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
@@ -74,7 +74,7 @@ public class ProductService implements IProductService{
 				productImage.setProductImageType(mfile.getContentType());
 				productRepository.updateProductImage(productImage);
 			}
-			
+
 			mfile = product.getImage2();
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
@@ -83,7 +83,7 @@ public class ProductService implements IProductService{
 				productImage.setProductImageType(mfile.getContentType());
 				productRepository.updateProductImage(productImage);
 			}
-			
+
 			mfile = product.getImage3();
 			if (mfile != null && !mfile.isEmpty()) {
 				productImage.setImageName(mfile.getOriginalFilename());
@@ -96,8 +96,9 @@ public class ProductService implements IProductService{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	@Override
 	public Product selectProduct(int productId) {
 		return productRepository.selectProduct(productId);
@@ -109,8 +110,8 @@ public class ProductService implements IProductService{
 	}
 
 	@Override
-	public List<Product> selectProductAtModal(int start,int end) {
-		return productRepository.selectProductListAtModal(start,end);
+	public List<Product> selectProductAtModal(int start, int end) {
+		return productRepository.selectProductListAtModal(start, end);
 	}
 
 	@Override
@@ -126,5 +127,26 @@ public class ProductService implements IProductService{
 	@Override
 	public List<Product> selectProductListInBaord(List<Integer> list) {
 		return productRepository.selectProductListInBoard(list);
+	}
+
+	@Override
+	public List<Product> selectProductListByCategory(int categoryId, int page) {
+		int start = (page - 1) * 10 + 1;
+		return productRepository.getProductListByCategory(categoryId, start, start + 9);
+	}
+
+	@Override
+	public int selectTotalProductCountByCategory(int categoryId) {
+		return productRepository.selectTotalProductCountByCategoryId(categoryId);
+	}
+
+	@Override
+	public ProductImage getProductThumbnail(int productId) {
+		return productRepository.getProductImageMinId(productId);
+	}
+
+	@Override
+	public List<ProductImage> getProductImageList(int productId) {
+		return productRepository.getProductImageList(productId);
 	}
 }
