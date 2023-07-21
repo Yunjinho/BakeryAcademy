@@ -40,8 +40,10 @@ public class ProductController {
 	@Autowired
 	IProductService productService;
 	
+	//카테고리와 페이지에 따른 상품 목록으로 이동
 	@RequestMapping("/product/{categoryId}/{page}")
-	public String getProductListByCategory(@PathVariable int categoryId, @PathVariable int page, HttpSession session, Model model) {
+	public String getProductListByCategory(@PathVariable int categoryId, @PathVariable int page, HttpSession session,
+			Model model) {
 		session.setAttribute("page", page);
 		model.addAttribute("categoryId", categoryId);
 		List<Product> productList = productService.selectProductListByCategory(categoryId, page);
@@ -234,38 +236,28 @@ public class ProductController {
 		return result;
 	}
 	
+	//상품 목록 1 페이지로 이동
 	@RequestMapping("/product/{categoryId}")
 	public String getProductListByCategory(@PathVariable int categoryId, HttpSession session, Model model) {
-//		return getProductListByCategory(categoryId, 1, session, model);
 		return "redirect:/product/{categoryId}/1";
 	}
 
+	//카테고리 1의 1페이지로 이동
 	@RequestMapping("/product")
 	public String getProductListByCategory(HttpSession session, Model model) {
-//		return getProductListByCategory(1, 1, session, model);
 		return "redirect:/product/1/1";
 	}
-	
-//	@RequestMapping("/files/{productId}")
-//	public ResponseEntity<byte[]> getFileList(@PathVariable int productId) {
-//		BoardUploadFile file = boardService.getFile(fileId);
-//		logger.info("getFile " + file.toString());
-//		final HttpHeaders headers = new HttpHeaders();
-//		String[] mtypes = file.getFileContentType().split("/");
-//		headers.setContentType(new MediaType(mtypes[0], mtypes[1]));
-//		headers.setContentLength(file.getFileSize());
-//		try {
-//			String encodedFileName = URLEncoder.encode(file.getFileName(), "UTF-8");
-//			headers.setContentDispositionFormData("attachment", encodedFileName);
-//		} catch (UnsupportedEncodingException e) {
-//			throw new RuntimeException(e);
-//		}
-//		return new ResponseEntity<byte[]>(file.getFileData(), headers, HttpStatus.OK);
-//	}
-	
+
+	//상품 id의 썸네일 반환
 	@RequestMapping("/file/{productId}")
-	public ResponseEntity<byte[]> getFile(@PathVariable int productId) {
+	public ResponseEntity<byte[]> getProductThumbnail(@PathVariable int productId) {
 		ProductImage file = productService.getProductThumbnail(productId);
+
+		if (file == null) {
+			productId = 0;
+			file = productService.getProductThumbnail(productId);
+		}
+
 		logger.info("getFile " + file.toString());
 		final HttpHeaders headers = new HttpHeaders();
 		String[] mtypes = file.getProductImageType().split("/");
@@ -278,6 +270,28 @@ public class ProductController {
 			throw new RuntimeException(e);
 		}
 		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
-//		return new ResponseEntity<byte[]>(file.getProductImage(), HttpStatus.OK);
 	}
+
+	//상품 id에 해당하는 모든 이미지 반환
+	@RequestMapping("/product-detail/{productId}")
+	public String getProductDetail(int productId) {
+		return "product-detail";
+	}
+//	@RequestMapping("/files/{productId}")
+//	public List<ProductImage> getFileList(@PathVariable int productId) {
+////	public List<ResponseEntity<byte[]>> getFileList(@PathVariable int productId) {
+//		List<ProductImage> productImageList = productService.getProductImageList(productId);
+//		logger.info("getImageList : " + productImageList.size());
+//		final HttpHeaders headers = new HttpHeaders();
+//		String[] mtypes = productImageList.get(0).getProductImageType().split("/");
+//		headers.setContentType(new MediaType(mtypes[0], mtypes[1]));
+//		headers.setContentLength(Long.parseLong(productImageList.get(0).getProductImageSize()));
+//		try {
+//			String encodedFileName = URLEncoder.encode(productImageList.get(0).getProductImageName(), "UTF-8");
+//			headers.setContentDispositionFormData("attachment", encodedFileName);
+//		} catch (UnsupportedEncodingException e) {
+//			throw new RuntimeException(e);
+//		}
+//		return productImageList;
+//	}
 }
