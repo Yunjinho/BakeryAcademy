@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.example.myapp.member.dao.IMemberRepository">
+
+	<insert id="insertMember"
+		parameterType="com.example.myapp.member.model.Member">
+		<![CDATA[
+		 	INSERT INTO member 
+		 		(member_id, member_password, member_name, member_phone_number, member_email, member_nickname, is_admin, member_address)
+    		VALUES 
+    			(#{memberId}, #{memberPassword}, #{memberName}, #{memberPhoneNumber}, #{memberEmail}, #{memberNickName}, #{isAdmin}, #{memberAddress})
+   		]]>
+	</insert>
+
+	<select id="selectMember" parameterType="string"
+		resultType="com.example.myapp.member.model.Member">
+		<![CDATA[
+			SELECT
+			member_id		AS "memberId",
+			member_password		AS "memberPassword",		 		
+			member_name		AS "memberName",
+			member_phone_number		"memberPhoneNumber",
+			member_email		AS "memberEmail",
+			member_nickname		AS "memberNickName",
+			is_admin		AS "isAdmin"
+			FROM
+			member
+			WHERE member_id=#{memberId}
+		]]>
+	</select>
+
+	<update id="updateMember"
+		parameterType="com.example.myapp.member.model.Member">
+		<![CDATA[
+		UPDATE MEMBER
+		SET
+			member_name=#{memberName}, member_password=#{memberPassword}, member_address=#{memberAddress}, member_phone_number=#{memberPhoneNumber}, member_email=#{memberEmail}, member_nickname=#{memberNickName}
+			WHERE
+				member_id=#{memberId}
+		]]>
+	</update>
+
+	<delete id="deleteMember"
+		parameterType="com.example.myapp.member.model.Member">
+		<![CDATA[
+			DELETE FROM member WHERE member_id = #{memberId}
+    	]]>
+	</delete>
+
+	<select id="getPassword" parameterType="string"
+		resultType="string">
+				<![CDATA[
+				SELECT
+					member_password
+				FROM
+					member
+				WHERE member_id=#{memberId}
+				]]>
+	</select>
+</mapper>
