@@ -29,4 +29,9 @@ public class ProductService implements IProductService {
 	public ProductImage getProductThumbnail(int productId) {
 		return productRepository.getProductImageMinId(productId);
 	}
+
+	@Override
+	public List<ProductImage> getProductImageList(int productId) {
+		return productRepository.getProductImageList(productId);
+	}
 }

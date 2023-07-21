@@ -9,5 +9,8 @@ public interface IProductService {
 	public List<Product> selectProductListByCategory(int categoryId, int page);
 
 	public int selectTotalProductCountByCategory(int categoryId);
-	ProductImage getProductThumbnail(int productId);
+
+	public ProductImage getProductThumbnail(int productId);
+
+	public List<ProductImage> getProductImageList(int productId);
 }
