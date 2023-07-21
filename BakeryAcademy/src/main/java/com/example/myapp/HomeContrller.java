@@ -16,8 +16,8 @@ public class HomeContrller {
 	
 	@RequestMapping("/")
 	public String home(HttpSession session) {
-		session.setAttribute("memberId", "admin");
-		session.setAttribute("isAdmin", 1);
+		session.setAttribute("memberId", "my");
+		session.setAttribute("isAdmin", 0);
 		if(session.getAttribute("memberId")==null) {
 			session.setAttribute("memberId", null);
 		}

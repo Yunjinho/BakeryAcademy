@@ -1,5 +1,7 @@
 package com.example.myapp.member.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +14,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.myapp.member.model.Member;
+import com.example.myapp.member.model.Order;
 import com.example.myapp.member.service.IMemberService;
+import com.example.myapp.member.service.IOrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -28,7 +33,10 @@ public class MemberController {
 
 	@Autowired
 	private Validator memberValidator;
-
+	
+	@Autowired
+	IOrderService orderService;
+	
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {
 		binder.setValidator(memberValidator);
@@ -160,5 +168,41 @@ public class MemberController {
 			return "member/delete";
 		}
 	}
+	
+	@RequestMapping("/member/my-orders")
+	public String myOrderList(Model model,HttpSession session) {
+		
+		List<Order> orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "상품 준비중");
+		model.addAttribute("beforeDeliveryList", orderList);
+
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "배송중");
+		model.addAttribute("delivering", orderList);
+
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "배송 완료");
+		model.addAttribute("afterDeliveryList", orderList);
+		
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "환불 요청중");
+		model.addAttribute("refunList", orderList);
+		
+		
+		return "/member/my-orders";
+	}
+	
+	@RequestMapping("/member/update-order")
+	public String updateOrderStatus(@RequestParam String status,@RequestParam int orderId, HttpSession session,Model model) {
+		orderService.updateOrder(status, orderId);
+		
+		List<Order> orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "상품 준비중");
+		model.addAttribute("beforeDeliveryList", orderList);
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "배송중");
+		model.addAttribute("delivering", orderList);
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "배송 완료");
+		model.addAttribute("afterDeliveryList", orderList);
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "환불 요청중");
+		model.addAttribute("refunList", orderList);
+		
+		return "/member/my-orders";
+	}
+	
 }
 	
