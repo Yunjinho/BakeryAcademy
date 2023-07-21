@@ -10,7 +10,8 @@
 <table class ="table_bordered" border="1">
 <tr>
 	<td>글번호</td>
-	<td th:text="${board.boardId}"></td>
+	<td th:text="${board.boardId}">
+	</td>
 </tr>
 
 <tr>
@@ -42,12 +43,14 @@
 
 <tr>
 	<td>첨부파일</td>
-<!-- 	<td>
-		<img th:src="@{/file/__${board.boardImageId}__}" th:if="${fileType=='.JPG' || fileType=='.JPEG' || fileType=='.PNG' || fileType=='.GIF'}" alt="" width="200">	
-	</td>  -->
-</tr>
-
-
+	<td>
+     <img th:src="@{/file/{boardImageId}(boardImageId=${board.boardImageId})}" 
+     th:if="${board.boardImageType == 'image/jpeg' || board.boardImageType == 'image/png' || board.boardImageType == 'image/gif' || board.boardImageType == 'image/jpg'}" 
+     class="img-thumbnail" alt="" width="600"><br>
+     
+     <a th:href="@{/file/{boardImageId}(boardImageId=${board.boardImageId})}" 
+     th:text="${board.boardImageName}">(<span th:text="${#numbers.formatDecimal(board.fileSize,3,'COMMA',2,'POINT')}">0</span>byte)</a>
+	</td>
 </table>
 
 </body>
