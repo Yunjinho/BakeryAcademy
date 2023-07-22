@@ -249,7 +249,7 @@ public class ProductController {
 	}
 
 	//상품 id의 썸네일 반환
-	@RequestMapping("/file/{productId}")
+	@RequestMapping("/product-thumnail/{productId}")
 	public ResponseEntity<byte[]> getProductThumbnail(@PathVariable int productId) {
 		ProductImage file = productService.getProductThumbnail(productId);
 

@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.myapp.member.model.Cart;
 import com.example.myapp.member.model.Member;
 import com.example.myapp.member.model.Order;
+import com.example.myapp.member.service.ICartService;
 import com.example.myapp.member.service.IMemberService;
 import com.example.myapp.member.service.IOrderService;
 
@@ -35,8 +37,10 @@ public class MemberController {
 	private Validator memberValidator;
 	
 	@Autowired
-	IOrderService orderService;
+	private IOrderService orderService;
 	
+	@Autowired
+	private ICartService cartService;
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {
 		binder.setValidator(memberValidator);
@@ -169,7 +173,7 @@ public class MemberController {
 		}
 	}
 	
-	@RequestMapping("/member/my-orders")
+	@RequestMapping(value=("/member/my-orders"),method=RequestMethod.GET)
 	public String myOrderList(Model model,HttpSession session) {
 		
 		List<Order> orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "상품 준비중");
@@ -183,8 +187,6 @@ public class MemberController {
 		
 		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "환불 요청중");
 		model.addAttribute("refunList", orderList);
-		
-		
 		return "/member/my-orders";
 	}
 	
@@ -204,5 +206,20 @@ public class MemberController {
 		return "/member/my-orders";
 	}
 	
+	@RequestMapping(value="/member/shoping-cart",method=RequestMethod.GET)
+	public String viewMyCart(HttpSession session,Model model) {
+		String memberId=(String)session.getAttribute("memberId");
+		List<Cart> cartList=cartService.selectCartList(memberId);
+		model.addAttribute("cartList", cartList);
+		int totalPrice=cartService.totalProductPrice(memberId);
+		model.addAttribute("totalPrice", totalPrice);
+		return "/member/shoping-cart";
+	}
+	
+	@RequestMapping(value="/member/update-cart",method=RequestMethod.POST)
+	public String updateCart(@RequestParam(value="cartId") List<Integer> cartId,@RequestParam(value="amount") List<Integer> amount) {
+		cartService.updateCartList(cartId, amount);
+		return "redirect:/member/shoping-cart";
+	}
 }
 	
