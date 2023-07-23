@@ -23,6 +23,7 @@
 			member_phone_number		"memberPhoneNumber",
 			member_email		AS "memberEmail",
 			member_nickname		AS "memberNickName",
+			member_address	AS	"memberAddress",
 			is_admin		AS "isAdmin"
 			FROM
 			member

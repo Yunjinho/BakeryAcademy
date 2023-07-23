@@ -1,6 +1,8 @@
 package com.example.myapp.member.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,7 +177,7 @@ public class MemberController {
 	
 	@RequestMapping(value=("/member/my-orders"),method=RequestMethod.GET)
 	public String myOrderList(Model model,HttpSession session) {
-		
+		System.out.println("w");
 		List<Order> orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "상품 준비중");
 		model.addAttribute("beforeDeliveryList", orderList);
 
@@ -217,9 +219,31 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="/member/update-cart",method=RequestMethod.POST)
-	public String updateCart(@RequestParam(value="cartId") List<Integer> cartId,@RequestParam(value="amount") List<Integer> amount) {
+	public String updateCart(@RequestParam(value="cartId") List<Integer> cartId,@RequestParam(value="amount") List<Integer> amount,@RequestParam(value="productId") List<Integer> productId) {
 		cartService.updateCartList(cartId, amount);
 		return "redirect:/member/shoping-cart";
+	}
+	
+	@RequestMapping(value="/member/order",method=RequestMethod.GET)
+	public String order(@RequestParam(value="productId") List<Integer> productId,@RequestParam(value="amount") List<Integer> amount,@RequestParam(value="totalPrice")int totalPrice,HttpSession session,Model model) {
+		Map<Integer, Integer> productList=new HashMap<Integer, Integer>();
+		Member member=new Member();
+		for(int i=0;i<productId.size();i++) {
+			productList.put(productId.get(i),amount.get(i));
+		}
+		model.addAttribute("productList", productList);
+		member=memberService.selectMember((String)session.getAttribute("memberId"));
+		model.addAttribute("member", member);
+		model.addAttribute("totalPrice", totalPrice);
+		return "/member/order";
+	}
+
+	@RequestMapping(value="/member/order",method=RequestMethod.POST)
+	public String insertOrder(@RequestParam(value="product") List<Integer> product,@RequestParam(value="amount") List<Integer> amount,
+			@RequestParam(value="memberId") String name,@RequestParam(value="orderAddress") String orderAddress,@RequestParam(value="orderAddressDetail") String orderAddressDetail, 
+			HttpSession session,Model model) {
+		orderService.insertOrder(product, amount, name,orderAddress,orderAddressDetail,(String)session.getAttribute("memberId"));
+		return "redirect:/member/my-orders";
 	}
 }
 	
