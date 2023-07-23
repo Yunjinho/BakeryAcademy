@@ -12,4 +12,5 @@ public interface IOrderService {
 	//주문 목록
 	List<Order> selectDeliveryList(String memberId,String status);
 	void updateOrder(String stauts,int orderId);
+	void insertOrder(List<Integer>productId,List<Integer>amont,String name,String address,String addressDetail,String memberId);
 }

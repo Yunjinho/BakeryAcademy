@@ -17,4 +17,17 @@ UPDATE order_list SET order_status=#{status}
 WHERE order_id=#{orderId} 
 ]]>
 </update>
+
+<insert id="insertOrder" parameterType="com.example.myapp.member.model.Order">
+<![CDATA[
+INSERT INTO order_list 
+VALUES(SEQ_ORDER_ID.NEXTVAL,#{productId},#{memberId},#{orderNumber},#{orderAddress},'상품 준비중',SYSDATE,#{orderCount})
+]]>
+</insert>
+
+<select id="selectOrderNumber" resultType="Integer">
+<![CDATA[
+SELECT SEQ_ORDER_NUMBER.NEXTVAL AS "orderNumber" FROM dual
+]]>
+</select>
 </mapper>

@@ -13,4 +13,6 @@ public interface IOrderRepository {
 	//주문 목록
 	List<Order> selectDeliveryList(@Param("memberId") String memberId,@Param("status")String status);
 	void updateOrder(@Param("status")String stauts,@Param("orderId")int orderId);
+	void insertOrder(Order order);
+	int selectOrderNumber();
 }

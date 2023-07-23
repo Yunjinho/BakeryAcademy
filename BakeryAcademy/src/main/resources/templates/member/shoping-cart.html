@@ -14,25 +14,15 @@
 <script>
 window.onload=function(){
 	$("#update-cart").click(function(){
-		var cartId = new Array();
-		var productAmount = new Array();
-		var product = $("input[name=num-product1]");
-		product.each(function(i) {
-			// checkbox.parentd() : checkbox의 부모는 <td>이다.
-			var tr = product.parent().parent().parent().eq(i);
-			var td = tr.children();
-			
-			var id = td.eq(1).text()
-			cartId.push(id);
-			
-			var amount =td.eq(4).children().children().eq(1).val();
-			productAmount.push(amount);
-		});
-		
 		$('#cart-form').attr('method','post');
 		$('#cart-form').attr('action','/member/update-cart');
 	   	$('#cart-form').submit();
-		//location.href="/member/update-cart?cartId="+cartId+"&amount="+productAmount;
+	})
+
+	$("#order-cart").click(function(){
+		$('#cart-form').attr('method','get');
+		$('#cart-form').attr('action','/member/order');
+	   	$('#cart-form').submit();
 	})
 }
 </script>
@@ -79,17 +69,19 @@ window.onload=function(){
 											</div>
 										</div>
 									</td>
+									<td><input type="hidden" id="productId" name="productId" th:value="${list.productId}"></td>
 								</tr>
 							</table>
 						</div>
 
 						<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
+							<input type="hidden" name="totalPrice" th:value="${totalPrice}">
 							<div style="margin:0px 20%;"><a>총 가격: <span th:text="${totalPrice}"></span></a>
 							</div>
 							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" id="update-cart" >
 								장바구니 수정
 							</div>
-							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" id="order-cart">
 								결제하기
 							</div>
 						</div>
