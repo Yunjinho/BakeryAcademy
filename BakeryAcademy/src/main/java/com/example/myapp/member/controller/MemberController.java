@@ -120,22 +120,10 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
-	public String updateMember(@Validated Member member, BindingResult result, HttpSession session, Model model) {
-		if (result.hasErrors()) {
-			model.addAttribute("member", member);
-			return "member/update";
-		}
-		try {
-			memberService.updateMember(member);
-			model.addAttribute("message", "회원정보가 수정되었습니다.");
-			model.addAttribute("member", member);
-			session.setAttribute("memberemail", member.getMemberEmail());
-			return "member/login";
-		} catch (Exception e) {
-			model.addAttribute("message", e.getMessage());
-			e.printStackTrace();
-			return "member/error";
-		}
+	public String updateMember(Member member, HttpSession session, Model model) {
+		System.out.println(member);
+		memberService.updateMember(member);
+		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/member/delete", method = RequestMethod.GET)
@@ -144,7 +132,7 @@ public class MemberController {
 		if (memberId != null && !memberId.equals("")) {
 			Member member = memberService.selectMember(memberId);
 			model.addAttribute("member", member);
-			model.addAttribute("message", "MEMBER_PW_RE");
+			model.addAttribute("message", "");
 			return "member/delete";
 		} else {
 			// userid가 세션에 없을 때(로그인 하지 않았을 때)
@@ -154,18 +142,18 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/member/delete", method = RequestMethod.POST)
-	public String deleteMember(String memberpassword, HttpSession session, Model model) {
+	public String deleteMember(String memberPassword, HttpSession session, Model model) {
 		try {
 			Member member = new Member();
 			member.setMemberId((String) session.getAttribute("memberId"));
 			String dbpw = memberService.getPassword(member.getMemberId());
-			if (memberpassword != null && memberpassword.equals(dbpw)) {
-				member.setMemberPassword(memberpassword);
+			if (memberPassword != null && memberPassword.equals(dbpw)) {
+				member.setMemberPassword(memberPassword);
 				memberService.deleteMember(member);
 				session.invalidate(); // 삭제되었으면 로그아웃 처리
-				return "member/login";
+				return "redirect:/";
 			} else {
-				model.addAttribute("message", "WRONG_PASSWORD");
+				model.addAttribute("message", "비밀번호가 틀렸습니다.");
 				return "member/delete";
 			}
 		} catch (Exception e) {
@@ -177,7 +165,6 @@ public class MemberController {
 	
 	@RequestMapping(value=("/member/my-orders"),method=RequestMethod.GET)
 	public String myOrderList(Model model,HttpSession session) {
-		System.out.println("w");
 		List<Order> orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "상품 준비중");
 		model.addAttribute("beforeDeliveryList", orderList);
 
@@ -245,5 +232,7 @@ public class MemberController {
 		orderService.insertOrder(product, amount, name,orderAddress,orderAddressDetail,(String)session.getAttribute("memberId"));
 		return "redirect:/member/my-orders";
 	}
+	
+	
 }
 	
