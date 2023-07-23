@@ -3,7 +3,7 @@
 <mapper namespace="com.example.myapp.board.dao.IBoardRepository">
 
 
-	<select id="selectMaxArticleNo" parameterType="int" resultType="int">
+	<select id="selectMaxArticleNo" resultType="int">
 	<![CDATA[
 		SELECT 
 			NVL(MAX(board_id),0) AS "articleNo"
@@ -14,27 +14,10 @@
 
 
 
-<!-- <select id="selectArticleListByCategory" parameterType="hashmap" resultType="com.example.myapp.board.model.Board">
-	<![CDATA[
-		SELECT
-			board_id, board_title, board_content, board_write_date
-		FROM  board
-	]]>
-	</select>
 
-
-	<select id="selectTotalArticleCountByCategoryId" parameterType="int" resultType="int">
-	<![CDATA[
-		SELECT COUNT(board_id) AS "count"
-		FROM board 
-		WHERE board_id=${boardId}	
-	]]>
-	</select> -->
-
-
-
-	<!-- 게시글 조회 -->
-	<select id="selectArticle" parameterType="int" resultType="com.example.myapp.board.model.Board">
+	
+	<select id="selectArticle" parameterType="int"
+		resultType="com.example.myapp.board.model.Board">
 	<![CDATA[
  	SELECT b.board_id 			AS "boardId",
 			m.member_nickname AS "memberNickname",
@@ -42,7 +25,12 @@
 			b.visit_count 		AS "visitCount",
 			b.board_title 		AS "boardTitle",
 			b.board_content 	AS "boardContent",
+			bi.board_image_id AS "boardImageId",
+			bi.board_image_name AS "boardImageName",
+			bi.board_image_size AS "boardImageSize",
+			bi.board_image_type AS "boardImageType",
 			bi.board_image AS "boardImage"
+			
 		FROM board b
         JOIN member m ON b.member_id = m.member_id
 		LEFT JOIN board_image bi ON b.board_id = bi.board_id
@@ -50,28 +38,30 @@
 	]]>
 	</select>
 	
+	
+	
+
 	<!-- 게시글입력 -->
 	<insert id="insertArticle" parameterType="com.example.myapp.board.model.Board">
-	<![CDATA[
 		INSERT INTO 
 		board 
 			(board_id, board_title, board_content, board_write_date, visit_count, member_id)  
 		VALUES 
 			(seq_board_id.NEXTVAL, #{boardTitle}, #{boardContent}, SYSDATE, 0, #{memberId})
-	]]>
+		<selectKey resultType="int" keyProperty="boardId" order="AFTER">
+			select nvl(max(board_id), 0) as "boardId" from board
+		</selectKey>
 	</insert>
-	
-	
-	
-	<select id="insertFileData" parameterType="int" resultType="com.example.myapp.board.model.BoardImage">
-	<![CDATA[
 
-		INSERT INTO board_image(board_image_id, board_id, board_image, board_image_name, board_image_size) 
-		VALUES(seq_board_image_id.NEXTVAL, #{boardId}, #{boardImage}, #{boardImageName}, #{boardImageSize})
+	<select id="insertFileData" parameterType="com.example.myapp.board.model.BoardImage">
+	<![CDATA[
+		INSERT INTO board_image(board_image_id, board_id, board_image, board_image_name, board_image_size, board_image_type) 
+		VALUES(seq_board_image_id.NEXTVAL, #{boardId}, #{boardImage}, #{boardImageName}, #{boardImageSize}, #{boardImageType})
 	]]>
 	</select>
-	
-		<select id="getFile" parameterType="int" resultType="com.example.myapp.board.model.BoardImage">
+
+	<select id="getFile" parameterType="int"
+		resultType="com.example.myapp.board.model.BoardImage">
 	<![CDATA[
 		SELECT 
 			board_image_id				AS "boardImageId", 

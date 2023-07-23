@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" th:href="@{../css/adminpage.css}">
+<head th:replace="~{header::head}"></head>
+<style>
+.modal {
+  display: none; /* 모달 초기에는 숨김 상태로 설정 */
+  position: fixed; /* 화면에 고정 */
+  z-index: 1; /* 다른 요소보다 위에 표시되도록 설정 */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* 모달 내용이 화면 크기를 초과할 경우 스크롤 가능하도록 설정 */
+  background-color: rgba(0, 0, 0, 0.5); /* 반투명한 배경 색상 */
+  text-align: center;
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 20% auto; /* 모달을 수직, 수평 가운데로 위치시킴 */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 25%;
+  height: 15%;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.confirm,.confirm_no {
+  padding: 5px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 20px;
+  background-color: #c9dbff;
+  color: white;
+  width: 100px;
+  cursor: pointer;
+  margin: 2px 5px;
+}
+.confirm:hover, .confirm_no:hover{
+	color:black;
+}
+</style>
+
+<script>
+function refun(id){
+	var content='<p style="display:none" id="refunOrderId">'+id+'</p>\n';
+	content+=$(".modal-content").html();
+	$(".modal-content").html(content);
+}
+function yes(){
+	var orderId=$("#refunOrderId").html();
+	alert(orderId)
+	location.href="/member/update-order?status=환불 요청중&orderId="+orderId;
+}
+function no(){
+	$("#myModal").css("display","none");	
+}
+window.onload=function(){
+	$(".refun-btn").click(function(){
+		$("#myModal").css("display","block");
+	})
+
+	window.addEventListener("click", function(event) {
+		  if (event.target == document.getElementById("myModal")) {
+		    document.getElementById("myModal").style.display = "none"; // 모달을 숨김으로 설정
+		  }
+	});
+}
+</script>
+<body class="animsition">
+<header th:replace="~{body-header::body-header}"></header>
+	<!-- Content page -->
+	<section class="bg0 p-t-52 p-b-20">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-lg-9 p-b-80">
+					<div class="p-r-45 p-r-0-lg">
+						<div class="p-t-40">
+							<h5 class="mtext-113 cl2 p-b-12">
+								상품 준비중
+								<br>
+							</h5>
+							<table class="table">
+  							<thead>
+							    <tr>
+							      <td scope="col">주문 번호</td>
+							      <td>상품 이름</td>
+							      <td>상품 수량</td>
+							      <td>상품 상태</td>
+							      <td></td>
+							    </tr>
+							  </thead>
+							  <tbody th:each="list:${beforeDeliveryList}">
+							    <tr>
+							      <td th:text="${list.orderNumber}"/>
+							      <td th:text="${list.productName}"/>
+							      <td th:text="${list.orderCount}"/>
+							      <td th:text="${list.orderStatus}"/>
+							      <td><button type="button" class="refun-btn" th:onclick="refun([[${list.orderId}]])">취소!</button></td>
+							    </tr>
+							  </tbody>
+							</table>
+						</div>
+						<div class="p-t-40">
+							<h5 class="mtext-113 cl2 p-b-12">
+								환불 처리중
+								<br>
+							</h5>
+							<table class="table">
+  							<thead>
+							    <tr>
+							      <td scope="col">주문 번호</td>
+							      <td>상품 이름</td>
+							      <td>상품 수량</td>
+							      <td>상품 상태</td>
+							      <td></td>
+							    </tr>
+							  </thead>
+							  <tbody th:each="list:${refunList}">
+							    <tr>
+							      <td th:text="${list.orderNumber}"/>
+							      <td th:text="${list.productName}"/>
+							      <td th:text="${list.orderCount}"/>
+							      <td th:text="${list.orderStatus}"/>
+						      </tr>
+							  </tbody>
+							</table>
+						</div>
+						<div class="p-t-40">
+							<h5 class="mtext-113 cl2 p-b-12">
+								배송중
+								<br>
+							</h5>
+							<table class="table">
+  							<thead>
+							    <tr>
+							      <td scope="col">주문 번호</td>
+							      <td>상품 이름</td>
+							      <td>상품 수량</td>
+							      <td>상품 상태</td>
+							      <td></td>
+							    </tr>
+							  </thead>
+							  <tbody th:each="list:${delivering}">
+							    <tr>
+							      <td th:text="${list.orderNumber}"/>
+							      <td th:text="${list.productName}"/>
+							      <td th:text="${list.orderCount}"/>
+							      <td th:text="${list.orderStatus}"/>
+							    </tr>
+							  </tbody>
+							</table>
+						</div>
+						<div class="p-t-40">
+							<h5 class="mtext-113 cl2 p-b-12">
+								배송 완료
+								<br>
+							</h5>
+							<table class="table">
+  							<thead>
+							    <tr>
+							      <td scope="col">주문 번호</td>
+							      <td>상품 이름</td>
+							      <td>상품 수량</td>
+							      <td>상품 상태</td>
+							      <td></td>
+							    </tr>
+							  </thead>
+							  <tbody th:each="list:${afterDeliveryList}">
+							    <tr>
+							      <td th:text="${list.orderNumber}"/>
+							      <td th:text="${list.productName}"/>
+							      <td th:text="${list.orderCount}"/>
+							      <td th:text="${list.orderStatus}"/>
+							    </tr>
+							  </tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+<div th:replace="~{member/member-menu::member-menu}"></div>
+			</div>
+		</div>
+	</section>	
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+			<p>취소 할까요?</p>
+			<div>
+		 		<button class="confirm" th:onclick="yes()">예</button>
+				<button class="confirm_no" th:onclick="no()">아니요</button>
+			</div>
+		</div>
+	</div>
+	
+<footer th:replace="~{footer::footer}"></footer>
+<!--===============================================================================================-->	
+	<script src="../../vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/bootstrap/js/popper.js"></script>
+	<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/select2/select2.min.js"></script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="../../vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			$(this).css('position','relative');
+			$(this).css('overflow','hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed: 1,
+				scrollingThreshold: 1000,
+				wheelPropagation: false,
+			});
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

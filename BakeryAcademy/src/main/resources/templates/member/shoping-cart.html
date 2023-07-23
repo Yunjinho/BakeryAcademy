@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" th:href="@{../css/adminpage.css}">
+<head th:replace="~{header::head}"></head>
+<style>
+.side_menu{
+	margin:10%;
+}
+.how-itemcart1{
+	width:100px;
+	height:100px;
+}
+</style>
+<script>
+window.onload=function(){
+	$("#update-cart").click(function(){
+		var cartId = new Array();
+		var productAmount = new Array();
+		var product = $("input[name=num-product1]");
+		product.each(function(i) {
+			// checkbox.parentd() : checkbox의 부모는 <td>이다.
+			var tr = product.parent().parent().parent().eq(i);
+			var td = tr.children();
+			
+			var id = td.eq(1).text()
+			cartId.push(id);
+			
+			var amount =td.eq(4).children().children().eq(1).val();
+			productAmount.push(amount);
+		});
+		
+		$('#cart-form').attr('method','post');
+		$('#cart-form').attr('action','/member/update-cart');
+	   	$('#cart-form').submit();
+		//location.href="/member/update-cart?cartId="+cartId+"&amount="+productAmount;
+	})
+}
+</script>
+<body class="animsition">
+<header th:replace="~{body-header::body-header}"></header>
+	<br>
+	<br>
+	<!-- Shoping Cart -->
+	<form class="bg0 p-t-75 p-b-85" id="cart-form">
+		<div class="container">
+			<h3 style="text-align:center;">장바구니</h3><br>
+			<div class="row">
+				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+					<div class="m-l-25 m-r--38 m-lr-0-xl">
+						<div class="wrap-table-shopping-cart">
+							<table class="table-shopping-cart">
+								<tr class="table_head">
+									<th class="column-1">상품</th>
+									<th class="column-2"></th>
+									<th class="column-3">가격</th>
+									<th class="column-4">수량</th>
+									<th></th>
+								</tr>
+
+								<tr class="table_row" th:each="list:${cartList}">
+									<td class="column-1">
+										<div class="how-itemcart1">
+											<img th:src="@{/product-thumnail/__${list.productId}__}" style="width: 100px; height: 100px;">
+										</div>
+									</td>
+									<td><input type="hidden" id="cartId" name="cartId" th:value="${list.cartId}"></td>
+									<td class="column-2" th:text="${list.productName}"></td>
+									<td class="column-3" th:text="${list.productPrice}"></td>
+									<td class="column-4">
+										<div class="wrap-num-product flex-w m-l-auto m-r-0">
+											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+												<i class="fs-16 zmdi zmdi-minus"></i>
+											</div>
+
+											<input class="mtext-104 cl3 txt-center num-product" type="number" id="amount" name="amount" th:value="${list.productCount}">
+
+											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+												<i class="fs-16 zmdi zmdi-plus"></i>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+
+						<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
+							<div style="margin:0px 20%;"><a>총 가격: <span th:text="${totalPrice}"></span></a>
+							</div>
+							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" id="update-cart" >
+								장바구니 수정
+							</div>
+							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+								결제하기
+							</div>
+						</div>
+					</div>
+				</div>
+<div th:replace="~{member/member-menu::member-menu}"></div>
+			</div>
+		</div>
+	</form>
+<footer th:replace="~{footer::footer}"></footer>
+	<!-- Back to top -->
+	<div class="btn-back-to-top" id="myBtn">
+		<span class="symbol-btn-back-to-top">
+			<i class="zmdi zmdi-chevron-up"></i>
+		</span>
+	</div>
+	<!--===============================================================================================-->	
+	<script th:src="@{../vendor/jquery/jquery-3.2.1.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/animsition/js/animsition.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/bootstrap/js/popper.js}"></script>
+	<script th:src="@{../vendor/bootstrap/js/bootstrap.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/select2/select2.min.js}"></script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/MagnificPopup/jquery.magnific-popup.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			$(this).css('position','relative');
+			$(this).css('overflow','hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed: 1,
+				scrollingThreshold: 1000,
+				wheelPropagation: false,
+			});
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+	</script>
+<!--===============================================================================================-->
+	<script th:src="@{../js/main.js}"></script>
+
+</body>
+</html>

@@ -14,4 +14,6 @@ public class Order {
 	private String orderStatus;
 	private Date orderDate;
 	private int orderCount;
+	
+	private String productName;
 }

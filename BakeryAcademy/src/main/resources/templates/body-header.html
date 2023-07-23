@@ -59,7 +59,7 @@
 						<a th:if="${session.memberId !=null and session.isAdmin  == 1 }" th:href="@{/admin/category}" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11" data-notify="0">
  							<img th:src="@{../images/icons/mypage.png}" style="width:20px; height:20px;">
 						</a>
-						<a th:if="${session.memberId !=null and session.isAdmin != 1}" th:href="@{/admin/insert-product}" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11" data-notify="0">
+						<a th:if="${session.memberId !=null and session.isAdmin != 1}" th:href="@{/member/my-orders}" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11" data-notify="0">
  							<img th:src="@{../images/icons/mypage.png}" style="width:20px; height:20px;">
 						</a>
 					</div>
