@@ -205,9 +205,12 @@ public class MemberController {
 	public String viewMyCart(HttpSession session,Model model) {
 		String memberId=(String)session.getAttribute("memberId");
 		List<Cart> cartList=cartService.selectCartList(memberId);
-		model.addAttribute("cartList", cartList);
-		int totalPrice=cartService.totalProductPrice(memberId);
+		int totalPrice=0;
+		if(cartList.size()>0) {
+			totalPrice=cartService.totalProductPrice(memberId);
+		}
 		model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("cartList", cartList);
 		return "/member/shoping-cart";
 	}
 	

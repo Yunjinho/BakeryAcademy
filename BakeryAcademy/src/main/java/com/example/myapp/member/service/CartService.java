@@ -30,7 +30,11 @@ public class CartService implements ICartService {
 	@Override
 	public void updateCartList(List<Integer> cartId, List<Integer> amount) {
 		for(int i=0;i<cartId.size();i++) {
-			cartRepository.updateCartList(cartId.get(i), amount.get(i));
+			if(amount.get(i)==0) {
+				cartRepository.deleteCartProduct(cartId.get(i));
+			}else {
+				cartRepository.updateCartList(cartId.get(i), amount.get(i));
+			}
 		}
 	}
 

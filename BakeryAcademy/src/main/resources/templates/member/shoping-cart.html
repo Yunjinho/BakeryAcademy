@@ -73,15 +73,15 @@ window.onload=function(){
 								</tr>
 							</table>
 						</div>
-
+						<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm" th:if="${totalPrice==0}"><h2 style="margin:auto;">장바구니에 상품이 없습니다.</h2></div>
 						<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
 							<input type="hidden" name="totalPrice" th:value="${totalPrice}">
 							<div style="margin:0px 20%;"><a>총 가격: <span th:text="${totalPrice}"></span></a>
 							</div>
-							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" id="update-cart" >
+							<div th:if="${totalPrice!=0}" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" id="update-cart" >
 								장바구니 수정
 							</div>
-							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" id="order-cart">
+							<div th:if="${totalPrice!=0}" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" id="order-cart">
 								결제하기
 							</div>
 						</div>

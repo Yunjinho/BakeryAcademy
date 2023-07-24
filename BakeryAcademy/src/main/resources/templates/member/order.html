@@ -2,21 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::header}"></head>
 <link rel="stylesheet" type="text/css" th:href="@{../css/adminpage.css}">
-
+<script th:src="@{../../vendor/jquery/jquery-3.2.1.min.js}"></script>
 <script>
 window.onload=function(){
-	$(".memberAdress").click(function(){
-		new daum.Postcode({
-            oncomplete: function(data) { //선택시 입력값 세팅
-                document.getElementById("address_kakao").value = data.address; // 주소 넣기
-                document.querySelector("input[name=memberAddressDetail]").focus(); //상세입력 포커싱
-            }
-        }).open();
-	});
 	$("#purchase").click(function(){
-		$('.insert-order-form').attr('method','post');
-		$('.insert-order-form').attr('action','/member/order');
-	   	$('.insert-order-form').submit();
+		var IMP = window.IMP; // 생략가능
+		IMP.init('imp04512863'); // <-- 본인 가맹점 식별코드 삽입
+		  IMP.request_pay({
+		    pg: "html5_inicis.INIBillTst",
+		    pay_method: "cart",
+		    pg:"kakaopay.TC0ONETIME",
+		    pay_method:"kakaopay",
+		    merchant_uid : 'merchant_'+new Date().getTime(),
+		    name : '[[${member.memberId}]]',
+		    amount : '[[${totalPrice}]]',
+		    buyer_email : '[[${member.memberEmail}]]',
+		    buyer_name : '[[${member.memberName}]]',
+		    buyer_tel : '[[${member.memberPhoneNumber}]]',
+		    buyer_addr : '[[${member.memberAddress}]]'
+		  }, function (rsp) { // callback
+		      if (rsp.success) {
+				$('.insert-order-form').attr('method','post');
+				$('.insert-order-form').attr('action','/member/order');
+			   	$('.insert-order-form').submit(); 
+		      } else {
+		    	alert("결제 실패!");  
+		      }
+		  });
+		
 	})
 }
 </script>
@@ -65,14 +78,14 @@ window.onload=function(){
 									<input class="stext-111 cl2 plh3 size-116 p-lr-18" th:value="${totalPrice}" type="text" placeholder="총 가격" readonly>
 								</div>
 								<br>
+								</form>
 								<button id="purchase" class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
 									결제하기
 								</button>
-							</form>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4 col-lg-3 p-b-80" th:replace="~{/admin/admin-menu::admin-menu}"></div>
+				<div class="col-md-4 col-lg-3 p-b-80" th:replace="~{/member/member-menu::member-menu}"></div>
 			</div>
 		</div>
 	</section>	
