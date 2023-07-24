@@ -41,4 +41,28 @@ public class OredrService implements IOrderService {
 		cartRepository.deleteCart(memberId);
 	}
 
+	@Override
+	public List<Order> selectAdminDeliveryList(String status) {
+		return orderRepository.selectAdminDeliveryList(status);
+	}
+
+	@Override
+	public int countOrder(String stauts) {
+		return orderRepository.countOrder(stauts);
+	}
+
+	@Override
+	public Order selectOrderDetail(int orderId) {
+		return orderRepository.selectOrderDetail(orderId);
+	}
+
+	@Override
+	public void updateOrderStatus(Order order) {
+		if(order.getOrderStatus().equals("환불 완료")) {
+			orderRepository.deleteOrder(order.getOrderId());
+		}else {
+			orderRepository.updateOrderStatus(order);
+		}
+	}
+
 }

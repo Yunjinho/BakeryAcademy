@@ -13,4 +13,8 @@ public interface IOrderService {
 	List<Order> selectDeliveryList(String memberId,String status);
 	void updateOrder(String stauts,int orderId);
 	void insertOrder(List<Integer>productId,List<Integer>amont,String name,String address,String addressDetail,String memberId);
+	List<Order> selectAdminDeliveryList(String status);
+	int countOrder(String stauts);
+	Order selectOrderDetail(int orderId);
+	void updateOrderStatus(Order order);
 }
