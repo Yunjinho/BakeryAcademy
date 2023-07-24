@@ -86,7 +86,7 @@ public class MemberController {
 					session.setAttribute("memberId", memberId);
 					session.setAttribute("memberName", member.getMemberName());
 					session.setAttribute("memberEmail", member.getMemberEmail());
-					return "redirect:/member/memberinfo"; // memberinfo 페이지로 리다이렉션
+					return "redirect:/"; // memberinfo 페이지로 리다이렉션
 				} else { // 아이디는 있지만 비밀번호가 다른 경우
 					model.addAttribute("message", "WRONG_PASSWORD");
 				}
