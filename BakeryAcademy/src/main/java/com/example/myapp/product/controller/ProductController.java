@@ -278,27 +278,33 @@ public class ProductController {
 		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
 	}
 
-	//상품 id에 해당하는 모든 이미지 반환
+	// 상품 상세정보페이지로 이동
 	@RequestMapping("/product-detail/{productId}")
-	public ResponseEntity<byte[]> getProductDetail(@PathVariable int productId, Model model) {
+	public String getProductDetail(@PathVariable int productId, Model model) {
 		Product product = productService.selectProduct(productId);
-		model.addAttribute("product",product);
-		ProductImage file = productService.getProductThumbnail(productId);
-		if (file == null) {
-			productId = 0;
-			file = productService.getProductThumbnail(productId);
-		}
-		logger.info("getFile " + file.toString());
-		final HttpHeaders headers = new HttpHeaders();
-		String[] mtypes = file.getProductImageType().split("/");
-		headers.setContentType(new MediaType(mtypes[0], mtypes[1]));
-		headers.setContentLength(Long.parseLong(file.getProductImageSize()));
-		try {
-			String encodedFileName = URLEncoder.encode(file.getProductImageName(), "UTF-8");
-			headers.setContentDispositionFormData("attachment", encodedFileName);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
+		model.addAttribute("product", product);
+		return "/product-detail";
 	}
+
+	// 상품id에 해당하는 모든 이미지 반환
+//	@RequestMapping("/product-detail/{productId}")
+//	public ResponseEntity<byte[]> getProductDetail(@PathVariable int productId) {
+//		ProductImage file = productService.getProductThumbnail(productId);
+//		if (file == null) {
+//			productId = 0;
+//			file = productService.getProductThumbnail(productId);
+//		}
+//		logger.info("getFile " + file.toString());
+//		final HttpHeaders headers = new HttpHeaders();
+//		String[] mtypes = file.getProductImageType().split("/");
+//		headers.setContentType(new MediaType(mtypes[0], mtypes[1]));
+//		headers.setContentLength(Long.parseLong(file.getProductImageSize()));
+//		try {
+//			String encodedFileName = URLEncoder.encode(file.getProductImageName(), "UTF-8");
+//			headers.setContentDispositionFormData("attachment", encodedFileName);
+//		} catch (UnsupportedEncodingException e) {
+//			throw new RuntimeException(e);
+//		}
+//		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
+//	}
 }

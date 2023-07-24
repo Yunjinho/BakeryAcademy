@@ -20,8 +20,8 @@
 	<h2>STOCK</h2>
 	<div th:text="${product.productStock}">STOCK</div>
 	<br>
-<!-- 	<div th:each="image:${productImageList}"> -->
-<!-- 		<img src="${img.productImage}"> -->
-<!-- 	</div> -->
+	<div th:each="image:${productImageList}">
+		<img src="${image.productImage}">
+	</div>
 </body>
 </html>
