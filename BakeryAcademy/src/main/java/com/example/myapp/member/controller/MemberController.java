@@ -1,5 +1,10 @@
 package com.example.myapp.member.controller;
 
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +17,16 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.myapp.board.model.Board;
+import com.example.myapp.member.MemberValidator;
+import com.example.myapp.member.model.Cart;
 import com.example.myapp.member.model.Member;
+import com.example.myapp.member.model.Order;
+import com.example.myapp.member.service.ICartService;
 import com.example.myapp.member.service.IMemberService;
+import com.example.myapp.member.service.IOrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -27,12 +39,20 @@ public class MemberController {
 	private IMemberService memberService;
 
 	@Autowired
-	private Validator memberValidator;
-
-	@InitBinder
-	private void initBinder(WebDataBinder binder) {
-		binder.setValidator(memberValidator);
-	}
+	private MemberValidator memberValidator;
+	
+	@Autowired
+	private IOrderService orderService;
+	
+	@Autowired
+	private ICartService cartService;
+	
+	 @InitBinder("Member")
+	 private void initBinder(WebDataBinder binder) {
+		 binder.setValidator(memberValidator); 
+	 }
+	 
+	 
 
 	@RequestMapping(value = "/member/signup", method = RequestMethod.GET)
 	public String insertMember(Model model) {
@@ -106,22 +126,10 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
-	public String updateMember(@Validated Member member, BindingResult result, HttpSession session, Model model) {
-		if (result.hasErrors()) {
-			model.addAttribute("member", member);
-			return "member/update";
-		}
-		try {
-			memberService.updateMember(member);
-			model.addAttribute("message", "회원정보가 수정되었습니다.");
-			model.addAttribute("member", member);
-			session.setAttribute("memberemail", member.getMemberEmail());
-			return "member/login";
-		} catch (Exception e) {
-			model.addAttribute("message", e.getMessage());
-			e.printStackTrace();
-			return "member/error";
-		}
+	public String updateMember(Member member, HttpSession session, Model model) {
+		System.out.println(member);
+		memberService.updateMember(member);
+		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/member/delete", method = RequestMethod.GET)
@@ -130,7 +138,7 @@ public class MemberController {
 		if (memberId != null && !memberId.equals("")) {
 			Member member = memberService.selectMember(memberId);
 			model.addAttribute("member", member);
-			model.addAttribute("message", "MEMBER_PW_RE");
+			model.addAttribute("message", "");
 			return "member/delete";
 		} else {
 			// userid가 세션에 없을 때(로그인 하지 않았을 때)
@@ -140,18 +148,18 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/member/delete", method = RequestMethod.POST)
-	public String deleteMember(String memberpassword, HttpSession session, Model model) {
+	public String deleteMember(String memberPassword, HttpSession session, Model model) {
 		try {
 			Member member = new Member();
 			member.setMemberId((String) session.getAttribute("memberId"));
 			String dbpw = memberService.getPassword(member.getMemberId());
-			if (memberpassword != null && memberpassword.equals(dbpw)) {
-				member.setMemberPassword(memberpassword);
+			if (memberPassword != null && memberPassword.equals(dbpw)) {
+				member.setMemberPassword(memberPassword);
 				memberService.deleteMember(member);
 				session.invalidate(); // 삭제되었으면 로그아웃 처리
-				return "member/login";
+				return "redirect:/";
 			} else {
-				model.addAttribute("message", "WRONG_PASSWORD");
+				model.addAttribute("message", "비밀번호가 틀렸습니다.");
 				return "member/delete";
 			}
 		} catch (Exception e) {
@@ -159,6 +167,194 @@ public class MemberController {
 			e.printStackTrace();
 			return "member/delete";
 		}
+	}
+	
+	@RequestMapping(value=("/member/my-orders"),method=RequestMethod.GET)
+	public String myOrderList(Model model,HttpSession session) {
+		List<Order> orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "상품 준비중");
+		model.addAttribute("beforeDeliveryList", orderList);
+
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "배송중");
+		model.addAttribute("delivering", orderList);
+
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "배송 완료");
+		model.addAttribute("afterDeliveryList", orderList);
+		
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "환불 요청중");
+		model.addAttribute("refunList", orderList);
+		return "/member/my-orders";
+	}
+	
+	@RequestMapping("/member/update-order")
+	public String updateOrderStatus(@RequestParam String status,@RequestParam int orderId, HttpSession session,Model model) {
+		orderService.updateOrder(status, orderId);
+		
+		List<Order> orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "상품 준비중");
+		model.addAttribute("beforeDeliveryList", orderList);
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "배송중");
+		model.addAttribute("delivering", orderList);
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "배송 완료");
+		model.addAttribute("afterDeliveryList", orderList);
+		orderList=orderService.selectDeliveryList((String)session.getAttribute("memberId"), "환불 요청중");
+		model.addAttribute("refunList", orderList);
+		
+		return "/member/my-orders";
+	}
+	
+	@RequestMapping(value="/member/shoping-cart",method=RequestMethod.GET)
+	public String viewMyCart(HttpSession session,Model model) {
+		String memberId=(String)session.getAttribute("memberId");
+		List<Cart> cartList=cartService.selectCartList(memberId);
+		model.addAttribute("cartList", cartList);
+		int totalPrice=cartService.totalProductPrice(memberId);
+		model.addAttribute("totalPrice", totalPrice);
+		return "/member/shoping-cart";
+	}
+	
+	@RequestMapping(value="/member/update-cart",method=RequestMethod.POST)
+	public String updateCart(@RequestParam(value="cartId") List<Integer> cartId,@RequestParam(value="amount") List<Integer> amount,@RequestParam(value="productId") List<Integer> productId) {
+		cartService.updateCartList(cartId, amount);
+		return "redirect:/member/shoping-cart";
+	}
+	
+	@RequestMapping(value="/member/order",method=RequestMethod.GET)
+	public String order(@RequestParam(value="productId") List<Integer> productId,@RequestParam(value="amount") List<Integer> amount,@RequestParam(value="totalPrice")int totalPrice,HttpSession session,Model model) {
+		Map<Integer, Integer> productList=new HashMap<Integer, Integer>();
+		Member member=new Member();
+		for(int i=0;i<productId.size();i++) {
+			productList.put(productId.get(i),amount.get(i));
+		}
+		model.addAttribute("productList", productList);
+		member=memberService.selectMember((String)session.getAttribute("memberId"));
+		model.addAttribute("member", member);
+		model.addAttribute("totalPrice", totalPrice);
+		return "/member/order";
+	}
+
+	@RequestMapping(value="/member/order",method=RequestMethod.POST)
+	public String insertOrder(@RequestParam(value="product") List<Integer> product,@RequestParam(value="amount") List<Integer> amount,
+			@RequestParam(value="memberId") String name,@RequestParam(value="orderAddress") String orderAddress,@RequestParam(value="orderAddressDetail") String orderAddressDetail, 
+			HttpSession session,Model model) {
+		orderService.insertOrder(product, amount, name,orderAddress,orderAddressDetail,(String)session.getAttribute("memberId"));
+		return "redirect:/member/my-orders";
+	}
+	
+	
+	@RequestMapping(value="/admin/orders",method=RequestMethod.GET)
+	public String managerOrders(@RequestParam int beforePage,@RequestParam int ingPage,@RequestParam int afterPage,@RequestParam int refunPage,Model model) {
+		
+		//
+		List<Order> orderList=orderService.selectAdminDeliveryList("상품 준비중");
+		model.addAttribute("beforeDeliveryList", orderList);
+		int bbsCount = orderService.countOrder("상품 준비중");
+		int totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
+		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("beforeTotalPageCount", totalPage);
+		model.addAttribute("beforeNowPage", beforePage);
+		model.addAttribute("beforeTotalPageBlock", totalPageBlock);
+		model.addAttribute("beforeNowPageBlock", nowPageBlock);
+		model.addAttribute("beforeStartPage", startPage);
+		model.addAttribute("beforeEndPage", endPage);
+		//
+		//
+		orderList=orderService.selectAdminDeliveryList("배송중");
+		model.addAttribute("delivering", orderList);
+		bbsCount = orderService.countOrder("배송중");
+		totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
+		startPage = (nowPageBlock - 1) * 10 + 1;
+		endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("ingTotalPageCount", totalPage);
+		model.addAttribute("ingNowPage", beforePage);
+		model.addAttribute("ingTotalPageBlock", totalPageBlock);
+		model.addAttribute("ingNowPageBlock", nowPageBlock);
+		model.addAttribute("ingStartPage", startPage);
+		model.addAttribute("ingEndPage", endPage);
+		//
+		//
+		orderList=orderService.selectAdminDeliveryList("배송 완료");
+		model.addAttribute("afterDeliveryList", orderList);
+		bbsCount = orderService.countOrder("배송 완료");
+		totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
+		startPage = (nowPageBlock - 1) * 10 + 1;
+		endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("afterTotalPageCount", totalPage);
+		model.addAttribute("afterNowPage", beforePage);
+		model.addAttribute("afterTotalPageBlock", totalPageBlock);
+		model.addAttribute("afterNowPageBlock", nowPageBlock);
+		model.addAttribute("afterStartPage", startPage);
+		model.addAttribute("afterEndPage", endPage);
+		//
+		//
+		orderList=orderService.selectAdminDeliveryList("환불 요청중");
+		model.addAttribute("refunList", orderList);
+		bbsCount = orderService.countOrder("배송중");
+		totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
+		startPage = (nowPageBlock - 1) * 10 + 1;
+		endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("refunTotalPageCount", totalPage);
+		model.addAttribute("refunNowPage", beforePage);
+		model.addAttribute("refunTotalPageBlock", totalPageBlock);
+		model.addAttribute("refunNowPageBlock", nowPageBlock);
+		model.addAttribute("refunStartPage", startPage);
+		model.addAttribute("refunEndPage", endPage);
+		//
+		
+		return "/admin/orders";
+	}
+	
+	@RequestMapping(value="/admin/order-detail",method=RequestMethod.GET)
+	public String viewOrderDetail(@RequestParam int orderId,Model model) {
+		Order order=new Order();
+		order=orderService.selectOrderDetail(orderId);
+		model.addAttribute("order", order);
+		return "/admin/orders-detail";
+	}
+
+	@RequestMapping(value="/admin/order-detail",method=RequestMethod.POST)
+	public String updateOrderDetail(Order order,Model model) {
+		orderService.updateOrderStatus(order);
+		return "redirect:/admin/orders?beforePage=1&ingPage=1&afterPage=1&refunPage=1";
 	}
 }
 	

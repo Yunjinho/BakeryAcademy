@@ -1,16 +1,20 @@
 package com.example.myapp.board.model;
 
 
-import java.util.Date;
 
+
+import java.sql.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-
 public class Board {
 	private int boardId;
 	private String memberId;
@@ -28,6 +32,7 @@ public class Board {
 	
 	private MultipartFile file;
 	private byte[] boardImage;
+	
 	@Override
 	public String toString() {
 		return "Board [boardId=" + boardId + ", memberId=" + memberId + ", boardTitle=" + boardTitle + ", visitCount="
