@@ -88,11 +88,13 @@ public class MemberController {
 					session.setAttribute("memberEmail", member.getMemberEmail());
 					return "redirect:/"; // memberinfo 페이지로 리다이렉션
 				} else { // 아이디는 있지만 비밀번호가 다른 경우
-					model.addAttribute("message", "WRONG_PASSWORD");
+					model.addAttribute("message", " 비밀번호를 잘못 입력했습니다.\r\n"
+							+ "입력하신 내용을 다시 확인해주세요..");
 				}
 			}
 		} else {
-			model.addAttribute("message", "USER_NOT_FOUND");
+			model.addAttribute("message", "아이디(로그인 전용 아이디)를 잘못 입력했습니다.\r\n"
+					+ "입력하신 내용을 다시 확인해주세요.");
 		}
 		session.invalidate();
 		return "member/login";
@@ -119,7 +121,7 @@ public class MemberController {
 			return "member/update";
 		} else {
 			// memberid가 세션에 없을 때 (로그인하지 않았을 때)
-			model.addAttribute("message", "NOT_LOGIN_USER");
+			model.addAttribute("message", "사용자가 아닙니다.");
 			return "member/login";
 
 		}
