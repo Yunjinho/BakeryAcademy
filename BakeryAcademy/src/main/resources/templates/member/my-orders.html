@@ -64,7 +64,7 @@ function no(){
 	$("#myModal").css("display","none");	
 }
 window.onload=function(){
-	$(".refun-btn").click(function(){
+	$("#refun-btn").click(function(){
 		$("#myModal").css("display","block");
 	})
 
@@ -104,7 +104,7 @@ window.onload=function(){
 							      <td th:text="${list.productName}"/>
 							      <td th:text="${list.orderCount}"/>
 							      <td th:text="${list.orderStatus}"/>
-							      <td><button type="button" class="refun-btn" th:onclick="refun([[${list.orderId}]])">취소!</button></td>
+							      <td><button type="button" class="btn btn-outline-secondary" id="refun-btn" th:onclick="refun([[${list.orderId}]])">취소!</button></td>
 							    </tr>
 							  </tbody>
 							</table>
@@ -193,7 +193,16 @@ window.onload=function(){
 <div th:replace="~{member/member-menu::member-menu}"></div>
 			</div>
 		</div>
-	</section>	
+	</section>
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+			<p>취소 할까요?</p>
+			<div>
+		 		<button class="confirm" th:onclick="yes()">예</button>
+				<button class="confirm_no" th:onclick="no()">아니요</button>
+			</div>
+		</div>
+	</div>	
 <footer th:replace="~{footer::footer}"></footer>
 <!--===============================================================================================-->	
 	<script src="../../vendor/jquery/jquery-3.2.1.min.js"></script>

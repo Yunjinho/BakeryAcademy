@@ -117,7 +117,7 @@ public class MemberController {
 	@RequestMapping(value = "/member/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session, HttpServletRequest request) {
 		session.invalidate(); // 로그아웃
-		return "home";
+		return "index";
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.GET)
