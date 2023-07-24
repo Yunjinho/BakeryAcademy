@@ -39,6 +39,38 @@ public class ProductController {
 
 	@Autowired
 	IProductService productService;
+	
+	//테스트용 매핑
+	@RequestMapping("/test/{categoryId}/{page}")
+//	@RequestMapping("/test")
+	public String getTestCSS(@PathVariable int categoryId, @PathVariable int page, HttpSession session, Model model) {
+//	public String getTestCSS(@RequestParam int categoryId, @RequestParam int page, HttpSession session, Model model) {
+		session.setAttribute("page", page);
+		model.addAttribute("categoryId", categoryId);
+		List<Product> productList = productService.selectProductListByCategory(categoryId, page);
+		model.addAttribute("productList", productList);
+		int bbsCount = productService.selectTotalProductCountByCategory(categoryId);
+		int totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) Math.ceil(page / 10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int endPage = 0;
+		if (totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		return "/product/product-original";
+	}
 
 	// 카테고리와 페이지에 따른 상품 목록으로 이동
 	@RequestMapping("/product/{categoryId}/{page}")
