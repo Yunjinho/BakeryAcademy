@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.myapp.board.service.IBoardService;
+import com.example.myapp.member.dao.ICartRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -12,14 +13,12 @@ import jakarta.servlet.http.HttpSession;
 public class HomeContrller {
 	
 	@Autowired
-	IBoardService boardService;
+	ICartRepository cartRepository;
 	
 	@RequestMapping("/")
 	public String home(HttpSession session) {
-		session.setAttribute("memberId", "my");
-		session.setAttribute("isAdmin", 0);
-		if(session.getAttribute("memberId")==null) {
-			session.setAttribute("memberId", null);
+		if(session.getAttribute("memberId")!=null) {
+			cartRepository.countCart((String)session.getAttribute("memberId"));
 		}
 		return "index";
 	}

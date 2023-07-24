@@ -13,4 +13,5 @@ public interface ICartService {
 	List<Cart> selectCartList(String memberId);
 	int totalProductPrice(String memberId);
 	void updateCartList(List<Integer>cartId,List<Integer>amount);
+	int countCart(String memberId);
 }

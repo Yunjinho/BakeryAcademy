@@ -33,4 +33,9 @@ public class CartService implements ICartService {
 			cartRepository.updateCartList(cartId.get(i), amount.get(i));
 		}
 	}
+
+	@Override
+	public int countCart(String memberId) {
+		return cartRepository.countCart(memberId);
+	}
 }
