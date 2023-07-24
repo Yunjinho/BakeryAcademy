@@ -3,7 +3,9 @@
 <body>
 	<span>message</span>
 	<div>
-<!-- 		<img th:src="@{/product-thumnail/__${product.productId}__}" style="width: 100px; height: 100px;"> -->
+		<img th:src="@{/product-thumnail/__${product.productId}__}" style="width: 300px; height: 300px;">
+	</div>
+	<div>
 	</div>
 	<h2>ID</h2>
 	<div th:text="${product.productId}">ID</div>
@@ -20,8 +22,10 @@
 	<h2>STOCK</h2>
 	<div th:text="${product.productStock}">STOCK</div>
 	<br>
-	<div th:each="image:${productImageList}">
-		<img src="${image.productImage}">
+	<h2>Images</h2>
+	<div th:each="imageId : ${imageIdList}">
+		<p th:text = ${imageId}></p>
+		<img th:src ="@{/product-detail/image/__${imageId}__}">
 	</div>
 </body>
 </html>
