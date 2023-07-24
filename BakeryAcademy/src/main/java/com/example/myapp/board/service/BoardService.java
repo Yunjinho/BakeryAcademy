@@ -59,6 +59,14 @@ public class BoardService implements IBoardService{
         return board.getBoardId();
 	}
 	
+	//삭제할 게시물 조회
+	@Transactional
+	public Board selectDeleteBoard(int boardId) {
+		return boardRepository.selectDeleteBoard(boardId);
+	}
+	
+	
+	
 	//제목 내용 작성자 키워드로 게시물 찾기
 	@Override
 	public List<Board> selectKeywordBoardList(String keyword, int page) {
@@ -94,5 +102,47 @@ public class BoardService implements IBoardService{
 	public int countKeywordBoard(String keyword) {
 		return boardRepository.countKeywordBoard(keyword);
 	}
+
+
+
+
+	@Override
+	public String getMemberId(String memberId) {
+		return boardRepository.getMemberId(memberId);
+	}
+
+
+
+
+	@Transactional
+	public void deleteArticle(int boardId) {
+//		if(replyNumber>0) {
+//			boardRepository.deleteReplyFileData(boardId);
+//			boardRepository.deleteArticleByBoardId(boardId);
+//		} else if(replyNumber == 0){
+//			boardRepository.deleteFileData(boardId);
+//			boardRepository.deleteArticleByMasterId(boardId);
+//		} else {
+//			throw new RuntimeException("WRONG_REPLYNUMBER");
+//		}
+//	}
+		boardRepository.deleteFileData(boardId);
+		boardRepository.deleteArticleInfo(boardId);
+		
+	
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
