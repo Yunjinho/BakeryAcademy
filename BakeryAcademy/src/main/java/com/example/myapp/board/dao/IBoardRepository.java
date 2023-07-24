@@ -28,6 +28,17 @@ public interface IBoardRepository {
 	void insertBoardImage(BoardImage file);
 	void insertFileData(BoardImage file);
 	
+	//삭제할 보드 조회
+	Board selectDeleteBoard(int boardId);
+	
+	String getMemberId(String memberId);
+	//삭제할 파일 데이터
+	void deleteFileData(int boardId);
+	//삭제할 게시물 정보
+	void deleteArticleInfo(int boardId);
+	
+	
+	
 	//게시물에 등록된 이미지 삭제
 	void deleteBoardImage(int boardId);
 	//게시물 삭제
@@ -48,4 +59,6 @@ public interface IBoardRepository {
 	int countBoard();
 	//검색한 게시판의 수
 	int countKeywordBoard(@Param("keyword")String keyword);
+
+	
 }
