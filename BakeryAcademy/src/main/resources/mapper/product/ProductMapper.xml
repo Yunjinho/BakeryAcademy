@@ -76,7 +76,7 @@
 
 <select id="getProductImageList" parameterType="int" resultType="com.example.myapp.product.model.ProductImage">
 	<![CDATA[
-		SELECT * FROM product_image where product_id=#{productId};
+		SELECT * FROM product_image where product_id=#{productId}
 	]]>
 </select>
 
