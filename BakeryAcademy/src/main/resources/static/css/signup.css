@@ -1,0 +1,365 @@
+@charset "UTF-8";
+
+@media screen and (max-width: 1200px) {
+  .sign, .agree {
+    width: 100%;
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+
+  .agree-con-t {
+    width: calc(100% - 30px);
+  }
+
+  .sign-button {
+    width: 100%;
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .sign-info {
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .sign-text {
+    float: none;
+  }
+}
+main {
+	padding: 2% 10%;
+	margin-top: 10%;
+}
+
+body::-webkit-scrollbar {
+	display: none;
+}
+
+body {
+	font-family: "Noto Sans KR", sans-serif;
+	font-size: 0.8em;
+	line-height: 1.5em;
+	color: #666;
+}
+
+h1 {
+	font-size: 6em;
+	line-height: 0.5em;
+	color: #000;
+	font-family: "Noto Sans KR", sans-serif;
+	text-transform: uppercase;
+	display: inline;
+}
+
+
+
+h3 {
+	font-size: 4em;
+	line-height: 0.5em;
+	color: #000;
+	font-family: "Noto Sans KR", sans-serif;
+	display: inline;
+}
+
+h4 {
+	font-size: 3em;
+	line-height: 0.5em;
+	color: #000;
+	font-family: "Noto Sans KR", sans-serif;
+	display: inline;
+}
+
+h5 {
+	font-size: 2em;
+	line-height: 0.1em;
+	color: #000;
+	font-family: "Noto Sans KR", sans-serif;
+	display: inline;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+} /* a:link a tag 기본 */
+a:hover {
+	color: #000;
+} /* 마우스오버 link*/
+a:active {
+	color: #000;
+} /* 선택된 link*/
+a:visited {
+	color: #000;
+}
+
+/*d*/
+body {
+	background-color: #fff;
+	margin: 0px;
+}
+
+
+
+/*div 기본설정*/
+.sign-div {
+	border: 0px solid red;
+	position: relative;
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+	background-color: none;
+	overflow: hidden;
+}
+
+.signup:after {
+	content: "";
+	display: block;
+	clear: both;
+	height: 0;
+	visibility: hidden;
+}
+
+/*가입양식*/
+.sign {
+	border: 0px solid blue;
+	width: 1200px;
+	margin: 0 auto;
+}
+
+.sign h3 {
+	font-size: 1.5em;
+	padding: 20px;
+	line-height: 2em;
+}
+
+.sign h5 {
+	font-size: 1.2em;
+	padding: 20px;
+	line-height: 2em;
+}
+
+.hr1 {
+	margin: 20px auto 10px;
+	border: 1px solid black;
+}
+
+.hr2 {
+	margin: 15px auto 15px;
+}
+
+.sign-text {
+	border: px solid red;
+	float: left;
+}
+
+.sign-info {
+	border: 0px solid black;
+	width: 800px;
+	margin: auto;
+	padding: 0px;
+}
+
+.signuppage-memberPhoneNumber{
+	    padding: 6px;
+    margin-right: 15px;
+    border: solid 1px;
+}
+
+
+.signuppage {
+	padding: 6px;
+	margin-right: 15px;
+	border: solid 1px;
+}
+
+
+
+.sign select {
+	padding: 6px;
+}
+
+/*전체동의 컨텐츠*/
+.agree {
+	width: 1200px;
+	margin: 0 auto;
+	background-color: #eee;
+}
+
+hr {
+    display: block;
+    unicode-bidi: isolate;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+    overflow: hidden;
+    border-style: inset;
+    border-width: 1px;
+}
+.agree h3 {
+	font-size: 1.5em;
+	padding: 20px;
+	line-height: 2em;
+}
+
+.agree h5 {
+	font-size: 1.2em;
+	padding: 20px;
+}
+
+.agree-con {
+	padding: 20px 0px 0px 0px;
+	border: 0px solid black;
+	margin-top: 20px;
+}
+
+.agree-con-t {
+	border: 0px solid black;
+	width: 1168px;
+	margin: 20px auto 0px;
+	background-color: #fff;
+	overflow: auto;
+	height: 200px;
+}
+
+.agree h6 {
+	font-size: 1em;
+	color: #222;
+	margin: 0px;
+	padding: 20px;
+}
+
+/*체크박스 설정*/
+input[id="cb1"]+label {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #666;
+	cursor: pointer;
+	position: relative;
+	top: 13px;
+	left: 8px;
+	margin-right: 8px;
+}
+
+input[id="cb1"]:checked+label {
+	background-color: #666666;
+}
+
+input[id="cb1"] {
+	display: none;
+}
+
+input[id="cb2"]+label {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #666;
+	cursor: pointer;
+	position: relative;
+	top: 13px;
+	left: 5px;
+	margin-right: 8px;
+}
+
+input[id="cb2"]:checked+label {
+	background-color: #666666;
+}
+
+input[id="cb2"] {
+	display: none;
+}
+
+input[id="cb3"]+label {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #666;
+	cursor: pointer;
+	position: relative;
+	top: 13px;
+	left: 5px;
+	margin-right: 8px;
+}
+
+input[id="cb3"]:checked+label {
+	background-color: #666666;
+}
+
+input[id="cb3"] {
+	display: none;
+}
+
+input[id="cb4"]+label {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #666;
+	cursor: pointer;
+	position: relative;
+	top: 11px;
+	left: 5px;
+	margin-right: 8px;
+}
+
+input[id="cb4"]:checked+label {
+	background-color: #666666;
+}
+
+input[id="cb4"] {
+	display: none;
+}
+
+input[id="cb5"]+label {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #666;
+	cursor: pointer;
+	position: relative;
+	top: 11px;
+	left: 10px;
+	margin-right: 15px;
+}
+
+input[id="cb5"]:checked+label {
+	background-color: #666666;
+}
+
+input[id="cb5"] {
+	display: none;
+}
+
+/*회원가입버튼*/
+.sign-button {
+	border: 0px solid blue;
+	width: 1200px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.sign-button .btn {
+	background-color: #cccc;
+	padding: 10px 30px;
+	margin-right: 40px;
+	color: #222;
+	font-size: 1.1em;
+	font-weight: bold;
+	cursor: pointer;
+	margin-top: 30px;
+}
+.btn{
+	color: #000;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    margin: 10px 0px;
+    display: inline-block;
+    background-color: #fff;
+}
+.sign-button .btn:hover {
+	background-color: #222;
+	color: #fff;
+	font-weight: normal;
+}
