@@ -1,11 +1,64 @@
 @charset "UTF-8";
 
 .whole{
-margin-top : 100px;
+	margin-top : 200px;
+	width:100%;
 	
 }
+
 
 .content{
 	color : block;
 	
 }
+
+.title{
+	color : block;
+	font-weight : bold;
+	font-size : 17px;
+}
+
+.content{
+	font-weight : bold;
+	font-size : 17px;
+	
+}
+
+.image{
+	font-weight : bold;
+	font-size : 17px;
+	margin-left:-30px;
+}
+
+
+
+/* 저장 버튼 */
+#i_submit {
+	background-color: black; /* 검정색으로 배경색 설정 */
+	color: white; /* 글자색을 흰색으로 설정 (버튼과 대비를 주기 위해) */
+	font-weight : bold;
+	border: none;
+}
+
+/* 취소 버튼 */
+input[type="reset"] {
+	background-color: black; /* 검정색으로 배경색 설정 */
+	color: white; /* 글자색을 흰색으로 설정 (버튼과 대비를 주기 위해) */
+	font-weight : bold;
+	border: none;
+}
+
+
+
+.btn{
+	margin-top:10px;
+	margin-bottom : 25px;
+}
+
+.form-group{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 30px;
+	
+}
+
