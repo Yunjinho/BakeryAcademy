@@ -16,7 +16,8 @@
 					</tr>
 				</thead>
 				<tr th:each="product: ${productList}">
-					<td><a th:href="@{/product-detail/__${product.productId}__}"><img th:src="@{/file/__${product.productId}__}"
+					<td><a th:href="@{/product-detail/__${product.productId}__}"><img
+							th:src="@{/product-thumnail/__${product.productId}__}"
 							style="width: 100px; height: 100px;"></a></td>
 					<td th:text="${product.productId}">ID</td>
 					<td th:text="${product.productName}">NAME</td>
@@ -42,9 +43,6 @@
 							</ul>
 						</nav>
 					</td>
-					<!-- 					<td align="right"> -->
-					<!-- 						<a th:href="@{/board/write/__${categoryId}__}"><button type="button" class="btn btn-info" th:text="#{WRITE_NEW_ARTICLE}">WRITE NEW ARTICLE</button></a> -->
-					<!-- 					</td> -->
 				</tr>
 			</table>
 		</div>

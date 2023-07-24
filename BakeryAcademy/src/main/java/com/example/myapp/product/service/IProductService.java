@@ -16,17 +16,17 @@ public interface IProductService {
 
 	public List<Product> selectProductAtModal(int start, int end);
 
-	List<Product> selectProductListInBaord(List<Integer> list);
+	public List<Product> selectProductListInBaord(List<Integer> list);
 
-	int countProductList();
+	public int countProductList();
 
-	int countKeyWordProductList(String keyword);
+	public int countKeyWordProductList(String keyword);
 
 	public List<Product> selectProductListByCategory(int categoryId, int page);
 
 	public int selectTotalProductCountByCategory(int categoryId);
 
-	ProductImage getProductThumbnail(int productId);
+	public ProductImage getProductThumbnail(int productId);
 
-	List<ProductImage> getProductImageList(int productId);
+	public List<ProductImage> getProductImageList(int productId);
 }
