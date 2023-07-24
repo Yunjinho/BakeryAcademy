@@ -4,6 +4,20 @@
 <title>Yoon's BakeryAcademy</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+<script th:src="@{../../vendor/jquery/jquery-3.2.1.min.js}"></script>
+<script>
+window.onload=function(){
+	$.ajax({
+		type: "GET",
+		url: "/cart-count",
+		dataType:"json",
+		success: function(data) {
+			$("#cart-img").attr('data-notify',data['cartCount']);
+		}
+	});
+}
+</script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" th:href="@{../images/icons/favicon.png}"/>
 <!--===============================================================================================-->

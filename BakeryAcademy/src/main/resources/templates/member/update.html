@@ -1,48 +1,215 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{header::head}"></head>
+<link rel="stylesheet" type="text/css"
+	th:href="@{../css/member-update.css}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <body>
+<header th:replace="~{body-header::body-header}"></header>
 
-	<div class="memberinfo_update">
-		<h1 class="title">회원정보 수정</h1>
-	</div>
-	<div class="content">
-   	<form th:action="@{/member/update}" method="post" id="signup" class="form-horizontal">
-			<label for="memberId">아이디</label> 
-			<input type="text"  id="memberId" name="memberId" pattern="(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{1,10}"  required> <!-- 영어와 숫자의 조합으로 1글자부터 10글자까지 허용, 영어,숫자 하나이상 들어가야함 -->
-			<label for="memberPassword">비밀번호</label> 
-			 <input type="password" id="memberPassword" name ="memberPassword" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" th:error="memberPassword"  required> 
-			 <label for="passwordcheck">비밀번호 확인</label>  
-			 <input type="password" id="memberPasswordConfirm" name="memberPasswordConfirm" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  th:error="memberPasswordConfirm" required>  
-			<label for="memberName">이름</label>
-			<input type="text" id="memberName" name="memberName" pattern="[가-힣]{2,}" required>
-			<label for="memberNickName">닉네임</label>
-			<input type="text" id="memberNickName" name="memberNickName" required> 
-			<label for="memberEmail">이메일 주소</label>
-			<input type="email" id="memberEmail" name="memberEmail" required>
-			<label for="memberAddress">주소</label>
-			<input type="text" id="memberAddress" name="memberAddress" pattern="[가-힣0-9]+" required> <!-- 숫자와 한글만 입력 -->
-			<label for="memberPhoneNumber">전화번호</label> 
-			<input type="text" pattern="[0-9]{11}" placeholder="예: 01012341234" id="memberPhoneNumber" name="memberPhoneNumber" required>
-			<input type="hidden" id="isAdmin" value=0 required>
-			<div class="memberinfoupdate_or_cancel">
-			<input type="submit" class="btn btn-info" value="회원정보 수정">
-			    <a th:href="@{/member/login}" class="btn btn-info">취소</a> 
+	<form th:action="@{/member/update}" method="post" id="member-update"
+		class="form-horizontal">
+		<main>
+			<div class="sign-div" style="padding: 20px;">
+				<div class="sign">
+					<label for="member-signup" style="padding: 20px; font-size: 30px;">회원정보 수정</label>
+					<hr class="hr1">
+					<br>
+					<h3>기본정보</h3>
+					<hr class="hr2">
+					<div class="sign-text">
+					 <h5 style="line-height: 2.5em;">이름
+					</h5>
+						</div>
+					<div class="sign-info">
+					<input type="text" class="signuppage" name="memberName" th:value="${member.memberName}"  pattern="[가-힣]{2,}"  required>(한글 두글자 이상 입력.) 
+					
+					</div>
+					
+					<hr class="hr2">
+					<div class="sign-text">
+					<h5 style="line-height: 3em;">아이디
+						</h5>
+				</div>
+				<div class="sign-info">
+					<input type="text" class="signuppage"   name="memberId" th:value="${member.memberId}"  pattern="(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{1,10}" required  readonly> (영어,숫자로 10글자까지 허용, 단 각각 하나 이상.) <!-- th:value="${member.memberId}" -->  
+					
+					</div>
+					
+					<hr class="hr2">
+					<div class="sign-text">
+						<h5 style="line-height: 2.5em;">
+						비밀번호
+					</h5>
+				</div>
+				<div class="sign-info">
+					<input type="password" class="signuppage"  name ="memberPassword" th:value="${member.memberPassword}" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  th:error="memberPassword"  required>(영문 대소문자/숫자/특수문자 포함. 단 최소 6자 이상.)
+					</div>
+					
+					
+					<hr class="hr2">
+					<div class="sign-text">
+					<h5 style="line-height: 2.5em;">비밀번호 확인</h5>
+				</div>
+				<div class="sign-info">
+			 <input type="password" id="memberPasswordConfirm" class="signuppage"   name="memberPasswordConfirm" th:value="${member.memberPassword}" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  th:error="memberPasswordConfirm" required> 
+					</div>
+					
+					<hr class="hr2">
+					<div class="sign-text">
+					<h5 style="line-height: 2.5em;">
+						닉네임
+						</h5>
+						</div>
+					<div class="sign-info">
+					<input type="text" class="signuppage"  name="memberNickName" th:value="${member.memberNickName}"  required> 
+					</div>
+					
+					<hr class="hr2">
+					<div class="sign-text"> 
+				<h5 style="line-height: 2.5em;">
+						이메일 주소
+						</h5>
+						</div>
+						<div class="sign-info">
+			<input type="text" class="signuppage"  name="memberEmail" th:value="${member.memberEmail}" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"  required>(@ 포함.) <!-- th:value="${member.memberEmail}" -->
 			</div>
+			
+					<hr class="hr2">
+					<div class="sign-text">
+					<h5 style="line-height: 2.5em;">
+						주소
+					</h5>
+				</div>
+				<div class="sign-info">
+			<input type="text" class="signuppage"  style="margin-top: 10px; width: 300px;"  name="memberAddress" th:value="${member.memberAddress}" pattern="[가-힣0-9]+"  placeholder="예:창경궁로 254"required><!--  th:value="${member.memberAddress}" -->
+					</div> 
+					
+					<hr class="hr2">
+					<div class="sign-text">
+					<h5 style="line-height: 1.7em;">전화번호</h5>
+					</div>
+				<div class="sign-info">
+					 <input type="text" id="phoneNum" class="signuppage-memberPhoneNumber"   name="memberPhoneNumber" th:value="${member.memberPhoneNumber}" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required> <!-- th:value="${member.memberAddress}" --> 
+					</div>
+					
+					<input type="hidden" id="isAdmin" value=0 required>
+					</div>
+					
+					</div>
+			<div class="sign-div">
+				<div class="sign-button">
+				
+		<input type="submit" id="signBtn" class="btn" th:value="회원정보수정"></input>
+		<input type="submit" id="cancelBtn"class="btn" th:value="취소"></input>
+						</div>
+				</div>
+			
+		</main>
 	</form>
-	</div>
+	<footer th:replace="~{footer::footer}"></footer>
+<script type="text/javascript" th:src="@{../js/member/update.js}"></script>
+<!--===============================================================================================-->	
+	<script th:src="@{../vendor/jquery/jquery-3.2.1.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/animsition/js/animsition.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/bootstrap/js/popper.js}"></script>
+	<script th:src="@{../vendor/bootstrap/js/bootstrap.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/select2/select2.min.js}"></script>
+ 	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+		})
+	</script> 
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/daterangepicker/moment.min.js}"></script>
+	<script th:src="@{../vendor/daterangepicker/daterangepicker.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/slick/slick.min.js}"></script>
+	<script th:src="@{../js/slick-custom.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/parallax100/parallax100.js}"></script>
+<!-- 	<script>
+        $('.parallax100').parallax100();
+	</script> -->
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/MagnificPopup/jquery.magnific-popup.min.js}"></script>
+ 	<script>
+		$('.gallery-lb').each(function() { // the containers for all your galleries
+			$(this).magnificPopup({
+		        delegate: 'a', // the selector for gallery item
+		        type: 'image',
+		        gallery: {
+		        	enabled:true
+		        },
+		        mainClass: 'mfp-fade'
+		    });
+		});
+	</script> 
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/isotope/isotope.pkgd.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/sweetalert/sweetalert.min.js}"></script>
+ 	<script>
+		$('.js-addwish-b2').on('click', function(e){
+			e.preventDefault();
+		});
+
+		$('.js-addwish-b2').each(function(){
+			var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to wishlist !", "success");
+
+				$(this).addClass('js-addedwish-b2');
+				$(this).off('click');
+			});
+		});
+
+		$('.js-addwish-detail').each(function(){
+			var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to wishlist !", "success");
+
+				$(this).addClass('js-addedwish-detail');
+				$(this).off('click');
+			});
+		});
+
+		/*---------------------------------------------*/
+
+		$('.js-addcart-detail').each(function(){
+			var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to cart !", "success");
+			});
+		});
 	
+	</script> 
+<!--===============================================================================================-->
+	<script th:src="@{../vendor/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+ 	<script>
+		$('.js-pscroll').each(function(){
+			$(this).css('position','relative');
+			$(this).css('overflow','hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed: 1,
+				scrollingThreshold: 1000,
+				wheelPropagation: false,
+			});
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+	</script> 
+<!--===============================================================================================-->
+	<script th:src="@{../js/main.js}"></script>
 </body>
-<script type="text/javascript">
-	var pw1 = document.querySelector("#memberPassword");
-	var pw2 = document.querySelector("#memberPassword2");
-	var pwConfirm = document.querySelector("#memberPasswordConfirm");
-	pw2.onkeyup = function(event) {
-		if (pw1.value !== pw2.value) {
-			pwConfirm.innerText = "비밀번호가 일치하지 않습니다.";
-		} else {
-			pwConfirm.innerText = "";
-		}
-	}
-   
-</script>	
 </html>

@@ -39,7 +39,6 @@ public class ProductController {
 
 	@Autowired
 	IProductService productService;
-
 	// 카테고리와 페이지에 따른 상품 목록으로 이동
 	@RequestMapping("/product/{categoryId}/{page}")
 	public String getProductListByCategory(@PathVariable int categoryId, @PathVariable int page, HttpSession session,
@@ -256,9 +255,10 @@ public class ProductController {
 		return "redirect:/product/1/1";
 	}
 
-	// 상품 id의 썸네일 반환
+
+	//상품 id의 썸네일 반환
 	@RequestMapping("/product-thumnail/{productId}")
-	public ResponseEntity<byte[]> getThumbnailImage(@PathVariable int productId) {
+	public ResponseEntity<byte[]> getProductThumbnail(@PathVariable int productId) {
 		ProductImage file = productService.getProductThumbnail(productId);
 		if (file == null) {
 			productId = 0;
@@ -278,33 +278,27 @@ public class ProductController {
 		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
 	}
 
-	// 상품 상세정보페이지로 이동
-	@RequestMapping("/product-detail/{productId}")
-	public String getProductDetail(@PathVariable int productId, Model model) {
-		Product product = productService.selectProduct(productId);
-		model.addAttribute("product", product);
-		return "/product-detail";
-	}
 
-	// 상품id에 해당하는 모든 이미지 반환
-//	@RequestMapping("/product-detail/{productId}")
-//	public ResponseEntity<byte[]> getProductDetail(@PathVariable int productId) {
-//		ProductImage file = productService.getProductThumbnail(productId);
-//		if (file == null) {
-//			productId = 0;
-//			file = productService.getProductThumbnail(productId);
-//		}
-//		logger.info("getFile " + file.toString());
+	//상품 id에 해당하는 모든 이미지 반환
+	@RequestMapping("/product-detail/{productId}")
+	public String getProductDetail(int productId) {
+		return "product-detail";
+	}
+//	@RequestMapping("/files/{productId}")
+//	public List<ProductImage> getFileList(@PathVariable int productId) {
+////	public List<ResponseEntity<byte[]>> getFileList(@PathVariable int productId) {
+//		List<ProductImage> productImageList = productService.getProductImageList(productId);
+//		logger.info("getImageList : " + productImageList.size());
 //		final HttpHeaders headers = new HttpHeaders();
-//		String[] mtypes = file.getProductImageType().split("/");
+//		String[] mtypes = productImageList.get(0).getProductImageType().split("/");
 //		headers.setContentType(new MediaType(mtypes[0], mtypes[1]));
-//		headers.setContentLength(Long.parseLong(file.getProductImageSize()));
+//		headers.setContentLength(Long.parseLong(productImageList.get(0).getProductImageSize()));
 //		try {
-//			String encodedFileName = URLEncoder.encode(file.getProductImageName(), "UTF-8");
+//			String encodedFileName = URLEncoder.encode(productImageList.get(0).getProductImageName(), "UTF-8");
 //			headers.setContentDispositionFormData("attachment", encodedFileName);
 //		} catch (UnsupportedEncodingException e) {
 //			throw new RuntimeException(e);
 //		}
-//		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
+//		return productImageList;
 //	}
 }

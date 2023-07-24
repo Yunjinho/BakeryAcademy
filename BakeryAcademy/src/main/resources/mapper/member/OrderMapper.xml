@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myapp.member.dao.IOrderRepository">
+
+<select id="selectDeliveryList" parameterType="hashmap" resultType="com.example.myapp.member.model.Order">
+<![CDATA[
+SELECT ol.order_id AS "orderId", ol.product_id AS "productId", ol.order_number AS "orderNumber", 
+		p.product_name AS "productName",ol.order_status AS "orderStatus", ol.order_count AS "orderCount"
+FROM order_list ol JOIN product p ON ol.product_id=p.product_id  
+WHERE member_id=#{memberId} AND ol.order_status  LIKE #{status} AND ol.order_date >= ADD_MONTHS(SYSDATE,-6)
+ORDER BY ol.order_date
+]]>
+</select>
+<update id="updateOrder" parameterType="hashmap">
+<![CDATA[
+UPDATE order_list SET order_status=#{status} 
+WHERE order_id=#{orderId} 
+]]>
+</update>
+
+<insert id="insertOrder" parameterType="com.example.myapp.member.model.Order">
+<![CDATA[
+INSERT INTO order_list 
+VALUES(SEQ_ORDER_ID.NEXTVAL,#{productId},#{memberId},#{orderNumber},#{orderAddress},'상품 준비중',SYSDATE,#{orderCount})
+]]>
+</insert>
+
+<select id="selectOrderNumber" resultType="Integer">
+<![CDATA[
+SELECT SEQ_ORDER_NUMBER.NEXTVAL AS "orderNumber" FROM dual
+]]>
+</select>
+
+<select id="selectAdminDeliveryList" parameterType="hashmap" resultType="com.example.myapp.member.model.Order">
+<![CDATA[
+SELECT ol.order_id AS "orderId", ol.product_id AS "productId", ol.order_number AS "orderNumber", 
+		p.product_name AS "productName",ol.order_status AS "orderStatus", ol.order_count AS "orderCount",order_date AS "orderDate" 
+FROM order_list ol JOIN product p ON ol.product_id=p.product_id  
+WHERE ol.order_status  LIKE #{status} AND ol.order_date >= ADD_MONTHS(SYSDATE,-6)
+ORDER BY ol.order_date
+]]>
+</select>
+
+<select id="countOrder" resultType="Integer">
+<![CDATA[
+SELECT count(*) FROM order_list WHERE order_status=#{status}
+]]>
+</select>
+
+<select id="selectOrderDetail" parameterType="int" resultType="com.example.myapp.member.model.Order">
+<![CDATA[
+SELECT ol.order_id AS "orderId", ol.product_id AS "productId",ol.member_id AS "memberId",ol.order_count AS "orderCount",
+		ol.order_date AS "orderDate", ol.order_status AS "orderStatus",
+		ol.order_number AS "orderNumber", ol.order_address AS "orderAddress",p.product_name AS "productName"
+FROM order_list ol JOIN product p ON ol.product_id=p.product_id 
+WHERE ol.order_id=#{orderId}
+]]>
+</select>
+<update id="updateOrderStatus" parameterType="com.example.myapp.member.model.Order">
+<![CDATA[
+UPDATE order_list SET order_status=#{orderStatus} WHERE order_id=#{orderId}
+]]>
+</update>
+<delete id="deleteOrder">
+<![CDATA[
+DELETE FROM order_list WHERE order_id=#{orderId}
+]]>
+</delete>
+</mapper>

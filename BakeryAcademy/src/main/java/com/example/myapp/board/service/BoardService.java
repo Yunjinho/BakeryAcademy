@@ -3,7 +3,6 @@ package com.example.myapp.board.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,27 +30,42 @@ public class BoardService implements IBoardService{
 		return boardRepository.selectArticle(boardId);
 	}
 
+
+	
+	
 	@Override
 	public BoardImage getFile(int boardImageId) {
 		return boardRepository.getFile(boardImageId);
 	}
 
 	@Transactional
-	public void insertArticle(Board board) {
-		boardRepository.insertArticle(board);
+	public int insertArticle(Board board) {
+		return boardRepository.insertArticle(board);
 	}
 	
+
+	
 	@Transactional
-	public void insertArticle(Board board, BoardImage file) {
-		board.setBoardId(boardRepository.selectMaxArticleNo()+1);
+	public int insertArticle(Board board, BoardImage file) {
+		//board.setBoardId(boardRepository.selectMaxArticleNo()+1);
 		boardRepository.insertArticle(board);
-		if(file !=null) {
-			file.setBoardId(board.getBoardId());
-			//file.setBoardImageId(boardRepository.selectMaxFileId()+1); 
-			
-			boardRepository.insertFileData(file);
-		}
+        if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
+        	file.setBoardId(board.getBoardId());
+
+        	
+        	//file.setFileId(boardRepository.selectMaxFileId()+1);
+        	boardRepository.insertFileData(file);
+        }
+        return board.getBoardId();
 	}
+	
+	//삭제할 게시물 조회
+	@Transactional
+	public Board selectDeleteBoard(int boardId) {
+		return boardRepository.selectDeleteBoard(boardId);
+	}
+	
+	
 	
 	//제목 내용 작성자 키워드로 게시물 찾기
 	@Override
@@ -88,5 +102,47 @@ public class BoardService implements IBoardService{
 	public int countKeywordBoard(String keyword) {
 		return boardRepository.countKeywordBoard(keyword);
 	}
+
+
+
+
+	@Override
+	public String getMemberId(String memberId) {
+		return boardRepository.getMemberId(memberId);
+	}
+
+
+
+
+	@Transactional
+	public void deleteArticle(int boardId) {
+//		if(replyNumber>0) {
+//			boardRepository.deleteReplyFileData(boardId);
+//			boardRepository.deleteArticleByBoardId(boardId);
+//		} else if(replyNumber == 0){
+//			boardRepository.deleteFileData(boardId);
+//			boardRepository.deleteArticleByMasterId(boardId);
+//		} else {
+//			throw new RuntimeException("WRONG_REPLYNUMBER");
+//		}
+//	}
+		boardRepository.deleteFileData(boardId);
+		boardRepository.deleteArticleInfo(boardId);
+		
+	
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
