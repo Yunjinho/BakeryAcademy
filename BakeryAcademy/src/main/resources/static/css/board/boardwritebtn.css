@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+.new_write{
+	 text-align: right;
+	margin-top : 30px;
+}
+ 
+ 
+ 
+.new_write_btn {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    text-decoration: none;
+}
+
+.new_write_btn:hover {
+    background-color: #333; 
+}

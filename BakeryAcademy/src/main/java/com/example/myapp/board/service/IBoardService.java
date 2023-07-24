@@ -22,6 +22,9 @@ public interface IBoardService {
 	
 	Board selectDeleteBoard(int boardId);
 	String getMemberId(String memberId);
+	
+	
+	
 	void deleteArticle(int boardId);
 
 	

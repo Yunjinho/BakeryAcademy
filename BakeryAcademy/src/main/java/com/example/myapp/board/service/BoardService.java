@@ -110,8 +110,7 @@ public class BoardService implements IBoardService{
 	public String getMemberId(String memberId) {
 		return boardRepository.getMemberId(memberId);
 	}
-
-
+	
 
 
 	@Transactional
@@ -129,7 +128,6 @@ public class BoardService implements IBoardService{
 		boardRepository.deleteFileData(boardId);
 		boardRepository.deleteArticleInfo(boardId);
 		
-	
 	}
 
 
