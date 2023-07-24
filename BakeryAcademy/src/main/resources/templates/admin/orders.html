@@ -117,7 +117,8 @@ window.onload=function(){
 							</a>
 							<span th:each="i: ${#numbers.sequence(refunStartPage, refunEndPage)}" th:classappend="${i==refunNowPage}?active">
 								<a th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${i})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-									[[${i}]]
+									<span th:if=${i==refunNowPage} style="color:black;">[[${i}]]</span>
+									<span th:if=${i!=refunNowPage} style="color:white;">[[${i}]]</span>
 								</a>
 							</span>
 							<a th:if="${refunNowPageBlock<refunTotalPageBlock}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunEndPage+1})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
@@ -160,7 +161,8 @@ window.onload=function(){
 							</a>
 							<span th:each="i: ${#numbers.sequence(beforeStartPage, beforeEndPage)}" th:classappend="${i==beforeNowPage}?active">
 								<a th:href="@{/admin/orders(beforePage=${i},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-									[[${i}]]
+									<span th:if=${i==beforeNowPage} style="color:black;">[[${i}]]</span>
+									<span th:if=${i!=beforeNowPage} style="color:white;">[[${i}]]</span>
 								</a>
 							</span>
 							<a th:if="${beforeNowPageBlock<beforeTotalPageBlock}" th:href="@{/admin/orders(beforePage=${beforeStartPage+1},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
@@ -198,15 +200,16 @@ window.onload=function(){
 							  </tbody>
 							</table>
 							<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
-							<a th:if="${refunNowPageBlock>1}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingStartPage-1},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+							<a th:if="${ingNowPageBlock>1}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingStartPage-1},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
 								◀
 							</a>
-							<span th:each="i: ${#numbers.sequence(refunStartPage, refunEndPage)}" th:classappend="${i==refunNowPage}?active">
+							<span th:each="i: ${#numbers.sequence(ingStartPage, ingEndPage)}" th:classappend="${i==refunNowPage}?active">
 								<a th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${i},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-									[[${i}]]
+									<span th:if=${i==ingNowPage} style="color:black;">[[${i}]]</span>
+									<span th:if=${i!=ingNowPage} style="color:white;">[[${i}]]</span>
 								</a>
 							</span>
-							<a th:if="${refunNowPageBlock<refunTotalPageBlock}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingEndPage+1},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+							<a th:if="${ingNowPageBlock<ingTotalPageBlock}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingEndPage+1},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
 								▶
 							</a>
 							</div>
@@ -241,15 +244,16 @@ window.onload=function(){
 							  </tbody>
 							</table>
 							<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
-							<a th:if="${refunNowPageBlock>1}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterStartPage-1},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+							<a th:if="${afterNowPageBlock>1}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterStartPage-1},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
 								◀
 							</a>
-							<span th:each="i: ${#numbers.sequence(refunStartPage, refunEndPage)}" th:classappend="${i==refunNowPage}?active">
+							<span th:each="i: ${#numbers.sequence(afterStartPage, afterEndPage)}" th:classappend="${i==refunNowPage}?active">
 								<a th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingEndPage+1},afterPage=${i},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-									[[${i}]]
+									<span th:if=${i==afterNowPage} style="color:black;">[[${i}]]</span>
+									<span th:if=${i!=afterNowPage} style="color:white;">[[${i}]]</span>
 								</a>
 							</span>
-							<a th:if="${refunNowPageBlock<refunTotalPageBlock}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterEndPage+1},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+							<a th:if="${afterNowPageBlock<afterTotalPageBlock}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterEndPage+1},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
 								▶
 							</a>
 							</div>

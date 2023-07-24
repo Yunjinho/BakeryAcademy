@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" th:href="@{../css/adminpage.css}">
+<head th:replace="~{header::head}"></head>
+<style>
+textarea{
+    width: 100%;
+    height: 6.25em;
+    border: solid;
+    resize: none;
+}
+</style>
+<body class="animsition">
+<header th:replace="~{body-header::body-header}"></header>
+	<!-- Content page -->
+	<section class="bg0 p-t-52 p-b-20">
+	<br><br><br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-lg-9 p-b-80">
+				<form th:action="@{/member/write-review(orderId=${order.orderId})}" method="post">
+					<div class="p-r-45 p-r-0-lg">
+						<div class="wrap-table-shopping-cart">
+							<table class="table">
+  								<thead>
+							    	<tr>
+								      <td scope="col">상품</td>
+								      <td>상품 이름</td>
+								      <td>주문 수량</td>
+								      <td>상품 날짜</td>
+								      <td></td>
+								    </tr>
+						 	 	</thead>
+							  	<tbody>
+							    	<tr>
+								      <td><img th:src="@{/product-thumnail/__${product.productId}__}" style="width: 100px; height: 100px;"></td>
+								      <td th:text="${product.productName}"/>
+								      <td th:text="${order.orderCount}"/>
+								      <td th:text="${order.orderDate}"/>
+								    </tr>
+							  </tbody>
+							</table>
+						</div>
+						<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm"></div>
+					</div>
+					<div class="p-t-40">
+						<span>별점</span>
+						<select name="rating">
+							<option value=5>★★★★★</option>
+							<option value=4>★★★★</option>
+							<option value=3>★★★</option>
+							<option value=2>★★</option>
+							<option value=1>★</option>
+						</select>
+							<br>	
+							<textarea name="productReviewContent" placeholder="후기를 작성해 주세요"></textarea>
+						</div>
+						<br>	
+						<button type="submit" id="write-review" class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
+							등록
+						</button>
+				</form>
+				</div>
+				<br><br><br>
+<div th:replace="~{member/member-menu::member-menu}"></div>
+			</div>
+		</div>
+	</section>	
+<footer th:replace="~{footer::footer}"></footer>
+<!--===============================================================================================-->	
+	<script src="../../vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/bootstrap/js/popper.js"></script>
+	<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/select2/select2.min.js"></script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="../../vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			$(this).css('position','relative');
+			$(this).css('overflow','hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed: 1,
+				scrollingThreshold: 1000,
+				wheelPropagation: false,
+			});
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="../../js/main.js"></script>
+
+</body>
+</html>

@@ -27,6 +27,10 @@ import com.example.myapp.member.model.Order;
 import com.example.myapp.member.service.ICartService;
 import com.example.myapp.member.service.IMemberService;
 import com.example.myapp.member.service.IOrderService;
+import com.example.myapp.product.model.Product;
+import com.example.myapp.product.model.ProductReview;
+import com.example.myapp.product.service.IProductReviewService;
+import com.example.myapp.product.service.IProductService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -47,6 +51,11 @@ public class MemberController {
 	@Autowired
 	private ICartService cartService;
 	
+	@Autowired
+	private IProductService productService;
+	
+	@Autowired
+	private IProductReviewService productReviewService;
 	 @InitBinder("Member")
 	 private void initBinder(WebDataBinder binder) {
 		 binder.setValidator(memberValidator); 
@@ -361,5 +370,25 @@ public class MemberController {
 		orderService.updateOrderStatus(order);
 		return "redirect:/admin/orders?beforePage=1&ingPage=1&afterPage=1&refunPage=1";
 	}
+	
+	@RequestMapping(value="member/write-review",method=RequestMethod.GET)
+	public String viewReview(@RequestParam int orderId, @RequestParam int productId,Model model) {
+		Product product=new Product();
+		product=productService.selectProduct(productId);
+		model.addAttribute("product", product);
+		Order order =new Order();
+		order=orderService.selectOrderDetail(orderId);
+		model.addAttribute("order", order);
+		return "/member/write-review";
+	}
+	@RequestMapping(value="member/write-review",method=RequestMethod.POST)
+	public String writeReview(@RequestParam int orderId,ProductReview productReview, HttpSession session) {
+		String memberId=(String)session.getAttribute("memberId");
+		productReview.setMemberId(memberId);
+		productReview.setOrderId(orderId);
+		productReviewService.insertProductReview(productReview);
+		return "redirect:/member/my-orders";
+	}
+	
 }
 	

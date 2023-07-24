@@ -5,9 +5,10 @@
 <select id="selectDeliveryList" parameterType="hashmap" resultType="com.example.myapp.member.model.Order">
 <![CDATA[
 SELECT ol.order_id AS "orderId", ol.product_id AS "productId", ol.order_number AS "orderNumber", 
-		p.product_name AS "productName",ol.order_status AS "orderStatus", ol.order_count AS "orderCount"
+		p.product_name AS "productName",ol.order_status AS "orderStatus", ol.order_count AS "orderCount", pr.product_review_id AS "productReviewId"
 FROM order_list ol JOIN product p ON ol.product_id=p.product_id  
-WHERE member_id=#{memberId} AND ol.order_status  LIKE #{status} AND ol.order_date >= ADD_MONTHS(SYSDATE,-6)
+LEFT JOIN product_review pr ON pr.order_id=ol.order_id 
+WHERE ol.member_id=#{memberId} AND ol.order_status  LIKE #{status} AND ol.order_date >= ADD_MONTHS(SYSDATE,-6)
 ORDER BY ol.order_date
 ]]>
 </select>
