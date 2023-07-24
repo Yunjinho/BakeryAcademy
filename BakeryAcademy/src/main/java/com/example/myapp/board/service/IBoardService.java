@@ -19,7 +19,14 @@ public interface IBoardService {
 
 	int insertArticle(Board board);
 	int insertArticle(Board board, BoardImage file);
+	
+	Board selectDeleteBoard(int boardId);
+	String getMemberId(String memberId);
+	void deleteArticle(int boardId);
 
+	
+	
+	
 	/*
 	 * List<Board> selectArticleListByCategory(int boardId, int page); int
 	 * selectTotalArticleCountByCategoryId(int boardId);
@@ -33,4 +40,7 @@ public interface IBoardService {
 	int countKeywordBoard(String keyword);
 	
 	void deleteBoard(int boardId);
+
+
+	
 }

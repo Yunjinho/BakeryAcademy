@@ -9,4 +9,6 @@ public class ProductReview {
 	private String memberId;
 	private String productReviewContent;
 	private int rating;
+	private int orderId;
+	
 }

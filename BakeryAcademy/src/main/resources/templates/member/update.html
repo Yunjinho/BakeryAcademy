@@ -1,102 +1,115 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{header::header}"></head>
-<link rel="stylesheet" type="text/css" th:href="@{../css/adminpage.css}">
-<style>
-#confirmPassword{
-	color:red;
-}
-#update-member-info{
-	 pointer-events: none;
-}
-</style>
-<script>
-window.onload=function(){
-	$("#memberPassword2").keyup(function(){
-		var pwd1=$("#memberPassword").val()
-		var pwd2=$("#memberPassword2").val()
-		
-		if(pwd1!=pwd2){
-			$("#confirmPassword").html("비밀번호가 일치하지 않습니다.")
-			$("#update-member-info").css("pointer-events","none");
-		}else{
-			$("#confirmPassword").html("비밀번호가 일치합니다.")
-			$("#update-member-info").css("pointer-events","auto");
-		}
-	})
-}
-</script>
-<body class="animsition">
-	<!-- Header -->
-	<header th:replace="~{body-header::body-header}"></header>
-	<!-- Content page -->
-	<section class="bg0 p-t-52 p-b-20">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8 col-lg-9 p-b-80">
-					<div class="p-r-45 p-r-0-lg">
-						<!-- product-register -->
-						<div class="p-t-40">
-							<h5 class="mtext-113 cl2 p-b-12">
-								회원 정보 수정
-							</h5>
-							<form th:action="@{/member/update}" method="post" enctype="multipart/form-data" class="insert-product-form">
-								<label for="memberId" class="member-infomation-label">아이디</label>
-								<div class="product-infomation-box">
-									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="text"  id="memberId" name="memberId" pattern="(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{1,10}"  th:value="${member.memberId}"readonly>
-								</div>
+<head th:replace="~{header::head}"></head>
+<link rel="stylesheet" type="text/css"
+	th:href="@{../css/member-update.css}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body>
+<header th:replace="~{body-header::body-header}"></header>
 
-								<label for="memberName" class="member-infomation-label">이름</label>
-								<div class="product-infomation-box">
-									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="text"  id="memberName" name="memberName" th:value="${member.memberName}"readonly>
-								</div>
-								
-								<label for="memberPassword" class="member-infomation-label">비밀번호</label>
-								<div class="product-infomation-box">
-									<input type="password" id="memberPassword" name ="memberPassword" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" th:error="memberPassword"  required>
-								</div>
-
-								<label for="memberPassword2" class="member-infomation-label">비밀번호 확인</label>
-								<div class="product-infomation-box">
-									<input type="password" id="memberPassword2" name="memberPassword2" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  th:error="memberPasswordConfirm" required>
-								</div>
-								<span id="confirmPassword"></span>
-
-								<label for="memberNickName" class="member-infomation-label">닉네임</label>
-								<div class="product-infomation-box">
-									<input type="text" id="memberNickName" name="memberNickName" th:value="${member.memberNickName}"required>
-								</div>
-
-								<label for="memberEmail" class="member-infomation-label">이메일</label>
-								<div class="product-infomation-box">
-									<input type="email" id="memberEmail" name="memberEmail" th:value="${member.memberEmail}"required>
-								</div>
-
-								<label for="memberEmail" class="member-infomation-label">주소</label>
-								<div class="product-infomation-box">
-									<input type="text" id="memberAddress" name="memberAddress" th:value="${member.memberAddress}"required>
-								</div>
-
-								<label for="memberPhoneNumber" class="member-infomation-label">연락처</label>
-								<div class="product-infomation-box">
-									<input type="text" pattern="[0-9]{11}" placeholder="예: 01012341234" id="memberPhoneNumber" name="memberPhoneNumber" th:value="${member.memberPhoneNumber}" required>
-								</div>
-								
-								<input type="hidden" id="isAdmin" value=0>
-								
-								<br>
-								<button id="update-member-info"class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
-									등록
-								</button>
-							</form>
+	<form th:action="@{/member/update}" method="post" id="member-update"
+		class="form-horizontal">
+		<main>
+			<div class="sign-div" style="padding: 20px;">
+				<div class="sign">
+					<label for="member-signup" style="padding: 20px; font-size: 30px;">회원정보 수정</label>
+					<hr class="hr1">
+					<br>
+					<h3>기본정보</h3>
+					<hr class="hr2">
+					<div class="sign-text">
+					 <h5 style="line-height: 2.5em;">이름
+					</h5>
 						</div>
+					<div class="sign-info">
+					<input type="text" class="signuppage" name="memberName" th:value="${member.memberName}"  pattern="[가-힣]{2,}"  required>(한글 두글자 이상 입력.) 
+					
 					</div>
+					
+					<hr class="hr2">
+					<div class="sign-text">
+					<h5 style="line-height: 3em;">아이디
+						</h5>
 				</div>
-				<div class="col-md-4 col-lg-3 p-b-80" th:replace="~{/member/member-menu::member-menu}"></div>
+				<div class="sign-info">
+					<input type="text" class="signuppage"   name="memberId" th:value="${member.memberId}"  pattern="(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{1,10}" required  readonly> (영어,숫자로 10글자까지 허용, 단 각각 하나 이상.) <!-- th:value="${member.memberId}" -->  
+					
+					</div>
+					
+					<hr class="hr2">
+					<div class="sign-text">
+						<h5 style="line-height: 2.5em;">
+						비밀번호
+					</h5>
+				</div>
+				<div class="sign-info">
+					<input type="password" class="signuppage"  name ="memberPassword" th:value="${member.memberPassword}" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  th:error="memberPassword"  required>(영문 대소문자/숫자/특수문자 포함. 단 최소 6자 이상.)
+					</div>
+					
+					
+					<hr class="hr2">
+					<div class="sign-text">
+					<h5 style="line-height: 2.5em;">비밀번호 확인</h5>
+				</div>
+				<div class="sign-info">
+			 <input type="password" id="memberPasswordConfirm" class="signuppage"   name="memberPasswordConfirm" th:value="${member.memberPassword}" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  th:error="memberPasswordConfirm" required> 
+					</div>
+					
+					<hr class="hr2">
+					<div class="sign-text">
+					<h5 style="line-height: 2.5em;">
+						닉네임
+						</h5>
+						</div>
+					<div class="sign-info">
+					<input type="text" class="signuppage"  name="memberNickName" th:value="${member.memberNickName}"  required> 
+					</div>
+					
+					<hr class="hr2">
+					<div class="sign-text"> 
+				<h5 style="line-height: 2.5em;">
+						이메일 주소
+						</h5>
+						</div>
+						<div class="sign-info">
+			<input type="text" class="signuppage"  name="memberEmail" th:value="${member.memberEmail}" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"  required>(@ 포함.) <!-- th:value="${member.memberEmail}" -->
 			</div>
-		</div>
-	</section>	
-<footer th:replace="~{footer::footer}"></footer>
+			
+					<hr class="hr2">
+					<div class="sign-text">
+					<h5 style="line-height: 2.5em;">
+						주소
+					</h5>
+				</div>
+				<div class="sign-info">
+			<input type="text" class="signuppage"  style="margin-top: 10px; width: 300px;"  name="memberAddress" th:value="${member.memberAddress}" pattern="[가-힣0-9]+"  placeholder="예:창경궁로 254"required><!--  th:value="${member.memberAddress}" -->
+					</div> 
+					
+					<hr class="hr2">
+					<div class="sign-text">
+					<h5 style="line-height: 1.7em;">전화번호</h5>
+					</div>
+				<div class="sign-info">
+					 <input type="text" id="phoneNum" class="signuppage-memberPhoneNumber"   name="memberPhoneNumber" th:value="${member.memberPhoneNumber}" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required> <!-- th:value="${member.memberAddress}" --> 
+					</div>
+					
+					<input type="hidden" id="isAdmin" value=0 required>
+					</div>
+					
+					</div>
+			<div class="sign-div">
+				<div class="sign-button">
+				
+		<input type="submit" id="signBtn" class="btn" th:value="회원정보수정"></input>
+		<input type="submit" id="cancelBtn"class="btn" th:value="취소"></input>
+						</div>
+				</div>
+			
+		</main>
+	</form>
+	<footer th:replace="~{footer::footer}"></footer>
+<script type="text/javascript" th:src="@{../js/member/update.js}"></script>
 <!--===============================================================================================-->	
 	<script th:src="@{../vendor/jquery/jquery-3.2.1.min.js}"></script>
 <!--===============================================================================================-->

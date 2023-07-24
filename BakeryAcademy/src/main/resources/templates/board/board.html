@@ -57,17 +57,15 @@ window.onload=function(){
 							</a>
 							<span th:each="i: ${#numbers.sequence(startPage, endPage)}" th:classappend="${i==nowPage}?active">
 								<a th:href="@{/board(page=${i})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-									[[${i}]]
+									<span th:if=${i==nowPage} style="color:black;">[[${i}]]</span>
+									<span th:if=${i!=nowPage} style="color:white;">[[${i}]]</span>
 								</a>
 							</span>
 							<a th:if="${nowPageBlock<totalPageBlock}" th:href="@{/board(page=${endPage+1})" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
 								▶
 							</a>
 						</div>
-					</div>
-				</div>
-				
-				<div class="col-md-4 col-lg-3 p-b-80">
+						<div class="col-md-4 col-lg-3 p-b-80">
 					<div class="side-menu">
 						<div class="bor17 of-hidden pos-relative">
 							<input class="stext-103 cl2 plh4 size-116 p-l-28 p-r-55" id="board-search" type="text" name="search" placeholder="제목 or 내용 or 작성자 " onkeyup="if(window.event.keyCode==13){searchBoard()}">
@@ -78,8 +76,6 @@ window.onload=function(){
 						</div>
 					</div>
 				</div>
-				
-				
 			</div>
 		</div>
 	</section>	

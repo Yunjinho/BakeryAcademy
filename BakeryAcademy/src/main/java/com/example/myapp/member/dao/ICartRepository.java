@@ -14,4 +14,6 @@ public interface ICartRepository {
 	int totalProductPrice(@Param("memberId")String memberId);
 	void updateCartList(@Param("cartId")int cartId,@Param("amount")int amount);
 	void deleteCart(@Param("memberId")String memberId);
+	void deleteCartProduct(int cartId);
+	int countCart(@Param("memberId")String memberId);
 }

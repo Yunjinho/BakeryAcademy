@@ -15,4 +15,9 @@ public interface IOrderRepository {
 	void updateOrder(@Param("status")String stauts,@Param("orderId")int orderId);
 	void insertOrder(Order order);
 	int selectOrderNumber();
+	List<Order> selectAdminDeliveryList(@Param("status")String status);
+	int countOrder(@Param("status")String stauts);
+	Order selectOrderDetail(int orderId);
+	void updateOrderStatus(Order order);
+	void deleteOrder(int orderId);
 }

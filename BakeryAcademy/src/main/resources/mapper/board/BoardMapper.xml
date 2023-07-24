@@ -53,12 +53,13 @@
 		</selectKey>
 	</insert>
 
-	<select id="insertFileData" parameterType="com.example.myapp.board.model.BoardImage">
+	<insert id="insertFileData" parameterType="com.example.myapp.board.model.BoardImage">
 	<![CDATA[
 		INSERT INTO board_image(board_image_id, board_id, board_image, board_image_name, board_image_size, board_image_type) 
 		VALUES(seq_board_image_id.NEXTVAL, #{boardId}, #{boardImage}, #{boardImageName}, #{boardImageSize}, #{boardImageType})
 	]]>
-	</select>
+	</insert>
+
 
 	<select id="getFile" parameterType="int"
 		resultType="com.example.myapp.board.model.BoardImage">
@@ -74,6 +75,48 @@
 		WHERE board_image_id=#{boardImageId}
 	]]>
 	</select>
+	
+	<!-- 삭제할 보드 게시물 조회 -->
+<!-- 	<select id="selectDeleteBoard" parameterType="string" resultType="com.example.myapp.board.model.Board">
+	<![CDATA[
+		SELECT 
+			member_id		AS "memberId"
+		FROM
+			board
+		WHERE 
+			board_id = #{boardId}
+	]]>
+	</select> -->
+	
+		<select id="selectDeleteBoard" parameterType="com.example.myapp.board.model.Board">
+	<![CDATA[
+		SELECT 
+			member_id		AS "memberId"
+		FROM
+			board
+		WHERE 
+			board_id = #{boardId}
+	]]>
+	</select>
+	
+	<!-- 글삭제시 파일데이터 삭제 -->
+	<delete id="deleteFileData" parameterType="int">
+	<![CDATA[
+		DELETE FROM board_image 
+		WHERE EXISTS (SELECT board_id FROM board 
+					  WHERE board.board_id=#{boardId} 
+					  AND board.board_id=board_image.board_id)
+	]]>
+	</delete>
+	
+	
+	<delete id="deleteArticleInfo" parameterType="int">
+	<![CDATA[
+		DELETE FROM board 
+		WHERE DELETE FROM board WHERE board_id=#{boardId}
+	]]>
+	</delete>
+	
 	
 <!-- 전체 게시물 조회 -->
 <select id="selectAllBoardList" parameterType="hashmap" resultType="com.example.myapp.board.model.Board">
@@ -96,11 +139,12 @@ WHERE rowNumber BETWEEN #{start} AND #{end}
 <select id="selectKeywordBaord" parameterType="hashmap" resultType="com.example.myapp.board.model.Board">
 <![CDATA[
 SELECT board_id AS "boardId", member_nickname AS "memberNickname", board_write_date AS "boardWriteDate", visit_count AS "visitCount",board_title AS "boardTitle", board_content AS "boardContent"
-FROM ( SELECT rownum AS rowNumber,board_id, member_nickname, board_write_date, visit_count,board_title, board_content,member_status 
-        FROM (SELECT b.board_id,m.member_nickname,b.board_write_date,b.visit_count,b.board_title,b.board_content m.member_status FROM board b JOIN member m ON b.member_id=m.member_id)
-     	WHERE member_nickname LIKE '%'||#{keyword}||'%' OR board_title LIKE '%'||#{keyword}||'%' OR board_content LIKE '%'||#{keyword}||'%'
+FROM ( SELECT rownum AS rowNumber,board_id, member_nickname, board_write_date, visit_count,board_title, board_content,member_status ,member_status
+        FROM (SELECT b.board_id,m.member_nickname,b.board_write_date,b.visit_count,b.board_title,b.board_content ,m.member_status 
+        		FROM board b JOIN member m ON b.member_id=m.member_id)
+     			WHERE (member_nickname LIKE '%'||#{keyword}||'%' OR board_title LIKE '%'||#{keyword}||'%' OR board_content LIKE '%'||#{keyword}||'%') AND member_status=1
         )
-WHERE rowNumber BETWEEN #{start} AND #{end} AND member_status=1
+WHERE rowNumber BETWEEN #{start} AND #{end} 
 ]]>
 </select>
 

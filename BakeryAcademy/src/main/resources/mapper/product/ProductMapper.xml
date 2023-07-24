@@ -77,17 +77,31 @@
 		)
 	]]>
 	</select>
-
-	<select id="getProductImageList" parameterType="int"
-		resultType="com.example.myapp.product.model.ProductImage">
+	<select id="getProductImageByImageId" parameterType="int" resultType="com.example.myapp.product.model.ProductImage">
 	<![CDATA[
-		SELECT * FROM product_image where product_id=#{productId};
+	SELECT
+		product_image_id	as productImageId,
+		product_Id			as productId,
+		product_image		as productImage,
+		product_image_name	as productImageName,
+		product_image_size	as productImageSize,
+		product_image_type	as productImageType
+	FROM
+		product_image
+	WHERE
+		product_image_id = #{productImageId}
 	]]>
 	</select>
 
+	<select id="getProductImageList" parameterType="int" resultType="integer">
+	<![CDATA[
+		SELECT
+			product_image_id	as productImageId
+		FROM product_image WHERE product_id=#{productId}
+	]]>
+	</select>
 
-	<insert id="insertProduct"
-		parameterType="com.example.myapp.product.model.Product">
+	<insert id="insertProduct" parameterType="com.example.myapp.product.model.Product">
 <![CDATA[
 	INSERT INTO product VALUES(SEQ_PRODUCT_ID.NEXTVAL,#{categoryId},#{productName},#{productPrice},#{productContent},#{productStock},#{productStatus})
 ]]>
@@ -164,7 +178,8 @@
 		SELECT rowNumber, product_id AS productId, category_id AS categoryId,
 		product_name AS productName, product_price AS productPrice,
 		product_stock AS productStock
-		FROM ( SELECT rownum AS rowNumber, product_id, category_id, product_name,
+		FROM ( SELECT rownum AS rowNumber,
+		product_id, category_id, product_name,
 		product_price, product_stock
 		FROM product WHERE product_status=1)
 		WHERE product_id

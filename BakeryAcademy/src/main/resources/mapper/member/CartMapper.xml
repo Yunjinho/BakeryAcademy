@@ -26,9 +26,17 @@ UPDATE cart SET product_count=#{amount} WHERE cart_id=#{cartId}
 ]]>
 </update>
 
-<delete id="deleteCart">
+<delete id="deleteCart" parameterType="string">
 <![CDATA[
 DELETE FROM cart WHERE member_id=#{memberId}
 ]]>
 </delete>
+<delete id="deleteCartProduct" parameterType="integer">
+DELETE FROM cart WHERE cart_id=#{cartId}
+</delete>
+<select id="countCart" resultType="Integer">
+<![CDATA[
+SELECT COUNT(*) FROM cart WHERE member_id=#{memberId}
+]]>
+</select>
 </mapper>
