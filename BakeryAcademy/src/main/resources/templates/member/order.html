@@ -2,14 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::header}"></head>
 <link rel="stylesheet" type="text/css" th:href="@{../css/adminpage.css}">
-<style>
-.stauts-message{
-	color:red;
+
+<script>
+window.onload=function(){
+	$(".memberAdress").click(function(){
+		new daum.Postcode({
+            oncomplete: function(data) { //선택시 입력값 세팅
+                document.getElementById("address_kakao").value = data.address; // 주소 넣기
+                document.querySelector("input[name=memberAddressDetail]").focus(); //상세입력 포커싱
+            }
+        }).open();
+	});
+	$("#purchase").click(function(){
+		$('.insert-order-form').attr('method','post');
+		$('.insert-order-form').attr('action','/member/order');
+	   	$('.insert-order-form').submit();
+	})
 }
-</style>
+</script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<!-- iamport.payment.js -->
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-{SDK-최신버전}.js"></script>
+
 <body class="animsition">
 	<!-- Header -->
 	<header th:replace="~{body-header::body-header}"></header>
+		
 	<!-- Content page -->
 	<section class="bg0 p-t-52 p-b-20">
 		<div class="container">
@@ -19,23 +38,41 @@
 						<!-- product-register -->
 						<div class="p-t-40">
 							<h5 class="mtext-113 cl2 p-b-12">
-								회원 탈퇴
+								주문
 							</h5>
+							<form class="insert-order-form">
+	 							<ul th:each="list:${productList}" style="display:none">
+									<li><input name="product" th:value="${list.key}">
+									<li><input name="amount" th:value="${list.value}">
+								</ul> 
+								<label for="memberId" class="product-infomation-label">받는 사람</label>
+								<div class="product-infomation-box">
+									<input class="stext-111 cl2 plh3 size-116 p-lr-18" th:value="${member.memberId}"type="text" id="memberId" name="memberId" placeholder="받는 이">
+								</div>
+								
+								<label for="orderAddress" class="product-infomation-label">주소</label>
+								<div class="product-infomation-box">
+									<input class="stext-111 cl2 plh3 size-116 p-lr-18" th:value="${member.memberAddress}" type="text" id="orderAddress" name="orderAddress" placeholder="주소">
+								</div>
+								
+								<label for="memberAddressDetail" class="product-infomation-label">상세 주소</label>
+								<div class="product-infomation-box">
+									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="text" id="orderAddressDetail" name="orderAddressDetail" placeholder="상세 주소">
+								</div>
+								
+								<label for="productPrice" class="product-infomation-label">총 금액</label>
+								<div class="product-infomation-box">
+									<input class="stext-111 cl2 plh3 size-116 p-lr-18" th:value="${totalPrice}" type="text" placeholder="총 가격" readonly>
+								</div>
+								<br>
+								<button id="purchase" class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
+									결제하기
+								</button>
+							</form>
 						</div>
-						<br><br>
-						<form th:action="@{/member/delete}" method="post" >
-						<label for="memberName" class="member-infomation-label">비밀번호 입력</label>
-							<div class="product-infomation-box">
-								<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="password"  id="memberPassword" name="memberPassword">
-							</div>
-							<span th:text="${message}" class="stauts-message" ></span>
-							<br>
-							<input type="submit" class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04" value="회원 탈퇴">
-						</form>
 					</div>
-					<br><br><br><br><br><br><br><br><br><br><br>
 				</div>
-				<div class="col-md-4 col-lg-3 p-b-80" th:replace="~{/member/member-menu::member-menu}"></div>
+				<div class="col-md-4 col-lg-3 p-b-80" th:replace="~{/admin/admin-menu::admin-menu}"></div>
 			</div>
 		</div>
 	</section>	
@@ -141,5 +178,6 @@
 	</script> 
 <!--===============================================================================================-->
 	<script th:src="@{../js/main.js}"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </body>
 </html>

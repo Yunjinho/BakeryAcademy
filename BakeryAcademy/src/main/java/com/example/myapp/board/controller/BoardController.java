@@ -1,9 +1,8 @@
 package com.example.myapp.board.controller;
 
-
-
-
 import java.io.UnsupportedEncodingException;
+
+
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -22,98 +21,128 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
 import com.example.myapp.board.service.IBoardService;
+import com.example.myapp.member.model.Member;
+
 import jakarta.servlet.http.HttpSession;
-
-
-
-
-
 
 @Controller
 public class BoardController {
-static final Logger logger = LoggerFactory.getLogger(BoardController.class);
-	
+	static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+
 	@Autowired
 	IBoardService boardService;
-	
 
+	//게시물 전체 조회
+	@RequestMapping("/board")
+	public String board(@RequestParam int page,Model model,HttpSession session) {
+		session.setAttribute("page", page);
+		List<Board> list=boardService.selectAllBoardList(page);
+		model.addAttribute("boardList", list);
+		int bbsCount = boardService.countBoard();
+		int totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) (Math.ceil(page / 10.0));
+		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		return "board/board";
+	}
 
-    
-    
-	
-//	//게시글 리스트 조회
-//	@RequestMapping("/board/cat")
-//	public String getListByCategory(HttpSession session, Model model) {
-//		return getListByCategory(session, model);
-//	}
-	
-
-	
-	
-	
-	
+	//게시물 전체 조회
+	@RequestMapping("/search-board")
+	public String searchboard(@RequestParam int page,@RequestParam String keyword,Model model,HttpSession session) {
+		session.setAttribute("page", page);
+		List<Board> list=boardService.selectKeywordBoardList(keyword,page);
+		model.addAttribute("boardList", list);
+		int bbsCount = boardService.countKeywordBoard(keyword);
+		int totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) (Math.ceil(page / 10.0));
+		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		return "board/search-board";
+	}
 	
 	//게시글 상세조회
 	@RequestMapping("/board/{boardId}")
 	public String getBoardDetails(@PathVariable int boardId, Model model) {
 		Board board = boardService.selectArticle(boardId);
-		
-//		  String fileName = board.getFileName(); if(fileName!=null) { int fileLength =
-//		  fileName.length(); String fileType = fileName.substring(fileLength-4,
-//		  fileLength).toUpperCase(); model.addAttribute("fileType", fileType); }
+		System.out.println(board);
+//		  String fileName = board.getFileName(); 
+//		  if(fileName!=null) { 
+//			  int fileLength = fileName.length(); 
+//			  String fileType = fileName.substring(fileLength-4,fileLength).toUpperCase(); 
+//			  model.addAttribute("fileType", fileType); 
+//			  }
 
-		model.addAttribute("board", board); 
-//		logger.info("getBoardDetails" + board.toString()); 
-		
+		model.addAttribute("board", board);
+//		logger.info("getBoardDetails" + board.toString());
+
 		return "board/view";
 	}
-	
-//	@RequestMapping("/board/{boardId}")
-//	public String getBoardDetails(@PathVariable int boardId, Model model) {
-//		return getBoardDetails(boardId, model);
-//	}
 
-	
-	//게시글 입력
-	@RequestMapping(value="/board/write", method=RequestMethod.GET)
-	public String writeArticle(Model model,HttpSession session) {
-			
-		session.setAttribute("memberId", "my");
-		
-		
-		
-//		Board board = boardService.selectArticle(board);
-//		model.addAttribute("board", board);
-		
-//		model.addAttribute("boardId", boardId);
+
+	// 게시글 입력
+	@RequestMapping(value = "/board/write", method = RequestMethod.GET)
+	public String writeArticle(Model model, HttpSession session) {
+		session.setAttribute("memberId", "me");
 		return "board/write";
 	}
+
+
 	
 	
-	
-	 @RequestMapping(value="/board/write", method=RequestMethod.POST) 
-	 public String writeArticle(Board board, BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
-		 logger.info("/board/write : " + board.toString()); 	 
-		 
-		 board.setMemberId((String) session.getAttribute("memberId"));
-		 try {
-			 board.setBoardContent(board.getBoardContent().replace("\r\n", "<br>"));
-			 board.setBoardTitle(Jsoup.clean(board.getBoardTitle(), Safelist.basic()));
-			 board.setBoardContent(Jsoup.clean(board.getBoardContent(),Safelist.basic())); 
-			 MultipartFile mfile = board.getFile(); 
-			 if(mfile!=null && !mfile.isEmpty()) { 
-				 BoardImage file = new BoardImage();
-				 
-				 file.setBoardImageSize(mfile.getSize());
-				 file.setBoardImageType(mfile.getContentType());
-				 file.setBoardImage(mfile.getBytes());
-				 
-				 boardService.insertArticle(board,file);
+	@RequestMapping(value = "/board/write", method = RequestMethod.POST)
+	public String writeArticle(Member member, Board board, BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
+		logger.info("/board/write : " + board.toString());
+		board.setMemberId((String) session.getAttribute("memberId"));
+		board.setMemberNickname(board.getMemberNickname());
+		
+		try {
+			board.setBoardContent(board.getBoardContent().replace("\r\n", "<br>"));
+			board.setBoardTitle(Jsoup.clean(board.getBoardTitle(), Safelist.basic()));
+			board.setBoardContent(Jsoup.clean(board.getBoardContent(), Safelist.basic()));
+			MultipartFile mfile = board.getFile();
+			if (mfile != null && !mfile.isEmpty()) {
+				BoardImage file = new BoardImage();
+				file.setBoardImageName(mfile.getOriginalFilename());
+				file.setBoardImageSize(mfile.getSize());
+				file.setBoardImageType(mfile.getContentType());
+				file.setBoardImage(mfile.getBytes());
+				boardService.insertArticle(board, file);
 			} else {
 				boardService.insertArticle(board);
 			}
@@ -125,27 +154,30 @@ static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
 	 }
 
-	 
-	 @RequestMapping("/file/{boardImageId}")
-		public ResponseEntity<byte[]> getFile(@PathVariable int boardImageId){
-			BoardImage file = boardService.getFile(boardImageId);
-			System.out.println(file);
-			logger.info("getFile" + file.toString());
-			final HttpHeaders headers = new HttpHeaders();
-			String[] mtypes = file.getBoardImageType().split("/");
-			headers.setContentType(new MediaType(mtypes[0], mtypes[1]));
-			headers.setContentLength(file.getBoardImageSize());
-			try {
-				String encodedFileName = URLEncoder.encode(file.getBoardImageName(), "UTF-8");
-				headers.setContentDispositionFormData("attachment", encodedFileName);
-			} catch(UnsupportedEncodingException e){
-				throw new RuntimeException(e);
-			}
-			return new ResponseEntity<byte[]>(file.getBoardImage(), headers, HttpStatus.OK);
+
+	
+
+	
+	@RequestMapping("/file/{boardImageId}")
+	public ResponseEntity<byte[]> getFile(@PathVariable int boardImageId) {
+		BoardImage file = boardService.getFile(boardImageId);
+		logger.info("getFile " + file.toString());
+
+		final HttpHeaders headers = new HttpHeaders();
+		String[] mtypes = file.getBoardImageType().split("/");
+		headers.setContentType(new MediaType(mtypes[0], mtypes[1]));
+		headers.setContentLength(file.getBoardImageSize());
+		try {
+			String encodedFileName = URLEncoder.encode(file.getBoardImageName(), "UTF-8");
+			headers.setContentDispositionFormData("attachment", encodedFileName);
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
 		}
+		return new ResponseEntity<byte[]>(file.getBoardImage(), headers, HttpStatus.OK);
+	}
+	
+
+	
+	
+	
 }
-	
-	
-	
-
-
