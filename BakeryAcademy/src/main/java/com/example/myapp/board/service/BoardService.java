@@ -11,6 +11,7 @@ import com.example.myapp.board.dao.IBoardReplyRepository;
 import com.example.myapp.board.dao.IBoardRepository;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
+import com.example.myapp.board.model.BoardPrep;
 
 @Service
 public class BoardService implements IBoardService{
@@ -39,23 +40,26 @@ public class BoardService implements IBoardService{
 	}
 
 	@Transactional
-	public int insertArticle(Board board) {
-		return boardRepository.insertArticle(board);
+	public int insertArticle(Board board,BoardPrep boardPrep) {
+		boardRepository.insertArticle(board);
+		boardPrep.setBoardId(board.getBoardId());
+		boardPrepRepository.insertBoardPrep(boardPrep);
+		return 0;
 	}
 	
 
 	
 	@Transactional
-	public int insertArticle(Board board, BoardImage file) {
+	public int insertArticle(Board board, BoardImage file,BoardPrep boardPrep) {
 		//board.setBoardId(boardRepository.selectMaxArticleNo()+1);
 		boardRepository.insertArticle(board);
         if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
         	file.setBoardId(board.getBoardId());
-
-        	
         	//file.setFileId(boardRepository.selectMaxFileId()+1);
         	boardRepository.insertFileData(file);
         }
+        boardPrep.setBoardId(board.getBoardId());
+		boardPrepRepository.insertBoardPrep(boardPrep);
         return board.getBoardId();
 	}
 	
@@ -76,7 +80,7 @@ public class BoardService implements IBoardService{
 	
 	//게시물 삭제
 	@Override
-	@jakarta.transaction.Transactional
+	@Transactional
 	public void deleteBoard(int boardId) {
 		//게시물 상품 삭제
 		boardPrepRepository.deleteAllBoardPrep(boardId);
@@ -129,16 +133,6 @@ public class BoardService implements IBoardService{
 		boardRepository.deleteArticleInfo(boardId);
 		
 	}
-
-
-
-
-
-
-
-
-
-
 
 
 

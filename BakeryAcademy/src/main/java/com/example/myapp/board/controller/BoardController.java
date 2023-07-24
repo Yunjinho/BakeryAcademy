@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
+import com.example.myapp.board.model.BoardPrep;
 import com.example.myapp.board.service.IBoardService;
 
 import jakarta.servlet.http.HttpSession;
@@ -129,13 +130,10 @@ public class BoardController {
 	
 	
 	@RequestMapping(value = "/board/write", method = RequestMethod.POST)
-	public String writeArticle( Board board, BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
+	public String writeArticle( Board board,BoardPrep boardPrep, BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
 		logger.info("/board/write : " + board.toString());
 		board.setMemberId((String) session.getAttribute("memberId"));
 		board.setMemberNickname(board.getMemberNickname());
-		
-		
-		
 		
 		try {
 			board.setBoardContent(board.getBoardContent().replace("\r\n", "<br>"));
@@ -148,10 +146,9 @@ public class BoardController {
 				file.setBoardImageSize(mfile.getSize());
 				file.setBoardImageType(mfile.getContentType());
 				file.setBoardImage(mfile.getBytes());
-				boardService.insertArticle(board, file);
+				boardService.insertArticle(board, file,boardPrep);
 			} else {
-				boardService.insertArticle(board);
-				
+				boardService.insertArticle(board,boardPrep);
 			}
 			 }catch(Exception e) {
 				 e.printStackTrace(); 

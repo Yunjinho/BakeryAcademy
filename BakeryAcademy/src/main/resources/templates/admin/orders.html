@@ -4,79 +4,84 @@
 <head th:replace="~{header::head}"></head>
 <style>
 .modal {
-  display: none; /* 모달 초기에는 숨김 상태로 설정 */
-  position: fixed; /* 화면에 고정 */
-  z-index: 1; /* 다른 요소보다 위에 표시되도록 설정 */
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto; /* 모달 내용이 화면 크기를 초과할 경우 스크롤 가능하도록 설정 */
-  background-color: rgba(0, 0, 0, 0.5); /* 반투명한 배경 색상 */
-  text-align: center;
+	display: none; /* 모달 초기에는 숨김 상태로 설정 */
+	position: fixed; /* 화면에 고정 */
+	z-index: 1; /* 다른 요소보다 위에 표시되도록 설정 */
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto; /* 모달 내용이 화면 크기를 초과할 경우 스크롤 가능하도록 설정 */
+	background-color: rgba(0, 0, 0, 0.5); /* 반투명한 배경 색상 */
+	text-align: center;
 }
+
 .modal-content {
-  background-color: #fefefe;
-  margin: 20% auto; /* 모달을 수직, 수평 가운데로 위치시킴 */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 25%;
-  height: 15%;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+	background-color: #fefefe;
+	margin: 20% auto; /* 모달을 수직, 수평 가운데로 위치시킴 */
+	padding: 20px;
+	border: 1px solid #888;
+	width: 25%;
+	height: 15%;
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
+
 .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
 }
-.confirm,.confirm_no {
-  padding: 5px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 20px;
-  background-color: #c9dbff;
-  color: white;
-  width: 100px;
-  cursor: pointer;
-  margin: 2px 5px;
+
+.confirm, .confirm_no {
+	padding: 5px;
+	margin-top: 10px;
+	border: none;
+	border-radius: 20px;
+	background-color: #c9dbff;
+	color: white;
+	width: 100px;
+	cursor: pointer;
+	margin: 2px 5px;
 }
-.confirm:hover, .confirm_no:hover{
-	color:black;
+
+.confirm:hover, .confirm_no:hover {
+	color: black;
 }
 </style>
 
 <script>
-function refun(id){
-	var content='<p style="display:none" id="refunOrderId">'+id+'</p>\n';
-	content+=$(".modal-content").html();
-	$(".modal-content").html(content);
-}
-function yes(){
-	var orderId=$("#refunOrderId").html();
-	alert(orderId)
-	location.href="/member/update-order?status=환불 요청중,orderId="+orderId;
-}
-function no(){
-	$("#myModal").css("display","none");	
-}
-window.onload=function(){
-	$(".refun-btn").click(function(){
-		$("#myModal").css("display","block");
-	})
+	function refun(id) {
+		var content = '<p style="display:none" id="refunOrderId">' + id
+				+ '</p>\n';
+		content += $(".modal-content").html();
+		$(".modal-content").html(content);
+	}
+	function yes() {
+		var orderId = $("#refunOrderId").html();
+		alert(orderId)
+		location.href = "/member/update-order?status=환불 요청중,orderId=" + orderId;
+	}
+	function no() {
+		$("#myModal").css("display", "none");
+	}
+	window.onload = function() {
+		$(".refun-btn").click(function() {
+			$("#myModal").css("display", "block");
+		})
 
-	window.addEventListener("click", function(event) {
-		  if (event.target == document.getElementById("myModal")) {
-		    document.getElementById("myModal").style.display = "none"; // 모달을 숨김으로 설정
-		  }
-	});
-}
+		window.addEventListener("click", function(event) {
+			if (event.target == document.getElementById("myModal")) {
+				document.getElementById("myModal").style.display = "none"; // 모달을 숨김으로 설정
+			}
+		});
+	}
 </script>
 <body class="animsition">
-<header th:replace="~{body-header::body-header}"></header>
+	<header th:replace="~{body-header::body-header}"></header>
 	<!-- Content page -->
 	<section class="bg0 p-t-52 p-b-20">
 		<div class="container">
@@ -84,225 +89,241 @@ window.onload=function(){
 				<div class="col-md-8 col-lg-9 p-b-80">
 					<div class="p-r-45 p-r-0-lg">
 						<div class="p-t-40">
-						<form>
-							<h5 class="mtext-113 cl2 p-b-12">
-								환불 요청된 주문
-								<br>
-							</h5>
-							<table class="table">
-  							<thead>
-							    <tr>
-							      <td scope="col">주문 번호</td>
-							      <td>상품 이름</td>
-							      <td>상품 수량</td>
-							      <td>상품 상태</td>
-							      <td>주문 날짜</td>
-							      <td></td>
-							    </tr>
-							  </thead>
-							  <tbody th:each="list:${refunList}">
-							    <tr>
-							    	<td th:text="${list.orderNumber}"/>
-						      		<td th:text="${list.productName}"/>
-							      	<td th:text="${list.orderCount}"/>
-							      	<td th:text="${list.orderStatus}"/>
-							      	<td th:text="${list.orderDate}"/>
-							      	<td><button th:onclick="|location.href='@{/admin/order-detail(orderId=${list.orderId})}'|" type="button" class="btn btn-outline-secondary">수정</button></td>
-						      	</tr>
-							  </tbody>
-							</table>
-							<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
-							<a th:if="${refunNowPageBlock>1}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunStartPage-1})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								◀
-							</a>
-							<span th:each="i: ${#numbers.sequence(refunStartPage, refunEndPage)}" th:classappend="${i==refunNowPage}?active">
-								<a th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${i})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-									<span th:if=${i==refunNowPage} style="color:black;">[[${i}]]</span>
-									<span th:if=${i!=refunNowPage} style="color:white;">[[${i}]]</span>
-								</a>
-							</span>
-							<a th:if="${refunNowPageBlock<refunTotalPageBlock}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunEndPage+1})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								▶
-							</a>
-						</div>
-						</form>
-						</div>
-						<div class="p-t-40">
-						<form>
-							<h5 class="mtext-113 cl2 p-b-12">
-								상품 준비중
-								<br>
-							</h5>
-							<table class="table">
-  							<thead>
-							    <tr>
-							      <td scope="col">주문 번호</td>
-							      <td>상품 이름</td>
-							      <td>상품 수량</td>
-							      <td>상품 상태</td>
-							      <td>주문 날짜</td>
-							      <td></td>
-							    </tr>
-							  </thead>
-							  <tbody th:each="list:${beforeDeliveryList}">
-							    <tr>
-							    <td th:text="${list.orderNumber}"/>
-							      <td th:text="${list.productName}"/>
-							      <td th:text="${list.orderCount}"/>
-							      <td th:text="${list.orderStatus}"/>
-							      <td th:text="${list.orderDate}"/>
-						      		<td><button th:onclick="|location.href='@{/admin/order-detail(orderId=${list.orderId})}'|" type="button" class="btn btn-outline-secondary">수정</button></td>
-							    </tr>
-							  </tbody>
-							</table>
-							<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
-							<a th:if="${beforeNowPageBlock>1}" th:href="@{/admin/orders(beforePage=${beforeStartPage-1},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								◀
-							</a>
-							<span th:each="i: ${#numbers.sequence(beforeStartPage, beforeEndPage)}" th:classappend="${i==beforeNowPage}?active">
-								<a th:href="@{/admin/orders(beforePage=${i},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-									<span th:if=${i==beforeNowPage} style="color:black;">[[${i}]]</span>
-									<span th:if=${i!=beforeNowPage} style="color:white;">[[${i}]]</span>
-								</a>
-							</span>
-							<a th:if="${beforeNowPageBlock<beforeTotalPageBlock}" th:href="@{/admin/orders(beforePage=${beforeStartPage+1},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								▶
-							</a>
-							</div>
-						</form>
+							<form>
+								<h5 class="mtext-113 cl2 p-b-12">
+									환불 요청된 주문 <br>
+								</h5>
+								<table class="table">
+									<thead>
+										<tr>
+											<td scope="col">주문 번호</td>
+											<td>상품 이름</td>
+											<td>상품 수량</td>
+											<td>상품 상태</td>
+											<td>주문 날짜</td>
+											<td></td>
+										</tr>
+									</thead>
+									<tbody th:each="list:${refunList}">
+										<tr>
+											<td th:text="${list.orderNumber}" />
+											<td th:text="${list.productName}" />
+											<td th:text="${list.orderCount}" />
+											<td th:text="${list.orderStatus}" />
+											<td th:text="${list.orderDate}" />
+											<td><button
+													th:onclick="|location.href='@{/admin/order-detail(orderId=${list.orderId})}'|"
+													type="button" class="btn btn-outline-secondary">수정</button></td>
+										</tr>
+									</tbody>
+								</table>
+								<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
+									<a th:if="${refunNowPageBlock>1}"
+										th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunStartPage-1})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+										◀ </a> <span
+										th:each="i: ${#numbers.sequence(refunStartPage, refunEndPage)}"
+										th:classappend="${i==refunNowPage}?active"> <a
+										th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${i})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+											<span th:if=${i==refunNowPage} style="color: black;">[[${i}]]</span>
+											<span th:if=${i!=refunNowPage} style="color: white;">[[${i}]]</span>
+									</a>
+									</span> <a th:if="${refunNowPageBlock<refunTotalPageBlock}"
+										th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunEndPage+1})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+										▶ </a>
+								</div>
+							</form>
 						</div>
 						<div class="p-t-40">
-						<form>
-							<h5 class="mtext-113 cl2 p-b-12">
-								배송중
-								<br>
-							</h5>
-							<table class="table">
-  							<thead>
-							    <tr>
-							      <td scope="col">주문 번호</td>
-							      <td>상품 이름</td>
-							      <td>상품 수량</td>
-							      <td>상품 상태</td>
-							      <td>주문 날짜</td>
-							      <td></td>
-							    </tr>
-							  </thead>
-							  <tbody th:each="list:${delivering}">
-							    <tr>
-							    	<td th:text="${list.orderNumber}"/>
-							      	<td th:text="${list.productName}"/>
-							      	<td th:text="${list.orderCount}"/>
-							      	<td th:text="${list.orderStatus}"/>
-							      	<td th:text="${list.orderDate}"/>
-							      	<td><button th:onclick="|location.href='@{/admin/order-detail(orderId=${list.orderId})}'|" type="button" class="btn btn-outline-secondary">수정</button></td>
-							    </tr>
-							  </tbody>
-							</table>
-							<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
-							<a th:if="${ingNowPageBlock>1}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingStartPage-1},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								◀
-							</a>
-							<span th:each="i: ${#numbers.sequence(ingStartPage, ingEndPage)}" th:classappend="${i==refunNowPage}?active">
-								<a th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${i},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-									<span th:if=${i==ingNowPage} style="color:black;">[[${i}]]</span>
-									<span th:if=${i!=ingNowPage} style="color:white;">[[${i}]]</span>
-								</a>
-							</span>
-							<a th:if="${ingNowPageBlock<ingTotalPageBlock}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingEndPage+1},afterPage=${afterNowPage},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								▶
-							</a>
-							</div>
-						</form>
+							<form>
+								<h5 class="mtext-113 cl2 p-b-12">
+									상품 준비중 <br>
+								</h5>
+								<table class="table">
+									<thead>
+										<tr>
+											<td scope="col">주문 번호</td>
+											<td>상품 이름</td>
+											<td>상품 수량</td>
+											<td>상품 상태</td>
+											<td>주문 날짜</td>
+											<td></td>
+										</tr>
+									</thead>
+									<tbody th:each="list:${beforeDeliveryList}">
+										<tr>
+											<td th:text="${list.orderNumber}" />
+											<td th:text="${list.productName}" />
+											<td th:text="${list.orderCount}" />
+											<td th:text="${list.orderStatus}" />
+											<td th:text="${list.orderDate}" />
+											<td><button
+													th:onclick="|location.href='@{/admin/order-detail(orderId=${list.orderId})}'|"
+													type="button" class="btn btn-outline-secondary">수정</button></td>
+										</tr>
+									</tbody>
+								</table>
+								<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
+									<a th:if="${beforeNowPageBlock>1}"
+										th:href="@{/admin/orders(beforePage=${beforeStartPage-1},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunNowPage})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+										◀ </a> <span
+										th:each="i: ${#numbers.sequence(beforeStartPage, beforeEndPage)}"
+										th:classappend="${i==beforeNowPage}?active"> <a
+										th:href="@{/admin/orders(beforePage=${i},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunNowPage})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+											<span th:if=${i==beforeNowPage} style="color: black;">[[${i}]]</span>
+											<span th:if=${i!=beforeNowPage} style="color: white;">[[${i}]]</span>
+									</a>
+									</span> <a th:if="${beforeNowPageBlock<beforeTotalPageBlock}"
+										th:href="@{/admin/orders(beforePage=${beforeStartPage+1},ingPage=${ingNowPage},afterPage=${afterNowPage},refunPage=${refunNowPage})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+										▶ </a>
+								</div>
+							</form>
 						</div>
 						<div class="p-t-40">
-						<form>
-							<h5 class="mtext-113 cl2 p-b-12">
-								배송 완료
-								<br>
-							</h5>
-							<table class="table">
-  							<thead>
-							    <tr>
-							      <td scope="col">주문 번호</td>
-							      <td>상품 이름</td>
-							      <td>상품 수량</td>
-							      <td>상품 상태</td>
-							      <td>주문 날짜</td>
-							      <td></td>
-							    </tr>
-							  </thead>
-							  <tbody th:each="list:${afterDeliveryList}">
-							    <tr>
-							    	<td th:text="${list.orderNumber}"/>
-							      	<td th:text="${list.productName}"/>
-						    	  	<td th:text="${list.orderCount}"/>
-						    	  	<td th:text="${list.orderStatus}"/>
-						    	  	<td th:text="${list.orderDate}"/>
-							      	<td><button th:onclick="|location.href='@{/admin/order-detail(orderId=${list.orderId})}'|" type="button" class="btn btn-outline-secondary">수정</button></td>
-							    </tr>
-							  </tbody>
-							</table>
-							<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
-							<a th:if="${afterNowPageBlock>1}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterStartPage-1},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								◀
-							</a>
-							<span th:each="i: ${#numbers.sequence(afterStartPage, afterEndPage)}" th:classappend="${i==refunNowPage}?active">
-								<a th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingEndPage+1},afterPage=${i},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-									<span th:if=${i==afterNowPage} style="color:black;">[[${i}]]</span>
-									<span th:if=${i!=afterNowPage} style="color:white;">[[${i}]]</span>
-								</a>
-							</span>
-							<a th:if="${afterNowPageBlock<afterTotalPageBlock}" th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterEndPage+1},refunPage=${refunNowPage})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								▶
-							</a>
-							</div>
-						</form>
+							<form>
+								<h5 class="mtext-113 cl2 p-b-12">
+									배송중 <br>
+								</h5>
+								<table class="table">
+									<thead>
+										<tr>
+											<td scope="col">주문 번호</td>
+											<td>상품 이름</td>
+											<td>상품 수량</td>
+											<td>상품 상태</td>
+											<td>주문 날짜</td>
+											<td></td>
+										</tr>
+									</thead>
+									<tbody th:each="list:${delivering}">
+										<tr>
+											<td th:text="${list.orderNumber}" />
+											<td th:text="${list.productName}" />
+											<td th:text="${list.orderCount}" />
+											<td th:text="${list.orderStatus}" />
+											<td th:text="${list.orderDate}" />
+											<td><button
+													th:onclick="|location.href='@{/admin/order-detail(orderId=${list.orderId})}'|"
+													type="button" class="btn btn-outline-secondary">수정</button></td>
+										</tr>
+									</tbody>
+								</table>
+								<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
+									<a th:if="${ingNowPageBlock>1}"
+										th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingStartPage-1},afterPage=${afterNowPage},refunPage=${refunNowPage})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+										◀ </a> <span
+										th:each="i: ${#numbers.sequence(ingStartPage, ingEndPage)}"
+										th:classappend="${i==refunNowPage}?active"> <a
+										th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${i},afterPage=${afterNowPage},refunPage=${refunNowPage})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+											<span th:if=${i==ingNowPage} style="color: black;">[[${i}]]</span>
+											<span th:if=${i!=ingNowPage} style="color: white;">[[${i}]]</span>
+									</a>
+									</span> <a th:if="${ingNowPageBlock<ingTotalPageBlock}"
+										th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingEndPage+1},afterPage=${afterNowPage},refunPage=${refunNowPage})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+										▶ </a>
+								</div>
+							</form>
+						</div>
+						<div class="p-t-40">
+							<form>
+								<h5 class="mtext-113 cl2 p-b-12">
+									배송 완료 <br>
+								</h5>
+								<table class="table">
+									<thead>
+										<tr>
+											<td scope="col">주문 번호</td>
+											<td>상품 이름</td>
+											<td>상품 수량</td>
+											<td>상품 상태</td>
+											<td>주문 날짜</td>
+											<td></td>
+										</tr>
+									</thead>
+									<tbody th:each="list:${afterDeliveryList}">
+										<tr>
+											<td th:text="${list.orderNumber}" />
+											<td th:text="${list.productName}" />
+											<td th:text="${list.orderCount}" />
+											<td th:text="${list.orderStatus}" />
+											<td th:text="${list.orderDate}" />
+											<td><button
+													th:onclick="|location.href='@{/admin/order-detail(orderId=${list.orderId})}'|"
+													type="button" class="btn btn-outline-secondary">수정</button></td>
+										</tr>
+									</tbody>
+								</table>
+								<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
+									<a th:if="${afterNowPageBlock>1}"
+										th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterStartPage-1},refunPage=${refunNowPage})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+										◀ </a> <span
+										th:each="i: ${#numbers.sequence(afterStartPage, afterEndPage)}"
+										th:classappend="${i==refunNowPage}?active"> <a
+										th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingEndPage+1},afterPage=${i},refunPage=${refunNowPage})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+											<span th:if=${i==afterNowPage} style="color: black;">[[${i}]]</span>
+											<span th:if=${i!=afterNowPage} style="color: white;">[[${i}]]</span>
+									</a>
+									</span> <a th:if="${afterNowPageBlock<afterTotalPageBlock}"
+										th:href="@{/admin/orders(beforePage=${beforeNowPage},ingPage=${ingNowPage},afterPage=${afterEndPage+1},refunPage=${refunNowPage})}"
+										class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+										▶ </a>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
-<div th:replace="~{admin/admin-menu::admin-menu}"></div>
+				<div th:replace="~{admin/admin-menu::admin-menu}"></div>
 			</div>
 		</div>
-	</section>	
-<footer th:replace="~{footer::footer}"></footer>
-<!--===============================================================================================-->	
+	</section>
+	<footer th:replace="~{footer::footer}"></footer>
+	<!--===============================================================================================-->
 	<script src="../../vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<script src="../../vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<script src="../../vendor/bootstrap/js/popper.js"></script>
 	<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<script src="../../vendor/select2/select2.min.js"></script>
 	<script>
-		$(".js-select2").each(function(){
+		$(".js-select2").each(function() {
 			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
+				minimumResultsForSearch : 20,
+				dropdownParent : $(this).next('.dropDownSelect2')
 			});
 		})
 	</script>
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<script src="../../vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<script src="../../vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 	<script>
-		$('.js-pscroll').each(function(){
-			$(this).css('position','relative');
-			$(this).css('overflow','hidden');
+		$('.js-pscroll').each(function() {
+			$(this).css('position', 'relative');
+			$(this).css('overflow', 'hidden');
 			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
+				wheelSpeed : 1,
+				scrollingThreshold : 1000,
+				wheelPropagation : false,
 			});
 
-			$(window).on('resize', function(){
+			$(window).on('resize', function() {
 				ps.update();
 			})
 		});
 	</script>
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<script src="../../js/main.js"></script>
 
 </body>
