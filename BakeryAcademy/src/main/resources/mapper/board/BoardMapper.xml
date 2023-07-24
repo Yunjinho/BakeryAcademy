@@ -21,6 +21,7 @@
 	<![CDATA[
  	SELECT b.board_id 			AS "boardId",
 			m.member_nickname AS "memberNickname",
+			m.member_id AS "memberId",
 			b.board_write_date AS "boardWriteDate",
 			b.visit_count 		AS "visitCount",
 			b.board_title 		AS "boardTitle",
@@ -76,17 +77,6 @@
 	]]>
 	</select>
 	
-	<!-- 삭제할 보드 게시물 조회 -->
-<!-- 	<select id="selectDeleteBoard" parameterType="string" resultType="com.example.myapp.board.model.Board">
-	<![CDATA[
-		SELECT 
-			member_id		AS "memberId"
-		FROM
-			board
-		WHERE 
-			board_id = #{boardId}
-	]]>
-	</select> -->
 	
 		<select id="selectDeleteBoard" parameterType="com.example.myapp.board.model.Board">
 	<![CDATA[
@@ -99,8 +89,8 @@
 	]]>
 	</select>
 	
-	<!-- 글삭제시 파일데이터 삭제 -->
-	<delete id="deleteFileData" parameterType="int">
+	<!-- 글삭제 시 파일데이터 삭제 -->
+	<delete id="deleteFileData" parameterType="Integer">
 	<![CDATA[
 		DELETE FROM board_image 
 		WHERE EXISTS (SELECT board_id FROM board 
@@ -109,14 +99,31 @@
 	]]>
 	</delete>
 	
-	
-	<delete id="deleteArticleInfo" parameterType="int">
+	<!-- 게시물 정보 삭제 -->
+	<delete id="deleteArticleInfo" parameterType="Integer">
 	<![CDATA[
-		DELETE FROM board 
-		WHERE DELETE FROM board WHERE board_id=#{boardId}
+		DELETE FROM board  
+		WHERE board_id=#{boardId}
 	]]>
 	</delete>
 	
+	<!-- 멤버아이디조회 -->
+<!-- 	<select id="getMemberId" parameterType="int" resultType="String">
+	<![CDATA[
+		SELECT member_id 
+		FROM board 
+		WHERE board_id=#{boardId}
+	]]>
+	</select> -->
+	
+	<select id="getMemberId" parameterType="int" resultType="String">
+	<![CDATA[
+		SELECT member.memberId
+		FROM board
+		JOIN member ON board.memberId = member.memberId
+		WHERE board.boardId = #{board.boardId}
+	]]>
+	</select>	
 	
 <!-- 전체 게시물 조회 -->
 <select id="selectAllBoardList" parameterType="hashmap" resultType="com.example.myapp.board.model.Board">

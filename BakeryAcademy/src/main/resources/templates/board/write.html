@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
 <link rel="stylesheet" type="text/css" th:href="@{../css/board/boardwrite.css}">
 
@@ -31,15 +31,12 @@
             </div>
         </div>
         
-       
-
-        <div class="form-group">
-            <div class="btn">
-                <input type="submit" id="i_submit" class="btn btn-info" value="저장">
-                <input type="reset" class="btn btn-info" value="취소">
+        <div class="form-group2">
+                <input type="submit" class="board_write_safe" value="저장">
+                <input type="reset" class="board_write_cancel" value="취소">
             </div>
         </div>
-        </div>
+
 
     </form>
     

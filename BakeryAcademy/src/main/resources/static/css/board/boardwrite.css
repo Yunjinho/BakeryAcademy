@@ -32,28 +32,34 @@
 
 
 
-/* 저장 버튼 */
-#i_submit {
-	background-color: black; /* 검정색으로 배경색 설정 */
-	color: white; /* 글자색을 흰색으로 설정 (버튼과 대비를 주기 위해) */
-	font-weight : bold;
-	border: none;
-}
 
-/* 취소 버튼 */
-input[type="reset"] {
-	background-color: black; /* 검정색으로 배경색 설정 */
-	color: white; /* 글자색을 흰색으로 설정 (버튼과 대비를 주기 위해) */
-	font-weight : bold;
-	border: none;
+.form-group2 {
+    display: flex; /* 버튼들을 가로로 배치 */
+    justify-content: center;
+    gap : 30px;
+    margin-top:60px;
+    margin-bottom : 69px;
 }
 
 
-
-.btn{
-	margin-top:10px;
-	margin-bottom : 25px;
+.board_write_safe,
+.board_write_cancel {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    text-decoration: none;
+    cursor: pointer;
 }
+
+.board_write_safe:hover,
+.board_write_cancel:hover {
+    background-color: #333;
+}
+
+
+
 
 .form-group{
 	display: flex;

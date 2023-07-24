@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
+<link rel="stylesheet" type="text/css" th:href="@{../css/board/boardwritebtn.css}">
 <script th:src="@{../../vendor/jquery/jquery-3.2.1.min.js}"></script>
 <script>
 function searchBoard(){
@@ -26,7 +27,7 @@ window.onload=function(){
 						<div class="p-b-63" th:each="list:${boardList}">
 							<div class="p-t-32">
 								<h4 class="p-b-15">
-									<a th:href="@{/board-detail(boardId=${list.boardId}}" class="ltext-108 cl2 hov-cl1 trans-04">
+									<a th:href="@{/board/{boardId}(boardId=${list.boardId})}" class="ltext-108 cl2 hov-cl1 trans-04">
 										<span th:text=${list.boardTitle}></span>
 									</a>
 								</h4>
@@ -49,6 +50,12 @@ window.onload=function(){
 								</div>
 							</div>
 						</div>
+							<div class="new_write">	
+						 	<a href="/board/write">
+        					<button class ="new_write_btn">새글쓰기</button>
+    						</a>
+    					</div>
+						
 
 						<!-- Pagination -->
 						<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
