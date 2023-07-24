@@ -74,12 +74,13 @@
 	]]>
 </select>
 
-<select id="getProductImageList" parameterType="int" resultType="com.example.myapp.product.model.ProductImage">
+<select id="getProductImageList" parameterType="int" resultType="int">
 	<![CDATA[
-		SELECT * FROM product_image where product_id=#{productId}
+		SELECT
+			product_image_id	as productImageId
+		FROM product_image WHERE product_id=#{productId}
 	]]>
 </select>
-
 
 <insert id="insertProduct" parameterType="com.example.myapp.product.model.Product">
 <![CDATA[
@@ -155,5 +156,21 @@
 	<foreach collection="productList" item="list" open="(" close=")" separator=",">
  		#{list}
 	</foreach>
+</select>
+
+<select id="getProductImageByImageId" parameterType="int" resultType="com.example.myapp.product.model.ProductImage">
+	<![CDATA[
+	SELECT
+		product_image_id	as productImageId,
+		product_Id			as productId,
+		product_image		as productImage,
+		product_image_name	as productImageName,
+		product_image_size	as productImageSize,
+		product_image_type	as productImageType
+	FROM
+		product_image
+	WHERE
+		product_image_id = #{productImageId}
+	]]>
 </select>
 </mapper>

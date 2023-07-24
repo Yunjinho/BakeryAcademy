@@ -28,5 +28,7 @@ public interface IProductService {
 
 	public ProductImage getProductThumbnail(int productId);
 
-	public List<ProductImage> getProductImageList(int productId);
+	public List<Integer> getProductImageList(int productId);
+
+	public ProductImage getProductImageByImageId(int productImageId);
 }

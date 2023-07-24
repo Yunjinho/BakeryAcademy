@@ -146,7 +146,12 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public List<ProductImage> getProductImageList(int productId) {
+	public List<Integer> getProductImageList(int productId) {
 		return productRepository.getProductImageList(productId);
+	}
+
+	@Override
+	public ProductImage getProductImageByImageId(int productImageId) {
+		return productRepository.getProductImageByImageId(productImageId);
 	}
 }
