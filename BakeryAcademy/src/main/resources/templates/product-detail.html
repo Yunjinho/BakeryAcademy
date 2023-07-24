@@ -22,9 +22,9 @@
 	<h2>STOCK</h2>
 	<div th:text="${product.productStock}">STOCK</div>
 	<br>
+	<h2>Images</h2>
 	<div th:each="imageId : ${imageIdList}">
 		<p th:text = ${imageId}></p>
-<!-- 		<img src="@{/product-detail/image/__${imageId}__}" style="width: 800px;"> -->
 		<img th:src ="@{/product-detail/image/__${imageId}__}">
 	</div>
 </body>

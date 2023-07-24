@@ -1,65 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
+<head th:replace="~{header::head}"></head>
+<link rel="stylesheet" type="text/css" th:href="@{../css/login.css}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <body>
-	<div class="container">
-		<div class="pg-opt">
-			<div class="row">
-				<div class="col-md-6 pc">
-					<h2>
-						<span th:text="로그인"></span> <span th:if="${message != null}">
-							[[${message}]]</span>
-					</h2>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="content">
-		<form th:action="@{/member/login}" method="post"
-			class="form-horizontal">
-			<div class="form-group">
-				<label class="control-label col-sm-2" for="id" th:text="사용자아이디">MEMBER
-					ID</label>
-				<div class="col-sm-8">
-					<div class="row">
-						<div class="col-sm-6">
-							<input type="text" name="memberId" id="memberId"
-								pattern="(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{1,10}"
-								class="form-control" placeholder=" 아이디 "
-								aria-describedby="basic-addon1" required>
+	<header th:replace="~{body-header::body-header}"></header>
+	<main>
+		<div class="loginpage-wrap">
+			<div class="section1">
+				<div class="d-div" style="width: 504px; margin: 0 auto;">
+					<span class="login-title" th:text="로그인"></span> 
+					<span th:if="${message != null}">[[${message}]]</span> <br>
+					<hr class="hr1">
+					<form th:action="@{/member/login}" method="post" id="login" class="form-horizontal">
+						<input type="text" name="memberId" id="memberId"
+							pattern="(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{1,10}" class="signin"
+							placeholder=" 아이디 " aria-describedby="basic-addon1" required>
+						<input type="password" name="memberPassword" id="pw"
+							pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" class="signin"
+							placeholder="비밀번호" required>
+						<div style="display: inline-block">
+							
+							<label class="checkbox-inline"><input type="checkbox" class="cb1"><span>아이디 저장</span></label>
 						</div>
+						<br>
+						<input type="submit" class="d-button" th:value="로그인"
+							style="color: #fff;">
+					</form>
+					<div class="login-sub">
+						<ul>
+							<li><a th:href="@{/member/signup}" class="btn">회원가입</a></li>
+							<li><a href="#" class="btn" >아이디 찾기</a></li>
+							<li><a href="#" class="btn">비밀번호 찾기</a></li>
+						</ul>
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
-				<label class="control-label col-sm-2" for="pw" th:text="비밀번호">MEMBER
-					PASSWORD</label>
-				<div class="col-sm-8">
-					<input type="password" name="memberPassword" id="pw"
-						pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
-						th:error="memberPassword" class="form-control"
-						th:placeholder="비밀번호" aria-describedby="basic-addon1" required>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-8">
-					<input type="submit" class="btn btn-info" th:value="로그인"> <input
-						type="reset" class="btn btn-info" th:value="취소"> <a
-						th:href="@{/member/signup}" th:text="회원가입" class="btn btn-success"></a>
-
-				</div>
-			</div>
-		</form>
-
-		<!-- 사인아웃 -->
-		<div th:if="${session.memberEmail!=null}">
-			<h4>[[${session.memberId}]]</h4>
-			<h4>[[${session.memberEmail}]]</h4>
-			[<a th:href="@{/member/update}" th:text="회원정보수정">UPDATE USER INFO</a>] 
-			[<a th:href="@{/member/logout}" th:text="로그아웃">SIGN OUT</a>] 
-			[<a th:href="@{/member/delete}" th:text="회원탈퇴">EXIT MEMBER</a>]
-		
 		</div>
-	</div>
+	</main>
+	<footer th:replace="~{footer::footer}"></footer>
 </body>
+</html>

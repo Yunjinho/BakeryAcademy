@@ -3,6 +3,7 @@ package com.example.myapp.board.dao;
 
 import java.util.List;
 
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -15,18 +16,28 @@ import com.example.myapp.board.model.BoardImage;
 public interface IBoardRepository {
 	int selectMaxArticleNo();
 	
-	//boardId를 기반으로 단일 게시물을 가져옵니다.
+	//boardId를 기반으로 단일 게시물을 가져오기
 	Board selectArticle(int boardId);
 
 	BoardImage getFile(int boardImageId); 
+	int insertArticle(Board board);
+	int insertArticle(Board board, BoardImage file);
 	
-	void insertArticle(Board board);
-	void insertArticle(Board board, BoardImage file);
-
 	int selectMaxBoardImageId();
 
 	void insertBoardImage(BoardImage file);
 	void insertFileData(BoardImage file);
+	
+	//삭제할 보드 조회
+	Board selectDeleteBoard(int boardId);
+	
+	String getMemberId(String memberId);
+	//삭제할 파일 데이터
+	void deleteFileData(int boardId);
+	//삭제할 게시물 정보
+	void deleteArticleInfo(int boardId);
+	
+	
 	
 	//게시물에 등록된 이미지 삭제
 	void deleteBoardImage(int boardId);
@@ -48,4 +59,6 @@ public interface IBoardRepository {
 	int countBoard();
 	//검색한 게시판의 수
 	int countKeywordBoard(@Param("keyword")String keyword);
+
+	
 }

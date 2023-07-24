@@ -7,9 +7,9 @@
 		parameterType="com.example.myapp.member.model.Member">
 		<![CDATA[
 		 	INSERT INTO member 
-		 		(member_id, member_password, member_name, member_phone_number, member_email, member_nickname, is_admin, member_address)
+		 		(member_id, member_password, member_name, member_phone_number, member_email, member_nickname, is_admin, member_address,member_status)
     		VALUES 
-    			(#{memberId}, #{memberPassword}, #{memberName}, #{memberPhoneNumber}, #{memberEmail}, #{memberNickName}, #{isAdmin}, #{memberAddress})
+    			(#{memberId}, #{memberPassword}, #{memberName}, #{memberPhoneNumber}, #{memberEmail}, #{memberNickName}, #{isAdmin}, #{memberAddress},1)
    		]]>
 	</insert>
 
@@ -23,10 +23,11 @@
 			member_phone_number		"memberPhoneNumber",
 			member_email		AS "memberEmail",
 			member_nickname		AS "memberNickName",
+			member_address	AS	"memberAddress",
 			is_admin		AS "isAdmin"
 			FROM
 			member
-			WHERE member_id=#{memberId}
+			WHERE member_id=#{memberId} AND member_status=1
 		]]>
 	</select>
 
@@ -41,21 +42,20 @@
 		]]>
 	</update>
 
-	<delete id="deleteMember"
-		parameterType="com.example.myapp.member.model.Member">
+	<update id="deleteMember">
 		<![CDATA[
-			DELETE FROM member WHERE member_id = #{memberId}
+			UPDATE member SET member_status=0 WHERE member_id = #{memberId}
     	]]>
-	</delete>
+	</update>
 
-	<select id="getPassword" parameterType="string"
-		resultType="string">
-				<![CDATA[
-				SELECT
-					member_password
-				FROM
-					member
-				WHERE member_id=#{memberId}
-				]]>
-	</select>
+<select id="getPassword" parameterType="string" resultType="string">
+<![CDATA[
+SELECT
+	member_password
+FROM
+	member
+WHERE member_id=#{memberId}
+]]>
+</select>
+
 </mapper>

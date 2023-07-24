@@ -258,7 +258,7 @@ public class ProductController {
 
 	// 상품 id의 썸네일 반환
 	@RequestMapping("/product-thumnail/{productId}")
-	public ResponseEntity<byte[]> getThumbnailImage(@PathVariable int productId) {
+	public ResponseEntity<byte[]> getProductThumbnail(@PathVariable int productId) {
 		ProductImage file = productService.getProductThumbnail(productId);
 		if (file == null) {
 			productId = 0;
@@ -278,24 +278,20 @@ public class ProductController {
 		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
 	}
 
-	// 상품 상세정보페이지로 이동
+	// 상품 상세 페이지로 이동
 	@RequestMapping("/product-detail/{productId}")
 	public String getProductDetail(@PathVariable int productId, Model model) {
-		Product product = productService.selectProduct(productId);
-		model.addAttribute("product", product);
-		List<Integer> ImageIdList = productService.getProductImageList(productId);
-		if (ImageIdList.size() != 0) {
-			model.addAttribute("imageIdList", ImageIdList);
-//			for (Integer i : ImageIdList) {
-//				System.out.println(i);
-//			}
+		model.addAttribute("product", productService.selectProduct(productId));
+		List<Integer> imageIdList = productService.getProductImageList(productId);
+		if (imageIdList.size() != 0) {
+			model.addAttribute("imageIdList", imageIdList);
 		}
-		return "/product-detail";
+		return "product-detail";
 	}
 
-	// 이미지id에 해당하는 이미지를 반환
+	// 이미지 번호에 따른 이미지 반환
 	@RequestMapping("/product-detail/image/{productImageId}")
-	public ResponseEntity<byte[]> getProductDetail(@PathVariable int productImageId) {
+	public ResponseEntity<byte[]> getProductImageByImageId(@PathVariable int productImageId) {
 		ProductImage file = productService.getProductImageByImageId(productImageId);
 		logger.info("getFile " + file.toString());
 		final HttpHeaders headers = new HttpHeaders();
@@ -310,4 +306,5 @@ public class ProductController {
 		}
 		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
 	}
+
 }

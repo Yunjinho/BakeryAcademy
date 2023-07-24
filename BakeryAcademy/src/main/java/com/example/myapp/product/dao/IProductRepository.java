@@ -45,5 +45,5 @@ public interface IProductRepository {
 
 	List<Integer> getProductImageList(int productId);
 	
-	ProductImage getProductImageByImageId(int productId);
+	ProductImage getProductImageByImageId(int productImageId);
 }

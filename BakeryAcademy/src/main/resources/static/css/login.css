@@ -1,0 +1,111 @@
+@charset "UTF-8";
+
+.loginpage-wrap {
+	font-family: "Noto Sans KR", sans-serif;
+	font-size: 0.8em;
+	line-height: 1.5em;
+	color: #666;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh; 
+	width: 100%;
+}
+
+.hr1 {
+	margin: 20px auto 10px;
+	border: 1px solid black;
+}
+
+.login-title {
+	font-size: 2em;
+	color: black;
+}
+
+.signin {
+	width: 480px;
+	height: 50px;
+	margin: 10px 0px;
+	padding: 5px 10px;
+	border: 1px solid #666;
+	background-color: none;
+}
+
+.d-button {
+	width: 485px;
+	margin: 10px 0px;
+	padding: 5px 10px;
+	text-align: center;
+	background-color: #000;
+	line-height: 2em;
+	color: #fff;
+	font-size: 2em;
+}
+
+.d-button:hover {
+	color: #000;
+}
+
+.login-sub {
+	width: 505px;
+    margin: 0 auto;
+    text-align: center; 
+}
+
+.login-sub ul li {
+    list-style: none;
+}
+
+.login-sub ul {
+	display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.login-sub ul li:last-child {
+    margin-right: 20px;
+}
+
+.login-sub ul li:not(:last-child)::after {
+   
+    margin: 0 10px; 
+}
+.login-sub a {
+	color: #000;
+}
+
+.login-sub a:hover {
+	color: #527792;
+}
+
+.section1 {
+	height: auto;
+}
+
+.d-div {
+	border: 0px solid red;
+	position: relative;
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+	background-color: none;
+}
+
+.form-horizontal {
+	width: 504px; 
+	margin: 0 auto;
+}
+
+.checkbox-inline {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-inline input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.checkbox-inline span {
+    display: inline-block;
+    vertical-align: middle;
+}
