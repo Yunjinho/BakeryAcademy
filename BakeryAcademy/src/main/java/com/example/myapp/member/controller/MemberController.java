@@ -54,17 +54,7 @@ public class MemberController {
 		binder.setValidator(memberValidator);
 	}
 
-	/*
-	 * //Id 중복체크
-	 * 
-	 * @RequestMapping("/member/idcheck")
-	 * 
-	 * @ResponseBody //view 없을 때 사용 public String idCheck(String memberId) { String
-	 * result = ""; Member member = null; try { member =
-	 * memberService.selectMember(memberId); if(member==null) { result = "true";
-	 * }else { result = "false"; } }catch(Exception e){ e.printStackTrace(); }
-	 * return result; }
-	 */
+	
 
 	@RequestMapping(value = "/member/signup", method = RequestMethod.GET)
 	public String insertMember(Model model) {
@@ -109,11 +99,6 @@ public class MemberController {
 		session.invalidate();
 		return "member/login";
 	}
-
-	/*
-	 * @RequestMapping(value = "/member/memberinfo", method = RequestMethod.GET)
-	 * public String memberinfo() { return "member/memberinfo"; }
-	 */
 
 	@RequestMapping(value = "/member/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
