@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -30,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
+import com.example.myapp.board.model.BoardPrep;
 import com.example.myapp.board.service.IBoardService;
 
 import jakarta.servlet.http.HttpSession;
@@ -67,6 +69,7 @@ public class BoardController {
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
+		System.out.println(endPage);
 		return "board/board";
 	}
 
@@ -133,25 +136,30 @@ public class BoardController {
 	
 	
 	@RequestMapping(value = "/board/write", method = RequestMethod.POST)
-	public String writeArticle( Board board, BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
+	public String writeArticle( Board board,BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
 		logger.info("/board/write : " + board.toString());
 		board.setMemberId((String) session.getAttribute("memberId"));
-//		board.setMemberNickname(board.getMemberNickname());
 		try {
 			board.setBoardContent(board.getBoardContent().replace("\r\n", "<br>"));
 			board.setBoardTitle(Jsoup.clean(board.getBoardTitle(), Safelist.basic()));
 			board.setBoardContent(Jsoup.clean(board.getBoardContent(), Safelist.basic()));
-			MultipartFile mfile = board.getFile();
-			if (mfile != null && !mfile.isEmpty()) {
-				BoardImage file = new BoardImage();
-				file.setBoardImageName(mfile.getOriginalFilename());
-				file.setBoardImageSize(mfile.getSize());
-				file.setBoardImageType(mfile.getContentType());
-				file.setBoardImage(mfile.getBytes());
-				boardService.insertArticle(board, file);
+			List<BoardImage> fileList =new ArrayList<BoardImage>();
+			
+			for(MultipartFile m : board.getFile()) {
+				MultipartFile mfile=m;
+				if(mfile != null && !mfile.isEmpty()) {
+					BoardImage file = new BoardImage();
+					file.setBoardImageName(mfile.getOriginalFilename());
+					file.setBoardImageSize(mfile.getSize());
+					file.setBoardImageType(mfile.getContentType());
+					file.setBoardImage(mfile.getBytes());
+					fileList.add(file);
+				}
+			}
+			if (fileList.size()>0) {
+				boardService.insertArticle(board, fileList);
 			} else {
 				boardService.insertArticle(board);
-				
 			}
 			 }catch(Exception e) {
 				 e.printStackTrace(); 

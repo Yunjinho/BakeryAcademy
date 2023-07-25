@@ -46,7 +46,7 @@
 						</a>
 
 						<div th:if="${session.memberId!=null}"  id="cart-img" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart">
-							<i class="zmdi zmdi-shopping-cart"></i>
+							<a th:href="@{/member/shoping-cart}"><i class="zmdi zmdi-shopping-cart"></i></a>
 						</div>
 							
 						<a th:if="${session.memberId !=null and session.isAdmin  == 1 }" th:href="@{/admin/category}" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11" data-notify="0">

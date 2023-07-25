@@ -4,21 +4,21 @@ package com.example.myapp.board.service;
 
 import java.util.List;
 
+
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
+import com.example.myapp.board.model.BoardPrep;
+
 
 public interface IBoardService {
-	
 
-	
-	
 	Board selectArticle(int boardId);
 
 
 	BoardImage getFile(int boardImageId);
 
 	int insertArticle(Board board);
-	int insertArticle(Board board, BoardImage file);
+	int insertArticle(Board board, List<BoardImage> fileList);
 	
 	int updateArticle(Board board, BoardImage file);
 	int updateArticle(Board board);

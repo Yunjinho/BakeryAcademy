@@ -42,8 +42,7 @@ public class ProductController {
 
 	// 카테고리와 페이지에 따른 상품 목록으로 이동
 	@RequestMapping("/product/{categoryId}/{page}")
-	public String getProductListByCategory(@PathVariable int categoryId, @PathVariable int page, HttpSession session,
-			Model model) {
+	public String getProductListByCategory(@PathVariable int categoryId, @PathVariable int page, HttpSession session, Model model) {
 		session.setAttribute("page", page);
 		model.addAttribute("categoryId", categoryId);
 		List<Product> productList = productService.selectProductListByCategory(categoryId, page);
@@ -147,11 +146,6 @@ public class ProductController {
 		return "redirect:/admin/category";
 	}
 
-	// 상품 인서트 모달
-	@RequestMapping("/board/insert-product-register")
-	public String insertProductModal(Model model, HttpSession session) {
-		return "/board/insert-product-modal";
-	}
 
 	// 모달에서 페이징처리
 	@RequestMapping("/board/modal")

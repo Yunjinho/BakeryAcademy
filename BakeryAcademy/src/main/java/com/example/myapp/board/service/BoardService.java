@@ -11,6 +11,7 @@ import com.example.myapp.board.dao.IBoardReplyRepository;
 import com.example.myapp.board.dao.IBoardRepository;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
+import com.example.myapp.board.model.BoardPrep;
 
 @Service
 public class BoardService implements IBoardService{
@@ -40,22 +41,35 @@ public class BoardService implements IBoardService{
 
 	@Transactional
 	public int insertArticle(Board board) {
-		return boardRepository.insertArticle(board);
+		boardRepository.insertArticle(board);
+		for(Integer list:board.getProductId()) {
+			BoardPrep bp=new BoardPrep();
+			bp.setBoardId(board.getBoardId());
+			bp.setProductId(list);
+			boardPrepRepository.insertBoardPrep(bp);
+		}
+		return 0;
 	}
 	
 
 	
 	@Transactional
-	public int insertArticle(Board board, BoardImage file) {
+	public int insertArticle(Board board, List<BoardImage> fileList) {
 		//board.setBoardId(boardRepository.selectMaxArticleNo()+1);
 		boardRepository.insertArticle(board);
-        if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
-        	file.setBoardId(board.getBoardId());
-
-        	
-        	//file.setFileId(boardRepository.selectMaxFileId()+1);
-        	boardRepository.insertFileData(file);
-        }
+		for(BoardImage file : fileList) {
+			if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
+				file.setBoardId(board.getBoardId());
+				//file.setFileId(boardRepository.selectMaxFileId()+1);
+				boardRepository.insertFileData(file);
+			}
+		}
+		for(Integer list:board.getProductId()) {
+			BoardPrep bp=new BoardPrep();
+			bp.setBoardId(board.getBoardId());
+			bp.setProductId(list);
+			boardPrepRepository.insertBoardPrep(bp);
+		}
         return board.getBoardId();
 	}
 	
@@ -76,7 +90,7 @@ public class BoardService implements IBoardService{
 	
 	//게시물 삭제
 	@Override
-	@jakarta.transaction.Transactional
+	@Transactional
 	public void deleteBoard(int boardId) {
 		//게시물 상품 삭제
 		boardPrepRepository.deleteAllBoardPrep(boardId);
@@ -133,38 +147,27 @@ public class BoardService implements IBoardService{
 
 
 
-	@Override
-	public int updateArticle(Board board, BoardImage file) {
-		boardRepository.updateArticle(board);
-        if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
-        	file.setBoardId(board.getBoardId());
+
+// 	@Override
+// 	public int updateArticle(Board board, BoardImage file) {
+// 		boardRepository.updateArticle(board);
+//         if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
+//         	file.setBoardId(board.getBoardId());
 
         	
-        	//file.setFileId(boardRepository.selectMaxFileId()+1);
-        	boardRepository.insertFileData(file);
-        }
-        return board.getBoardId();
-	}
+//         	//file.setFileId(boardRepository.selectMaxFileId()+1);
+//         	boardRepository.insertFileData(file);
+//         }
+//         return board.getBoardId();
+// 	}
 
 
 
 
-	@Override
-	public int updateArticle(Board board) {
-		return boardRepository.updateArticle(board);
-	}
-
-
-
-
-
-
-
-
-
-
-
-
+// 	@Override
+// 	public int updateArticle(Board board) {
+// 		return boardRepository.updateArticle(board);
+// 	}
 
 
 }
