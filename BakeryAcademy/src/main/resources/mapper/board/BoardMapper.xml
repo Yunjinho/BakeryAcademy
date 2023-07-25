@@ -110,20 +110,11 @@
 	<!-- 멤버아이디조회 -->
 <!-- 	<select id="getMemberId" parameterType="int" resultType="String">
 	<![CDATA[
-		SELECT member_id 
-		FROM board 
-		WHERE board_id=#{boardId}
-	]]>
-	</select> -->
-	
-	<select id="getMemberId" parameterType="int" resultType="String">
-	<![CDATA[
-		SELECT member.memberId
+		SELECT member_id
 		FROM board
-		JOIN member ON board.memberId = member.memberId
-		WHERE board.boardId = #{board.boardId}
+		WHERE board_id = #{boardId}
 	]]>
-	</select>	
+	</select> -->	
 	
 <!-- 전체 게시물 조회 -->
 <select id="selectAllBoardList" parameterType="hashmap" resultType="com.example.myapp.board.model.Board">

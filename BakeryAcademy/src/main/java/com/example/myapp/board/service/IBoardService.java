@@ -20,8 +20,11 @@ public interface IBoardService {
 	int insertArticle(Board board);
 	int insertArticle(Board board, BoardImage file);
 	
+	int updateArticle(Board board, BoardImage file);
+	int updateArticle(Board board);
+	
 	Board selectDeleteBoard(int boardId);
-	String getMemberId(String memberId);
+//	String getMemberId(String memberId);
 	
 	
 	
@@ -43,6 +46,9 @@ public interface IBoardService {
 	int countKeywordBoard(String keyword);
 	
 	void deleteBoard(int boardId);
+
+
+	
 
 
 	
