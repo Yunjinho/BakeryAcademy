@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
-<link rel="stylesheet" type="text/css" th:href="@{../css/board/boardview.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/board/boardview.css}">
 <meta charset="UTF-8">
 
 
 <body>
 <header th:replace="~{body-header::body-header}"></header>
 
-<form action="/board/delete/{boardId}" method="post">
+<!-- <form action="/board/delete/" method="post" onsubmit="return deleteArticleConfirmation()"> -->
+<form action="/board/delete" method="post" onsubmit="return deleteArticleConfirmation()">
+
 <!-- <a th:href="@{/board/write/{categoryId}(categoryId=${categoryId})}"><button type="button" class="btn btn-info">새글쓰기</button></a> -->
 <table class ="table_bordered">
 <tr>
@@ -68,19 +70,47 @@
 	</div> -->
 	
 	
-		<div class="btn_location">
+	
+	<div class="btn_location">
 		<div class="btn_delete">
-				<div class="btn_location">
-		<div class="btn_delete">
-			<a th:href="@{/board/delete/{boardId}(boardId=${board.boardId})}"><button type="button" class="btn btn-info">삭제</button></a>
-		
+			<!-- <a th:href="@{/board/delete/{boardId}(boardId=${board.boardId})}"> -->
+			<!-- <input type="submit" class="update_board" value="수정"> -->
+					<a th:href="@{/board/update/{boardId}(boardId=${board.boardId})}"><button type="button" class="update_board">수정</button></a>
+			
+			<button type="button" class="delete_board" onclick="deleteArticleConfirmation()">삭제</button>
 		</div>
 	</div>
 		
-		</div>
-	</div>
+
+
 
 </form>
+<script>
+  function deleteArticleConfirmation() {
+    var confirmResult = confirm("게시물을 삭제하시겠습니까?");
+    if (confirmResult) {
+      deleteYes();
+      return true;
+    } else {
+    	return false;
+    }
+  }
+
+  function deleteYes() {
+	var mid='[[${board.memberId}]]'
+	  $.ajax({
+			type: "POST",
+			url: "/board/delete",
+			data:{'memberId':mid},
+	  		dataType:"json",
+			success: function(data) {
+				inputContent(data,"1");
+			},
+			error
+			
+		});
+  }
+</script>
 <footer th:replace="~{footer::footer}"></footer>
 
 

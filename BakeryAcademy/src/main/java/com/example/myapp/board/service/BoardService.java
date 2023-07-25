@@ -120,11 +120,11 @@ public class BoardService implements IBoardService{
 
 
 
-	@Override
-	public String getMemberId(String memberId) {
-		return boardRepository.getMemberId(memberId);
-	}
-	
+//	@Override
+//	public String getMemberId(String memberId) {
+//		return boardRepository.getMemberId(memberId);
+//	}
+//	
 
 
 	@Transactional
@@ -145,6 +145,29 @@ public class BoardService implements IBoardService{
 	}
 
 
+
+
+
+// 	@Override
+// 	public int updateArticle(Board board, BoardImage file) {
+// 		boardRepository.updateArticle(board);
+//         if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
+//         	file.setBoardId(board.getBoardId());
+
+        	
+//         	//file.setFileId(boardRepository.selectMaxFileId()+1);
+//         	boardRepository.insertFileData(file);
+//         }
+//         return board.getBoardId();
+// 	}
+
+
+
+
+// 	@Override
+// 	public int updateArticle(Board board) {
+// 		return boardRepository.updateArticle(board);
+// 	}
 
 
 }
