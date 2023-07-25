@@ -50,14 +50,14 @@ public class ProductController {
 		int bbsCount = productService.selectTotalProductCountByCategory(categoryId);
 		int totalPage = 0;
 		if (bbsCount > 0) {
-			totalPage = (int) Math.ceil(bbsCount / 10.0);
+			totalPage = (int) Math.ceil(bbsCount / 12.0);
 		}
-		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
-		int nowPageBlock = (int) Math.ceil(page / 10.0);
-		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int totalPageBlock = (int) (Math.ceil(totalPage / 12.0));
+		int nowPageBlock = (int) Math.ceil(page / 12.0);
+		int startPage = (nowPageBlock - 1) * 12 + 1;
 		int endPage = 0;
-		if (totalPage > nowPageBlock * 10) {
-			endPage = nowPageBlock * 10;
+		if (totalPage > nowPageBlock * 12) {
+			endPage = nowPageBlock * 12;
 		} else {
 			endPage = totalPage;
 		}
@@ -67,7 +67,10 @@ public class ProductController {
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
-		return "product";
+
+		List<Category> categoryList = categoryService.selectAllCategory();
+		model.addAttribute("categoryList", categoryList);
+		return "product/product";
 	}
 
 	// 상품 등록페이지로 이동
@@ -241,13 +244,13 @@ public class ProductController {
 	// 상품 목록 1 페이지로 이동
 	@RequestMapping("/product/{categoryId}")
 	public String getProductListByCategory(@PathVariable int categoryId, HttpSession session, Model model) {
-		return "redirect:/product/{categoryId}/1";
+		return getProductListByCategory(1, 1, session, model);
 	}
 
 	// 카테고리 1의 1페이지로 이동
 	@RequestMapping("/product")
 	public String getProductListByCategory(HttpSession session, Model model) {
-		return "redirect:/product/1/1";
+		return getProductListByCategory(1, 1, session, model);
 	}
 
 	// 상품 id의 썸네일 반환
@@ -280,7 +283,7 @@ public class ProductController {
 		if (imageIdList.size() != 0) {
 			model.addAttribute("imageIdList", imageIdList);
 		}
-		return "product-detail";
+		return "product/product-detail";
 	}
 
 	// 이미지 번호에 따른 이미지 반환
