@@ -46,8 +46,6 @@ public class MemberController {
 
 	@Autowired
 	private ICartService cartService;
-
-
   
 	@Autowired
 	private IProductService productService;
@@ -108,9 +106,7 @@ public class MemberController {
 	public String logout(HttpSession session) {
 		session.invalidate(); // 세션 무효화
 		return "redirect:/"; // 홈페이지로 리다이렉트
-
-	}
-  
+    
 	@RequestMapping(value = "/member/update", method = RequestMethod.GET)
 	public String updateMember(HttpSession session, Model model) {
 		String memberId = (String) session.getAttribute("memberId");

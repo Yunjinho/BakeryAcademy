@@ -34,23 +34,57 @@
   text-align: left;
 }
 
-.btn_location {
-  text-align: center;
-  margin-top: 100px;
-  margin-bottom : 100px;
-}
 
-.btn_delete button {
+
+/* .btn_delete button {
   background-color: black;
   color: #fff;
   border: none;
   padding: 10px 20px;
 
   border-radius: 5px;
+} */
+
+.delete_board{
+	background-color: black;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
 }
 
-.btn_delete button:hover {
+.update_board{
+	background-color: black;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+.delete_board:hover {
   background-color: red;
+  border: none;
+}
+
+
+.update_board{
+	background-color: black;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+.update_board:hover{
+	background-color: #333;
+}
+
+.btn_delete{
+	display: flex; /* 버튼들을 가로로 배치 */
+    justify-content: center;
+    gap : 30px;
+	margin-top:60px;
+	margin-bottom : 69px;
 }
 
 .img-thumbnail {
