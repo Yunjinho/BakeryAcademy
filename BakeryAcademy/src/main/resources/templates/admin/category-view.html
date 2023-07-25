@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<link rel="stylesheet" type="text/css" th:href="@{../css/adminpage.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminpage.css}">
 <head th:replace="~{header::head}"></head>
 <body class="animsition">
-<header th:replace="~{body-header::body-header}"></header>
+	<header th:replace="~{body-header::body-header}"></header>
 	<!-- Content page -->
 	<section class="bg0 p-t-52 p-b-20">
 		<div class="container">
@@ -14,74 +14,81 @@
 							<h5 class="mtext-113 cl2 p-b-12">
 								카테고리 목록
 								<div class="category-register-button">
-									<button type="button" class="btn btn-outline-secondary" th:onclick="|location.href='@{/admin/insert-category}'|">등록</button>
+									<button type="button" class="btn btn-outline-secondary"
+										th:onclick="|location.href='@{/admin/insert-category}'|">등록</button>
 								</div>
 								<br>
 							</h5>
 							<table class="table">
-  							<thead>
-							    <tr>
-							      <td scope="col">#</td>
-							      <td>이름</td>
-							      <td></td>
-							      <td></td>
-							    </tr>
-							  </thead>
-							  <tbody th:each="list:${categoryList}">
-							    <tr>
-							      <td th:text="${list.rowNum}"/>
-							      <td th:text="${list.categoryName}" id="categoryName"/>
-							      <td><button type="button" class="btn btn-outline-secondary" th:onclick="|location.href='@{/admin/update-category(categoryId=${list.categoryId})}'|">수정</button></td>
-							      <td><button type="button" class="btn btn-outline-secondary" th:onclick="|location.href='@{/admin/delete-category(categoryId=${list.categoryId})}'|">삭제</button></td>
-							    </tr>
-							  </tbody>
+								<thead>
+									<tr>
+										<td scope="col">#</td>
+										<td>이름</td>
+										<td></td>
+										<td></td>
+									</tr>
+								</thead>
+								<tbody th:each="list:${categoryList}">
+									<tr>
+										<td th:text="${list.rowNum}" />
+										<td th:text="${list.categoryName}" id="categoryName" />
+										<td><button type="button"
+												class="btn btn-outline-secondary"
+												th:onclick="|location.href='@{/admin/update-category(categoryId=${list.categoryId})}'|">수정</button></td>
+										<td><button type="button"
+												class="btn btn-outline-secondary"
+												th:onclick="|location.href='@{/admin/delete-category(categoryId=${list.categoryId})}'|">삭제</button></td>
+									</tr>
+								</tbody>
 							</table>
 						</div>
 					</div>
 				</div>
-<div th:replace="~{/admin/admin-menu::admin-menu}"></div>
+				<div th:replace="~{/admin/admin-menu::admin-menu}"></div>
 			</div>
 		</div>
 	</section>	
 <footer th:replace="~{footer::footer}"></footer>
 <!--===============================================================================================-->	
-	<script src="../../vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/animsition/js/animsition.min.js"></script>
+	<script src="/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/bootstrap/js/popper.js"></script>
-	<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/select2/select2.min.js"></script>
+	<script src="/vendor/select2/select2.min.js"></script>
+
 	<script>
-		$(".js-select2").each(function(){
+		$(".js-select2").each(function() {
 			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
+				minimumResultsForSearch : 20,
+				dropdownParent : $(this).next('.dropDownSelect2')
 			});
 		})
 	</script>
 <!--===============================================================================================-->
-	<script src="../../vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<script src="/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 	<script>
-		$('.js-pscroll').each(function(){
-			$(this).css('position','relative');
-			$(this).css('overflow','hidden');
+		$('.js-pscroll').each(function() {
+			$(this).css('position', 'relative');
+			$(this).css('overflow', 'hidden');
 			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
+				wheelSpeed : 1,
+				scrollingThreshold : 1000,
+				wheelPropagation : false,
 			});
 
-			$(window).on('resize', function(){
+			$(window).on('resize', function() {
 				ps.update();
 			})
 		});
 	</script>
 <!--===============================================================================================-->
-	<script src="../../js/main.js"></script>
+	<script src="/js/main.js"></script>
+
 
 </body>
 </html>

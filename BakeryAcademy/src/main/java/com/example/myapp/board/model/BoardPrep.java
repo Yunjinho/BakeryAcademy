@@ -11,4 +11,6 @@ public class BoardPrep {
 	private int boardPrepId;
 	private int boardId;
 	private int productId;
+	
+	private String productName;
 }

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<link rel="stylesheet" type="text/css" th:href="@{../css/adminpage.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminpage.css}">
 <head th:replace="~{header::head}"></head>
+<link rel="stylesheet" type="text/css" th:href="@{../../vendor/bootstrap/css/bootstrap.min.css}">
 <body class="animsition">
-<header th:replace="~{body-header::body-header}"></header>
+	<header th:replace="~{body-header::body-header}"></header>
 	<!-- Content page -->
 	<section class="bg0 p-t-52 p-b-20">
 		<div class="container">
@@ -12,100 +13,115 @@
 					<div class="p-r-45 p-r-0-lg">
 						<!-- product-register -->
 						<div class="p-t-40">
-							<h5 class="mtext-113 cl2 p-b-12">
-								상품 수정
-							</h5>
-							<form th:action="@{/admin/update-product}" method="post" enctype="multipart/form-data" >
-								<label for="productName" class="product-infomation-label">상품 이름</label>
+							<h5 class="mtext-113 cl2 p-b-12">상품 수정</h5>
+							<form th:action="@{/admin/update-product}" method="post"
+								enctype="multipart/form-data">
+								<label for="productName" class="product-infomation-label">상품
+									이름</label>
 								<div class="product-infomation-box">
-									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="text" name="productName" th:value="${product.productName}" placeholder="상품 이름">
-								</div>
-								
-								<label for="productPrice" class="product-infomation-label">상품 가격</label>
-								<div class="product-infomation-box">
-									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="number" name="productPrice" th:value="${product.productPrice}" placeholder="상품 가격">
+									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="text"
+										name="productName" th:value="${product.productName}"
+										placeholder="상품 이름">
 								</div>
 
-								<label for="productStock" class="product-infomation-label">상품 재고</label>
+								<label for="productPrice" class="product-infomation-label">상품
+									가격</label>
 								<div class="product-infomation-box">
-									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="number" name="productStock" th:value="${product.productStock}" placeholder="재고">
+									<input class="stext-111 cl2 plh3 size-116 p-lr-18"
+										type="number" name="productPrice"
+										th:value="${product.productPrice}" placeholder="상품 가격">
 								</div>
-								
-								
-								<label for="productContent" class="product-infomation-label">상품 설명</label>
+
+								<label for="productStock" class="product-infomation-label">상품
+									재고</label>
 								<div class="product-infomation-box">
-									<textarea class="stext-111 cl2 plh3 size-124 p-lr-18 p-tb-15" name="productContent"  th:text="${product.productContent}" placeholder="상품 소개"></textarea>
+									<input class="stext-111 cl2 plh3 size-116 p-lr-18"
+										type="number" name="productStock"
+										th:value="${product.productStock}" placeholder="재고">
 								</div>
-								
+
+
+								<label for="productContent" class="product-infomation-label">상품
+									설명</label>
+								<div class="product-infomation-box">
+									<textarea class="stext-111 cl2 plh3 size-124 p-lr-18 p-tb-15"
+										name="productContent" th:text="${product.productContent}"
+										placeholder="상품 소개"></textarea>
+								</div>
+
 								<label for="categoryId" class="product-infomation-label">카테고리</label>
 								<select name="categoryId" id="categoryId">
-									<option th:each="category:${category}" th:value="${category.categoryId}"th:text="${category.categoryName}"></option>
-								</select>
-
-								<label for="productContent" class="product-infomation-label">상품 상태</label>
-								<select name="productStatus" id="productStatus">
+									<option th:each="category:${category}"
+										th:value="${category.categoryId}"
+										th:text="${category.categoryName}"></option>
+								</select> <label for="productContent" class="product-infomation-label">상품
+									상태</label> <select name="productStatus" id="productStatus">
 									<option value="1">판매중</option>
 									<option value="0">판매 중지</option>
-								</select>
-
-								<label for="productContent" class="product-infomation-label">상품 이미지( 1개 ~ 3개 )</label>
+								</select> <label for="productContent" class="product-infomation-label">상품
+									이미지( 1개 ~ 3개 )</label>
 								<div>
-									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="file" name="image" placeholder="image">
-									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="file" name="image2" placeholder="image">
-									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="file" name="image3" placeholder="image">
+									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="file"
+										name="image" placeholder="image"> <input
+										class="stext-111 cl2 plh3 size-116 p-lr-18" type="file"
+										name="image2" placeholder="image"> <input
+										class="stext-111 cl2 plh3 size-116 p-lr-18" type="file"
+										name="image3" placeholder="image">
 								</div>
-								
-								<input type="hidden" name="productId" th:value="${product.productId}">
-								<br>
-								<button class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
-									등록
-								</button>
+
+								<input type="hidden" name="productId"
+									th:value="${product.productId}"> <br>
+								<button
+									class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
+									등록</button>
 							</form>
 						</div>
 					</div>
 				</div>
-<div th:replace="~{/admin/admin-menu::admin-menu}"></div>
+				<div th:replace="~{/admin/admin-menu::admin-menu}"></div>
 			</div>
 		</div>
 	</section>	
 <footer th:replace="~{footer::footer}"></footer>
 <!--===============================================================================================-->	
-	<script src="../../vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/animsition/js/animsition.min.js"></script>
+	<script src="/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/bootstrap/js/popper.js"></script>
-	<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/select2/select2.min.js"></script>
+	<script src="/vendor/select2/select2.min.js"></script>
+
 	<script>
-		$(".js-select2").each(function(){
+		$(".js-select2").each(function() {
 			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
+				minimumResultsForSearch : 20,
+				dropdownParent : $(this).next('.dropDownSelect2')
 			});
 		})
 	</script>
 <!--===============================================================================================-->
-	<script src="../../vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<script src="/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 	<script>
-		$('.js-pscroll').each(function(){
-			$(this).css('position','relative');
-			$(this).css('overflow','hidden');
+		$('.js-pscroll').each(function() {
+			$(this).css('position', 'relative');
+			$(this).css('overflow', 'hidden');
 			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
+				wheelSpeed : 1,
+				scrollingThreshold : 1000,
+				wheelPropagation : false,
 			});
 
-			$(window).on('resize', function(){
+			$(window).on('resize', function() {
 				ps.update();
 			})
 		});
 	</script>
 <!--===============================================================================================-->
-	<script src="../../js/main.js"></script>
+	<script src="/js/main.js"></script>
+
 </body>
 </html>

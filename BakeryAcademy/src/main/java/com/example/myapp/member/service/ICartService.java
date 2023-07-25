@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.example.myapp.member.model.Cart;
 import com.example.myapp.member.model.Order;
 
-@Service
 public interface ICartService {
 	List<Cart> selectCartList(String memberId);
 	int totalProductPrice(String memberId);
