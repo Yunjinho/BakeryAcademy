@@ -30,15 +30,16 @@ public class OredrService implements IOrderService {
 
 	@Override
 	@Transactional
-	public void insertOrder(List<Integer> productId, List<Integer> amount, String name, String address,String addressDetail,String memberId) {
+	public String insertOrder(List<Integer> productId, List<Integer> amount, String name, String address,String addressDetail,String memberId) {
 		int orderNumber=orderRepository.selectOrderNumber();
-		Order order=new Order(0, 0, memberId, orderNumber, address, memberId, null, 0, address, addressDetail);
+		Order order=new Order(0, 0, memberId, orderNumber, address, memberId, null, 0, address, addressDetail,0);
 		for(int i=0;i<productId.size();i++) {
 			order.setProductId(productId.get(i));
 			order.setOrderCount(amount.get(i));
 			orderRepository.insertOrder(order);
 		}
 		cartRepository.deleteCart(memberId);
+		return "";
 	}
 
 	@Override

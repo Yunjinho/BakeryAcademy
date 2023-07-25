@@ -1,54 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
+<link rel="stylesheet" type="text/css" th:href="@{../css/board/boardview.css}">
 <meta charset="UTF-8">
 
 
 <body>
 <header th:replace="~{body-header::body-header}"></header>
 
-
+<form action="/board/delete/{boardId}" method="post">
 <!-- <a th:href="@{/board/write/{categoryId}(categoryId=${categoryId})}"><button type="button" class="btn btn-info">새글쓰기</button></a> -->
-<table class ="table_bordered" border="1">
+<table class ="table_bordered">
 <tr>
-	<td>글번호</td>
+	<td class="td_text">글번호</td>
 	<td th:text="${board.boardId}">
 	</td>
 </tr>
 
 <tr>
-	<td>작성자</td>
+	<td class="td_text">작성자</td>
 	<td th:text ="${board.memberNickname}"></td>
 </tr>
 
 <tr>
-	<td>작성일</td>
+	<td class="td_text">작성일</td>
 	<td th:text ="${board.boardWriteDate}"></td>
 </tr>
 
 
 
 <tr>
-	<td>조회수</td>
+	<td class="td_text">조회수</td>
 	<td th:text ="${board.visitCount}"></td>
 </tr>
 
 <tr>
-	<td>제목</td>
+	<td class="td_text">제목</td>
 	<td th:text ="${board.boardTitle}"></td>
 </tr>
 
-<tr>
-	<td>내용</td>
-	<td th:text ="${board.boardContent}"></td>
-</tr>
+
 
 <tr>
-	<td>첨부파일</td>
+	<td class="td_text">첨부파일</td>
 	<td>
      <img th:src="@{/boardImageFile/{boardImageId}(boardImageId=${board.boardImageId})}" 
      th:if="${board.boardImageType == 'image/jpeg' || board.boardImageType == 'image/png' || board.boardImageType == 'image/gif' || board.boardImageType == 'image/jpg'}" 
-     class="img-thumbnail" alt="" width="600"><br>
+     class="img-thumbnail" alt="" width="300"><br>
      
      <a th:href="@{/file/{boardImageId}(boardImageId=${board.boardImageId})}" 
      th:text="${board.boardImageName}">(<span th:text="${#numbers.formatDecimal(board.fileSize,3,'COMMA',2,'POINT')}">0</span>byte)</a>
@@ -56,19 +54,34 @@
 </tr>
 
 <tr>
-	<td align="right">
-	<a th:href="@{/board/delete/{boardId}(boardId=${board.boardId})}"><button type="button" class="btn btn-info">삭제</button></a>
-
-	</td>
-
-
+	<td class="td_text">내용</td>
+	<td th:utext ="${board.boardContent}"></td>
 </tr>
 
 
-
-
 </table>
- <footer th:replace="~{footer::footer}"></footer>
+<!-- 	<div class="btn_location">
+		<div class="btn_delete">
+			<a th:href="@{/board/delete/{boardId}(boardId=${board.boardId})}"><button type="button" class="btn btn-info">삭제</button></a>
+		
+		</div>
+	</div> -->
+	
+	
+		<div class="btn_location">
+		<div class="btn_delete">
+				<div class="btn_location">
+		<div class="btn_delete">
+			<a th:href="@{/board/delete/{boardId}(boardId=${board.boardId})}"><button type="button" class="btn btn-info">삭제</button></a>
+		
+		</div>
+	</div>
+		
+		</div>
+	</div>
+
+</form>
+<footer th:replace="~{footer::footer}"></footer>
 
 
 </body>
