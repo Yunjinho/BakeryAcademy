@@ -7,17 +7,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +29,6 @@ import com.example.myapp.product.model.ProductReview;
 import com.example.myapp.product.service.IProductReviewService;
 import com.example.myapp.product.service.IProductService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -54,16 +48,13 @@ public class MemberController {
 	private ICartService cartService;
 
 
-	@InitBinder
-	private void initBinder(WebDataBinder binder) {
-		binder.setValidator(memberValidator);
-	}
   
 	@Autowired
 	private IProductService productService;
 	
 	@Autowired
 	private IProductReviewService productReviewService;
+	
 	 @InitBinder("Member")
 	 private void initBinder(WebDataBinder binder) {
 		 binder.setValidator(memberValidator); 
@@ -117,10 +108,7 @@ public class MemberController {
 	public String logout(HttpSession session) {
 		session.invalidate(); // 세션 무효화
 		return "redirect:/"; // 홈페이지로 리다이렉트
-=======
-	public String logout(HttpSession session, HttpServletRequest request) {
-		session.invalidate(); // 로그아웃
-		return "index";
+
 	}
   
 	@RequestMapping(value = "/member/update", method = RequestMethod.GET)
