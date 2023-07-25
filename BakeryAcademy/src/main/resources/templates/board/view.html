@@ -91,7 +91,7 @@
     if (confirmResult) {
       deleteYes();
       return true;
-    } else {
+    } else { 
     	return false;
     }
   }
@@ -106,12 +106,15 @@
 			success: function(data) {
 				inputContent(data,"1");
 			},
-			error
+			error: function (xhr, status, error) {
+		        alert(xhr.responseText);
+		      }
 			
 		});
   }
 </script>
-<footer th:replace="~{footer::footer}"></footer>
+
+<footer th:replace="~{/footer::footer}"></footer>
 
 
 </body>
