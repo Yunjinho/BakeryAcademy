@@ -104,36 +104,18 @@ public class BoardController {
 	
 	//게시글 상세조회
 	@RequestMapping("/board/{boardId}")
-	public String getBoardDetails(@PathVariable int boardId, Model model) {
-		Board board = boardService.selectArticle(boardId);
-//		  String fileName = board.getFileName(); 
-//		  if(fileName!=null) { 
-//			  int fileLength = fileName.length(); 
-//			  String fileType = fileName.substring(fileLength-4,fileLength).toUpperCase(); 
-//			  model.addAttribute("fileType", fileType); 
-//			  }
-
-
-		model.addAttribute("board", board);
-//		String dbId = boardService.getMemberId(board.getMemberId());
-//		System.out.println(dbId);
-		System.out.println("*****************" + board);
-		System.out.println(board.getMemberId());
-		
-		
-		//logger.info("getBoardDetails" + board.toString());
-		return "board/view";
+	public String getBoardDetails(@PathVariable int boardId, Model model, HttpSession session) {
+	    Board board = boardService.selectArticle(boardId);
+	    String memberId = board.getMemberId();
+	    model.addAttribute("board", board);
+	    return "board/view";
 	}
-
 
 	// 게시글 입력
 	@RequestMapping(value = "/board/write", method = RequestMethod.GET)
 	public String writeArticle(Model model, HttpSession session) {
 		return "board/write";
 	}
-
-
-	
 	
 	@RequestMapping(value = "/board/write", method = RequestMethod.POST)
 	public String writeArticle( Board board,BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
@@ -169,10 +151,7 @@ public class BoardController {
 
 	 }
 	
-
-
-	
-
+	//이미지파일 가져오기
 	@RequestMapping("/boardImageFile/{boardImageId}")
 	public ResponseEntity<byte[]> getFile(@PathVariable int boardImageId) {
 		BoardImage file = boardService.getFile(boardImageId);
@@ -191,66 +170,20 @@ public class BoardController {
 		return new ResponseEntity<byte[]>(file.getBoardImage(), headers, HttpStatus.OK);
 	}
 	
-
-//	@RequestMapping(value="/board/delete/{boardId}", method=RequestMethod.GET)
-//	public String deleteArticle(@PathVariable int boardId, Model model, HttpSession session) {
-//		Board board = boardService.selectDeleteBoard(boardId);
-////		model.addAttribute("memberId", board.getMemberId());
-//		boardService.getMemberId(board.getMemberId());
-////		board.setMemberId(board.getMemberId());
-//
-//		return "board/delete";
-//	}
 	
+	//게시물 삭제
 	@RequestMapping(value="/board/delete", method=RequestMethod.GET)
-	public String deleteArticle(Board board, Model model, HttpSession session) {
+	public String deleteArticle(Board board, String memberId, int boardId, Model model, HttpSession session) {
 		boardService.selectDeleteBoard(board.getBoardId());
-//		model.addAttribute("memberId", board.getMemberId());
-//		board.setMemberId(board.getMemberId());
-//		boardService.getMemberId(board.getMemberId());
+		boardService.getMemberId(board.getMemberId());
 		return "board/delete";
 	}
 	
-	
-
-//	@RequestMapping(value="/board/delete", method=RequestMethod.POST)
-//	public String deleteArticle(Board board, HttpSession session, RedirectAttributes model) {
-////		board.setMemberId((String) session.getAttribute("memberId"));
-//		
-//		try {
-//			String sessionMemberId = (String)session.getAttribute("memberId");
-//			String dbId = boardService.getMemberId(board.getMemberId());
-//			System.out.println("**************************" + dbId);
-//			
-//			if(board.getMemberId().equals(sessionMemberId)) {
-//				boardService.deleteArticle(board.getBoardId());
-////				return "redirect:/board/" + board.getBoardId() + "/" + (Integer)session.getAttribute("page");
-////				return "redirect:/board=?page={page}" + (int)session.getAttribute("page");
-//				return "redirect:/board/write";
-//			}
-//				else {
-//				model.addAttribute("message", "이 게시물의 작성자가 아니므로 삭제가 불가능합니다.");
-////				return "redirect:/board/" + board.getBoardId();	
-//				return "redirect:/board/write";
-//
-//			}
-//		} 
-//			catch(Exception e) {
-//			model.addAttribute("message", e.getMessage());
-//			e.printStackTrace();
-//			return "error/runtime";
-//		}
-//	}
-
-//	// 게시물 삭제를 처리하는 핸들러 메서드
     @RequestMapping(value = "/board/delete", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteArticle(String memberId,  HttpSession session) {
+    public ResponseEntity<String> deleteArticle(String memberId, HttpSession session) {
         try {
             String sessionMemberId = (String) session.getAttribute("memberId");
-            int sessionBoardId = (int) session.getAttribute("boardId");
-//            String dbId = boardService.getMemberId(board.getMemberId());
-//            System.out.println("dbId" + dbId);
-
+            Integer sessionBoardId = (Integer) session.getAttribute("boardId");
             if (memberId.equals(sessionMemberId)) {
                 boardService.deleteArticle(sessionBoardId);
                 return new ResponseEntity<>("삭제되었습니다.", HttpStatus.OK);
@@ -262,7 +195,7 @@ public class BoardController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         }
-    }
+
 	
 
 	
@@ -312,3 +245,5 @@ public class BoardController {
 //		return "redirect:/board/"+board.getBoardId();
 //	}
 
+    
+}

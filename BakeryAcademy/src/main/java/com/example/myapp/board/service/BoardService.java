@@ -120,11 +120,11 @@ public class BoardService implements IBoardService{
 
 
 
-//	@Override
-//	public String getMemberId(String memberId) {
-//		return boardRepository.getMemberId(memberId);
-//	}
-//	
+	@Override
+	public String getMemberId(String memberId) {
+		return boardRepository.getMemberId(memberId);
+	}
+	
 
 
 	@Transactional

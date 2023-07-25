@@ -82,6 +82,15 @@
 	]]>
 	</select>
 	
+	<!-- 멤버아이디조회 -->
+	<select id="getMemberId" parameterType="int" resultType="String">
+	<![CDATA[
+		SELECT member_id
+		FROM board
+		WHERE board_id = #{boardId}
+	]]>
+	</select>
+	
 	<!-- 글삭제 시 파일데이터 삭제 -->
 	<delete id="deleteFileData" parameterType="Integer">
 	<![CDATA[
