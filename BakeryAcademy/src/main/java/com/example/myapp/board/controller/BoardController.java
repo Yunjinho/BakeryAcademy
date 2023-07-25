@@ -65,7 +65,6 @@ public class BoardController {
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
-		System.out.println(endPage);
 		return "board/board";
 	}
 
@@ -101,22 +100,14 @@ public class BoardController {
 	//게시글 상세조회
 	@RequestMapping("/board/{boardId}")
 	public String getBoardDetails(@PathVariable int boardId, Model model) {
+		List<BoardImage> boardImageList=new ArrayList<BoardImage>();
+		List<BoardPrep> boardPrepList=new ArrayList<BoardPrep>();
 		Board board = boardService.selectArticle(boardId);
-//		  String fileName = board.getFileName(); 
-//		  if(fileName!=null) { 
-//			  int fileLength = fileName.length(); 
-//			  String fileType = fileName.substring(fileLength-4,fileLength).toUpperCase(); 
-//			  model.addAttribute("fileType", fileType); 
-//			  }
-
-
+		boardImageList=boardService.selectArticleImage(boardId);
+		boardPrepList=boardService.selectArticlePrep(boardId);
 		model.addAttribute("board", board);
-//		String dbId = boardService.getMemberId(board.getMemberId());
-//		System.out.println(dbId);
-		System.out.println("*****************" + board);
-		
-		
-		//logger.info("getBoardDetails" + board.toString());
+		model.addAttribute("imageList", boardImageList);
+		model.addAttribute("prepList", boardPrepList);
 		return "board/view";
 	}
 
@@ -174,7 +165,6 @@ public class BoardController {
 	public ResponseEntity<byte[]> getFile(@PathVariable int boardImageId) {
 		BoardImage file = boardService.getFile(boardImageId);
 		logger.info("getFile " + file.toString());
-		System.out.println(file);
 		final HttpHeaders headers = new HttpHeaders();
 		String[] mtypes = file.getBoardImageType().split("/");
 		headers.setContentType(new MediaType(mtypes[0], mtypes[1]));

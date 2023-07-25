@@ -27,11 +27,11 @@ public class BoardService implements IBoardService{
 
 	@Transactional
 	public Board selectArticle(int boardId) {
-		/* boardRepository.updateReadCount(boardId); */
-		return boardRepository.selectArticle(boardId);
+		Board board=new Board();
+		boardRepository.increaseVisitCount(boardId);
+		board=boardRepository.selectArticle(boardId);
+		return board;
 	}
-
-
 	
 	
 	@Override
@@ -145,6 +145,14 @@ public class BoardService implements IBoardService{
 	}
 
 
+	@Override
+	public List<BoardImage> selectArticleImage(int boardId) {
+		return boardRepository.selectArticleImage(boardId);
+	}
 
 
+	@Override
+	public List<BoardPrep> selectArticlePrep(int boardId) {
+		return boardPrepRepository.selectBoardPrepList(boardId);
+	}
 }

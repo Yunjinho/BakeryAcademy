@@ -51,7 +51,8 @@ window.onload=function(){
 								<tr class="table_row" th:each="list:${cartList}">
 									<td class="column-1">
 										<div class="how-itemcart1">
-											<img th:src="@{/product-thumnail/__${list.productId}__}" style="width: 100px; height: 100px;">
+											<img th:src="@{/product-thumnail/__${list.productId}__}" 
+     											style="width: 100px; height: 100px;">
 										</div>
 									</td>
 									<td><input type="hidden" id="cartId" name="cartId" th:value="${list.cartId}"></td>

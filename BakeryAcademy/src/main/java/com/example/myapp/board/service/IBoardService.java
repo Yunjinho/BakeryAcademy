@@ -13,7 +13,8 @@ import com.example.myapp.board.model.BoardPrep;
 public interface IBoardService {
 
 	Board selectArticle(int boardId);
-
+	List<BoardImage> selectArticleImage(int boardId);
+	List<BoardPrep> selectArticlePrep(int boardId);
 
 	BoardImage getFile(int boardImageId);
 
@@ -26,16 +27,6 @@ public interface IBoardService {
 	
 	
 	void deleteArticle(int boardId);
-
-	
-	
-	
-	/*
-	 * List<Board> selectArticleListByCategory(int boardId, int page); int
-	 * selectTotalArticleCountByCategoryId(int boardId);
-	 */
-	
-
 	
 	List<Board> selectAllBoardList(int page);
 	List<Board> selectKeywordBoardList(String keyword,int page);

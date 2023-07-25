@@ -27,7 +27,7 @@ window.onload=function(){
 						<div class="p-b-63" th:each="list:${boardList}">
 							<div class="p-t-32">
 								<h4 class="p-b-15">
-									<a th:href="@{/board-detail(boardId=${list.boardId}}" class="ltext-108 cl2 hov-cl1 trans-04">
+									<a th:href="@{/board/{boardId}(boardId=${list.boardId})}" class="ltext-108 cl2 hov-cl1 trans-04">
 										<span th:text=${list.boardTitle}></span>
 									</a>
 								</h4>
@@ -43,7 +43,7 @@ window.onload=function(){
 										</span>
 									</span>
 
-									<a th:href="@{/board-detail(boardId=${list.boardId}}" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
+									<a th:href="@{/board/{boardId}(boardId=${list.boardId})}" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
 										보기?
 										<i class="fa fa-long-arrow-right m-l-9"></i>
 									</a>
