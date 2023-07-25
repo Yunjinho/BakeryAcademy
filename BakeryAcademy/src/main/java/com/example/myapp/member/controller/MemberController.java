@@ -54,8 +54,6 @@ public class MemberController {
 		binder.setValidator(memberValidator);
 	}
 
-	
-
 	@RequestMapping(value = "/member/signup", method = RequestMethod.GET)
 	public String insertMember(Model model) {
 		model.addAttribute("member", new Member());
