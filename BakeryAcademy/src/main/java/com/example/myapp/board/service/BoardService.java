@@ -40,26 +40,36 @@ public class BoardService implements IBoardService{
 	}
 
 	@Transactional
-	public int insertArticle(Board board,BoardPrep boardPrep) {
+	public int insertArticle(Board board) {
 		boardRepository.insertArticle(board);
-		boardPrep.setBoardId(board.getBoardId());
-		boardPrepRepository.insertBoardPrep(boardPrep);
+		for(Integer list:board.getProductId()) {
+			BoardPrep bp=new BoardPrep();
+			bp.setBoardId(board.getBoardId());
+			bp.setProductId(list);
+			boardPrepRepository.insertBoardPrep(bp);
+		}
 		return 0;
 	}
 	
 
 	
 	@Transactional
-	public int insertArticle(Board board, BoardImage file,BoardPrep boardPrep) {
+	public int insertArticle(Board board, List<BoardImage> fileList) {
 		//board.setBoardId(boardRepository.selectMaxArticleNo()+1);
 		boardRepository.insertArticle(board);
-        if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
-        	file.setBoardId(board.getBoardId());
-        	//file.setFileId(boardRepository.selectMaxFileId()+1);
-        	boardRepository.insertFileData(file);
-        }
-        boardPrep.setBoardId(board.getBoardId());
-		boardPrepRepository.insertBoardPrep(boardPrep);
+		for(BoardImage file : fileList) {
+			if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
+				file.setBoardId(board.getBoardId());
+				//file.setFileId(boardRepository.selectMaxFileId()+1);
+				boardRepository.insertFileData(file);
+			}
+		}
+		for(Integer list:board.getProductId()) {
+			BoardPrep bp=new BoardPrep();
+			bp.setBoardId(board.getBoardId());
+			bp.setProductId(list);
+			boardPrepRepository.insertBoardPrep(bp);
+		}
         return board.getBoardId();
 	}
 	

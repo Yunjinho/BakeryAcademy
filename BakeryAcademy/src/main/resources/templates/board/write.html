@@ -108,6 +108,9 @@
 	width: 30%;
 	height: 300px;
 }
+#add-file:hover{
+	cursor:pointer;
+}
 </style>
 <script>
 	function tableContent(data) {
@@ -269,9 +272,8 @@
 		
 		$("#add-file").click(function(){
 			var content=$("#board-file").html();
-			alert(content)
-			console.log(content)
-			content +='<input type="file" id="boardImage" name="file" multiple>'
+			content ='<input type="file" id="boardImage" name="file" multiple>'
+			$("#board-file").append(content);
 		});
 	}
 </script>
@@ -320,12 +322,14 @@
 								<div class="form-group">
 									<label class="image" for="boardImage">첨부파일</label><br>
 									<div class="col-sm-8" id="board-file">
-										<input type="file" id="boardImage" name="file" multiple>
+										<div>
+											<input type="file" id="boardImage" name="file" multiple>
+										</div>
 									</div>
 								</div>
 
 								<div class="form-group">
-									<button id="add-file" class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04" >파일 추가</button>
+									<div id="add-file" class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04" >파일 추가</div>
 								</div>
 
 								<div class="form-group2">
