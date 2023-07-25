@@ -132,7 +132,7 @@ public class ProductService implements IProductService {
 	@Override
 	public List<Product> selectProductListByCategory(int categoryId, int page) {
 		int start = (page - 1) * 10 + 1;
-		return productRepository.getProductListByCategory(categoryId, start, start + 9);
+		return productRepository.getProductListByCategory(categoryId, start, start + 11);
 	}
 
 	@Override
