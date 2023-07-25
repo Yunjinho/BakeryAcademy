@@ -14,25 +14,36 @@ import com.example.myapp.product.model.ProductImage;
 @Mapper
 public interface IProductRepository {
 	Product selectProduct(int productId);
+
 	void insertProduct(Product product);
-	
-	List<Product> getProductListByCategory(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end);
+
+	List<Product> getProductListByCategory(@Param("categoryId") int categoryId, @Param("start") int start,
+			@Param("end") int end);
+
 	int selectTotalProductCountByCategoryId(int categoryId);
+
 	void insertProductImage(ProductImage productImage);
+
 	void updateProductImage(ProductImage productImage);
 
 	void updateProduct(Product product);
+
 	void deleteProductImage(int productId);
-	
-	
-	List<Product> selectKeywordProductList(@Param("keyword")String keyword,@Param("start")int start,@Param("end")int end);
-	List<Product> selectProductListAtModal(@Param("start")int start,@Param("end")int end);
+
+	List<Product> selectKeywordProductList(@Param("keyword") String keyword, @Param("start") int start,
+			@Param("end") int end);
+
+	List<Product> selectProductListAtModal(@Param("start") int start, @Param("end") int end);
 
 	List<Product> selectProductListInBoard(List<Integer> productList);
-	
+
 	int countProductList();
-	int countKeywordProductList(@Param("keyword")String keyword);
-	
+
+	int countKeywordProductList(@Param("keyword") String keyword);
+
 	ProductImage getProductImageMinId(int productId);
-	List<ProductImage> getProductImageList(int productId);//아직 mapper에 미구현
+
+	List<Integer> getProductImageList(int productId);
+	
+	ProductImage getProductImageByImageId(int productImageId);
 }

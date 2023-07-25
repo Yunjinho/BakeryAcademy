@@ -26,8 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
+import com.example.myapp.board.model.BoardPrep;
 import com.example.myapp.board.service.IBoardService;
-import com.example.myapp.member.model.Member;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -64,6 +64,7 @@ public class BoardController {
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
+		System.out.println(endPage);
 		return "board/board";
 	}
 
@@ -107,11 +108,11 @@ public class BoardController {
 //			  model.addAttribute("fileType", fileType); 
 //			  }
 
-		
+
 		model.addAttribute("board", board);
 //		String dbId = boardService.getMemberId(board.getMemberId());
 //		System.out.println(dbId);
-
+		System.out.println("*****************" + board);
 		
 		
 		//logger.info("getBoardDetails" + board.toString());
@@ -122,7 +123,7 @@ public class BoardController {
 	// 게시글 입력
 	@RequestMapping(value = "/board/write", method = RequestMethod.GET)
 	public String writeArticle(Model model, HttpSession session) {
-		session.setAttribute("memberId", "me");
+//		session.setAttribute("memberId", "me");
 		return "board/write";
 	}
 
@@ -130,13 +131,10 @@ public class BoardController {
 	
 	
 	@RequestMapping(value = "/board/write", method = RequestMethod.POST)
-	public String writeArticle( Board board, BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
+	public String writeArticle( Board board,BoardPrep boardPrep, BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
 		logger.info("/board/write : " + board.toString());
 		board.setMemberId((String) session.getAttribute("memberId"));
 		board.setMemberNickname(board.getMemberNickname());
-		
-		
-		
 		
 		try {
 			board.setBoardContent(board.getBoardContent().replace("\r\n", "<br>"));
@@ -149,10 +147,9 @@ public class BoardController {
 				file.setBoardImageSize(mfile.getSize());
 				file.setBoardImageType(mfile.getContentType());
 				file.setBoardImage(mfile.getBytes());
-				boardService.insertArticle(board, file);
+				boardService.insertArticle(board, file,boardPrep);
 			} else {
-				boardService.insertArticle(board);
-				
+				boardService.insertArticle(board,boardPrep);
 			}
 			 }catch(Exception e) {
 				 e.printStackTrace(); 
@@ -161,6 +158,7 @@ public class BoardController {
 		 return "redirect:/board/" +  board.getBoardId();
 
 	 }
+	
 
 
 	
@@ -185,20 +183,12 @@ public class BoardController {
 	
 
 	@RequestMapping(value="/board/delete/{boardId}", method=RequestMethod.GET)
-	public String deleteBoard(@PathVariable int boardId, Model model, HttpSession session) {
+	public String deleteArticle(@PathVariable int boardId, Model model, HttpSession session) {
 		Board board = boardService.selectDeleteBoard(boardId);
+		
 		session.setAttribute("memberId", "me");
-		model.addAttribute("memberId", board.getMemberId());
-		
-		
-//		Board board = boardService.selectDeleteBoard(memberId);
-//		board.setMemberId((String) session.getAttribute("memberId"));
-//		model.addAttribute("boardId", boardId);
+//		board.setMemberId(board.getMemberId());
 
-		
-		
-		
-		
 		return "board/delete";
 	}
 	
@@ -206,20 +196,20 @@ public class BoardController {
 	@RequestMapping(value="/board/delete", method=RequestMethod.POST)
 	public String deleteArticle(Board board, HttpSession session, RedirectAttributes model) {
 //		board.setMemberId((String) session.getAttribute("memberId"));
-        
+		
 		try {
-			String authenticatedMemberId = (String) session.getAttribute("memberId");
+			String authenticatedMemberId = (String)session.getAttribute("memberId");
+			System.out.println(authenticatedMemberId);
 			String dbId = boardService.getMemberId(board.getMemberId());
 			System.out.println(dbId);
+			
 			if(dbId.equals(authenticatedMemberId)) {
-				
-				//이미지 삭제 되었는데 보드는 아직 삭제 안됨 보드도 삭제하는 코드 입력해야함
 				boardService.deleteArticle(board.getBoardId());
-				
-				return "redirect:/board/" + board.getBoardId() + "/" + (Integer)session.getAttribute("page");
+//				return "redirect:/board/" + board.getBoardId() + "/" + (Integer)session.getAttribute("page");
+				return "redirect:/board/" + board.getBoardId() + "/" + (String)session.getAttribute("memberId");
 			}
 				else {
-				model.addAttribute("message", "이 게시물의 작성자가 아닙니다.");
+				model.addAttribute("message", "이 게시물의 작성자가 아니므로 삭제가 불가능합니다.");
 				return "redirect:/board/delete/" + board.getBoardId();	
 			}
 		} 

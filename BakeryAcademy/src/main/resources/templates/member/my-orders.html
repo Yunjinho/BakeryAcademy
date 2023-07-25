@@ -64,7 +64,7 @@ function no(){
 	$("#myModal").css("display","none");	
 }
 window.onload=function(){
-	$(".refun-btn").click(function(){
+	$("#refun-btn").click(function(){
 		$("#myModal").css("display","block");
 	})
 
@@ -104,7 +104,7 @@ window.onload=function(){
 							      <td th:text="${list.productName}"/>
 							      <td th:text="${list.orderCount}"/>
 							      <td th:text="${list.orderStatus}"/>
-							      <td><button type="button" class="refun-btn" th:onclick="refun([[${list.orderId}]])">취소!</button></td>
+							      <td><button type="button" class="btn btn-outline-secondary" id="refun-btn" th:onclick="refun([[${list.orderId}]])">취소!</button></td>
 							    </tr>
 							  </tbody>
 							</table>
@@ -171,7 +171,7 @@ window.onload=function(){
 							      <td>상품 이름</td>
 							      <td>상품 수량</td>
 							      <td>상품 상태</td>
-							      <td></td>
+							      <td>리뷰쓰기</td>
 							    </tr>
 							  </thead>
 							  <tbody th:each="list:${afterDeliveryList}">
@@ -180,6 +180,10 @@ window.onload=function(){
 							      <td th:text="${list.productName}"/>
 							      <td th:text="${list.orderCount}"/>
 							      <td th:text="${list.orderStatus}"/>
+							      <td>
+							      	<span th:if="${list.productReviewId==0}"><a th:href="@{/member/write-review(orderId=${list.orderId},productId=${list.productId})}">리뷰 쓰기</a></span>
+							      	<span th:if="${list.productReviewId!=0}">리뷰 완료!</span>
+							      </td>
 							    </tr>
 							  </tbody>
 							</table>
@@ -189,7 +193,7 @@ window.onload=function(){
 <div th:replace="~{member/member-menu::member-menu}"></div>
 			</div>
 		</div>
-	</section>	
+	</section>
 	<div id="myModal" class="modal">
 		<div class="modal-content">
 			<p>취소 할까요?</p>
@@ -198,8 +202,7 @@ window.onload=function(){
 				<button class="confirm_no" th:onclick="no()">아니요</button>
 			</div>
 		</div>
-	</div>
-	
+	</div>	
 <footer th:replace="~{footer::footer}"></footer>
 <!--===============================================================================================-->	
 	<script src="../../vendor/jquery/jquery-3.2.1.min.js"></script>

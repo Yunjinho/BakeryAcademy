@@ -32,6 +32,8 @@ public interface IBoardRepository {
 	Board selectDeleteBoard(int boardId);
 	
 	String getMemberId(String memberId);
+	
+	
 	//삭제할 파일 데이터
 	void deleteFileData(int boardId);
 	//삭제할 게시물 정보

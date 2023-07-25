@@ -29,6 +29,10 @@ import com.example.myapp.member.model.Order;
 import com.example.myapp.member.service.ICartService;
 import com.example.myapp.member.service.IMemberService;
 import com.example.myapp.member.service.IOrderService;
+import com.example.myapp.product.model.Product;
+import com.example.myapp.product.model.ProductReview;
+import com.example.myapp.product.service.IProductReviewService;
+import com.example.myapp.product.service.IProductService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -49,23 +53,22 @@ public class MemberController {
 	@Autowired
 	private ICartService cartService;
 
+
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {
 		binder.setValidator(memberValidator);
 	}
-
-	/*
-	 * //Id 중복체크
-	 * 
-	 * @RequestMapping("/member/idcheck")
-	 * 
-	 * @ResponseBody //view 없을 때 사용 public String idCheck(String memberId) { String
-	 * result = ""; Member member = null; try { member =
-	 * memberService.selectMember(memberId); if(member==null) { result = "true";
-	 * }else { result = "false"; } }catch(Exception e){ e.printStackTrace(); }
-	 * return result; }
-	 */
-
+	
+	@Autowired
+	private IProductService productService;
+	
+	@Autowired
+	private IProductReviewService productReviewService;
+	 @InitBinder("Member")
+	 private void initBinder(WebDataBinder binder) {
+		 binder.setValidator(memberValidator); 
+	 }
+	
 	@RequestMapping(value = "/member/signup", method = RequestMethod.GET)
 	public String insertMember(Model model) {
 		model.addAttribute("member", new Member());
@@ -110,17 +113,16 @@ public class MemberController {
 		return "member/login";
 	}
 
-	/*
-	 * @RequestMapping(value = "/member/memberinfo", method = RequestMethod.GET)
-	 * public String memberinfo() { return "member/memberinfo"; }
-	 */
-
 	@RequestMapping(value = "/member/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		session.invalidate(); // 세션 무효화
 		return "redirect:/"; // 홈페이지로 리다이렉트
+=======
+	public String logout(HttpSession session, HttpServletRequest request) {
+		session.invalidate(); // 로그아웃
+		return "index";
 	}
-
+  
 	@RequestMapping(value = "/member/update", method = RequestMethod.GET)
 	public String updateMember(HttpSession session, Model model) {
 		String memberId = (String) session.getAttribute("memberId");
@@ -258,4 +260,28 @@ public class MemberController {
 		return "redirect:/member/my-orders";
 	}
 
+	@RequestMapping(value="/admin/order-detail",method=RequestMethod.POST)
+	public String updateOrderDetail(Order order,Model model) {
+		orderService.updateOrderStatus(order);
+		return "redirect:/admin/orders?beforePage=1&ingPage=1&afterPage=1&refunPage=1";
+	}
+	
+	@RequestMapping(value="member/write-review",method=RequestMethod.GET)
+	public String viewReview(@RequestParam int orderId, @RequestParam int productId,Model model) {
+		Product product=new Product();
+		product=productService.selectProduct(productId);
+		model.addAttribute("product", product);
+		Order order =new Order();
+		order=orderService.selectOrderDetail(orderId);
+		model.addAttribute("order", order);
+		return "/member/write-review";
+	}
+	@RequestMapping(value="member/write-review",method=RequestMethod.POST)
+	public String writeReview(@RequestParam int orderId,ProductReview productReview, HttpSession session) {
+		String memberId=(String)session.getAttribute("memberId");
+		productReview.setMemberId(memberId);
+		productReview.setOrderId(orderId);
+		productReviewService.insertProductReview(productReview);
+		return "redirect:/member/my-orders";
+	}
 }

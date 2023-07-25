@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myapp.product.dao.IProductReviewRepository">
+<insert id="insertProductReview" parameterType="com.example.myapp.product.model.ProductReview">
+<![CDATA[
+INSERT INTO product_review VALUES(SEQ_PRODUCT_REVIEW_ID.NEXTVAL,#{productId},#{memberId},#{productReviewContent},#{rating},#{orderId})
+]]>
+</insert>
+</mapper>

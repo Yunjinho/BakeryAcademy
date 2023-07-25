@@ -21,4 +21,5 @@ public class Order {
 	
 	private String productName;
 	private String orderAddressDetail;
+	private int productReviewId;
 }
