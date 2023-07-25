@@ -20,7 +20,7 @@
 			member_id		AS "memberId",
 			member_password		AS "memberPassword",		 		
 			member_name		AS "memberName",
-			member_phone_number		"memberPhoneNumber",
+			member_phone_number AS "memberPhoneNumber",
 			member_email		AS "memberEmail",
 			member_nickname		AS "memberNickName",
 			member_address	AS	"memberAddress",
@@ -48,14 +48,15 @@
     	]]>
 	</update>
 
-<select id="getPassword" parameterType="string" resultType="string">
-<![CDATA[
-SELECT
+	<select id="getPassword" parameterType="string"
+		resultType="string">
+	<![CDATA[
+	SELECT
 	member_password
-FROM
+	FROM
 	member
-WHERE member_id=#{memberId}
-]]>
-</select>
+	WHERE member_id=#{memberId}
+	]]>
+	</select>
 
 </mapper>

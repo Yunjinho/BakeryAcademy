@@ -1,13 +1,9 @@
 package com.example.myapp;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.myapp.board.service.IBoardService;
-import com.example.myapp.member.dao.ICartRepository;
 import com.example.myapp.member.service.ICartService;
 
 import jakarta.servlet.http.HttpSession;
@@ -31,5 +27,4 @@ public class HomeContrller {
 		jobj.put("cartCount", cartService.countCart((String)session.getAttribute("memberId")));
 		return jobj;
 	}
-	
 }

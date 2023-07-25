@@ -52,13 +52,18 @@
 .confirm:hover{
 	color:black;
 }
-.search{
+.search-product input{
 	text-align:center;
 	margin:10px;
+	border:1px solid !important;
+	display:inline-block !important;
 }
 .search-img{
 	width:30px;
 	height:30px;
+}
+.search-img:hover{
+	cursor:pointer;
 }
 .table{
 	text-align:center;
@@ -250,7 +255,6 @@ window.onload=function(){
 		searchPaging(1);
 	});
 }
-
 </script>
 </head>
 <body>
@@ -272,10 +276,8 @@ window.onload=function(){
 
 	<div id="myModal" class="modal">
 		<div class="modal-content">
-			<div class="paging-content">
-				<div class="search">
-					<input type="text" class="keyword" onkeyup="if(window.event.keyCode==13){searchPaging(1)}"><img th:src="@{../../images/icons/search.png}" class="search-img">
-				</div>
+			<div class="search-product">
+				<input type="text" class="keyword" onkeyup="if(window.event.keyCode==13){searchPaging(1)}"><img th:src="@{../../images/icons/search.png}" class="search-img">
 			</div>
 			<!-- 여기에 넣어줘야함 -->
 			<div class="table-form"></div>

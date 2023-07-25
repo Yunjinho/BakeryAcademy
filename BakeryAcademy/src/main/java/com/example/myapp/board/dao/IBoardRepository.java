@@ -32,12 +32,18 @@ public interface IBoardRepository {
 	Board selectDeleteBoard(int boardId);
 	
 	String getMemberId(String memberId);
+	
+	//보드 이미지 가져오기
+	List<BoardImage> selectArticleImage(int boardId);
+	
 	//삭제할 파일 데이터
 	void deleteFileData(int boardId);
 	//삭제할 게시물 정보
 	void deleteArticleInfo(int boardId);
 	
-	
+	//수정할 게시물
+	int updateArticle(Board board);
+	int updateArticle(Board board, BoardImage file);
 	
 	//게시물에 등록된 이미지 삭제
 	void deleteBoardImage(int boardId);
@@ -59,6 +65,10 @@ public interface IBoardRepository {
 	int countBoard();
 	//검색한 게시판의 수
 	int countKeywordBoard(@Param("keyword")String keyword);
+	
+	int increaseVisitCount(int boardId);
+
+	
 
 	
 }

@@ -1,90 +1,104 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
-<script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+<link rel="stylesheet" type="text/css"
+	th:href="@{../css/board/boardwritebtn.css}">
+<script th:src="@{../../vendor/jquery/jquery-3.2.1.min.js}"></script>
 <script>
-function searchBoard(){
-	var content=$("#board-search").val();
-	location.href="/search-board?page=1&keyword="+content
-}
-window.onload=function(){
-	$("#board-search-img").click(function(){
-		searchBoard();
-	})
-}
+	function searchBoard() {
+		var content = $("#board-search").val();
+		location.href = "/search-board?page=1&keyword=" + content
+	}
+	window.onload = function() {
+		$("#board-search-img").click(function() {
+			searchBoard();
+		})
+	}
 </script>
 <body class="animsition">
-<header th:replace="~{body-header::body-header}"></header>
-<br>
+	<header th:replace="~{body-header::body-header}"></header>
+	<br>
 	<!-- Content page -->
 	<section class="bg0 p-t-62 p-b-60">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 col-lg-9 p-b-80">
 					<div class="p-r-45 p-r-0-lg">
+
 						<!-- board list -->
 						<div class="p-b-63" th:each="list:${boardList}">
 							<div class="p-t-32">
 								<h4 class="p-b-15">
-									<a th:href="@{/board-detail(boardId=${list.boardId}}" class="ltext-108 cl2 hov-cl1 trans-04">
-										<span th:text=${list.boardTitle}></span>
+									<a th:href="@{/board/{boardId}(boardId=${list.boardId})}"
+										class="ltext-108 cl2 hov-cl1 trans-04"> <span
+										th:text=${list.boardTitle}></span>
 									</a>
 								</h4>
-
 								<div class="flex-w flex-sb-m p-t-18">
 									<span class="flex-w flex-m stext-111 cl2 p-r-30 m-tb-10">
-										<span>
-											<span class="cl4">By</span> <span th:text="${list.memberNickname}"></span>  
-											<span class="cl12 m-l-4 m-r-6">|</span>
+										<span> <span class="cl4">By</span> <span
+											th:text="${list.memberNickname}"></span> <span
+											class="cl12 m-l-4 m-r-6">|</span>
+										</span> 
+										<span> 
+											<span class="cl4">조회수</span> 
+											<span th:text="${list.visitCount}"></span>
 										</span>
-										<span >
-											<span class="cl4">조회수</span> <span th:text="${list.visitCount}"></span>  
-										</span>
-									</span>
-
-									<a th:href="@{/board-detail(boardId=${list.boardId}}" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
-										보기?
+									</span> 
+									<a th:href="@{/board/{boardId}(boardId=${list.boardId})}" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10"> 보기? 
 										<i class="fa fa-long-arrow-right m-l-9"></i>
 									</a>
 								</div>
 							</div>
 						</div>
+						<div class="new_write" th:if="${session.memberId!=null}">
+							<a href="/board/write">
+								<button class="new_write_btn">새글쓰기</button>
+							</a>
+						</div>
+
 
 						<!-- Pagination -->
 						<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
-							<a th:if="${nowPageBlock>1}" th:href="@{/board(page=${startPage-1})" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								◀
+							<a th:if="${nowPageBlock>1}"
+								th:href="@{/board(page=${startPage-1})}"
+								class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+								◀ </a> <span th:each="i: ${#numbers.sequence(startPage, endPage)}"
+								th:classappend="${i==nowPage}?active"> <a
+								th:href="@{/board(page=${i})}"
+								class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+									<span th:if=${i==nowPage} style="color: black;">[[${i}]]</span>
+									<span th:if=${i!=nowPage} style="color: white;">[[${i}]]</span>
 							</a>
-							<span th:each="i: ${#numbers.sequence(startPage, endPage)}" th:classappend="${i==nowPage}?active">
-								<a th:href="@{/board(page=${i})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-									<span th:if=${i==nowPage} style="color:black;">[[${i}]]</span>
-									<span th:if=${i!=nowPage} style="color:white;">[[${i}]]</span>
-								</a>
-							</span>
-							<a th:if="${nowPageBlock<totalPageBlock}" th:href="@{/board(page=${endPage+1})" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-								▶
-							</a>
+							</span> <a th:if="${nowPageBlock<totalPageBlock}"
+								th:href="@{/board(page=${endPage+1})}"
+								class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+								▶ </a>
 						</div>
-						<div class="col-md-4 col-lg-3 p-b-80">
-					<div class="side-menu">
-						<div class="bor17 of-hidden pos-relative">
-							<input class="stext-103 cl2 plh4 size-116 p-l-28 p-r-55" id="board-search" type="text" name="search" placeholder="제목 or 내용 or 작성자 " onkeyup="if(window.event.keyCode==13){searchBoard()}">
-							<button class="flex-c-m size-122 ab-t-r fs-18 cl4 hov-cl1 trans-04" id="board-search-img">
-								<i class="zmdi zmdi-search">
-								</i>
-							</button>
-						</div>
+					</div>
+				</div>
+				<div class="side-menu">
+					<div class="bor17 of-hidden pos-relative">
+						<input class="stext-103 cl2 plh4 size-116 p-l-28 p-r-55"
+							id="board-search" type="text" name="search"
+							placeholder="제목 or 내용 or 작성자 "
+							onkeyup="if(window.event.keyCode==13){searchBoard()}">
+						<button
+							class="flex-c-m size-122 ab-t-r fs-18 cl4 hov-cl1 trans-04"
+							id="board-search-img">
+							<i class="zmdi zmdi-search"> </i>
+						</button>
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>	
-<footer th:replace="~{footer::footer}"></footer>
+	</section>
+	<footer th:replace="~{footer::footer}"></footer>
 
 	<!-- Back to top -->
 	<div class="btn-back-to-top" id="myBtn">
-		<span class="symbol-btn-back-to-top">
-			<i class="zmdi zmdi-chevron-up"></i>
+		<span class="symbol-btn-back-to-top"> <i
+			class="zmdi zmdi-chevron-up"></i>
 		</span>
 	</div>
 
@@ -94,25 +108,25 @@ window.onload=function(){
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 	<script src="vendor/select2/select2.min.js"></script>
 	<script>
-		$(".js-select2").each(function(){
+		$(".js-select2").each(function() {
 			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
+				minimumResultsForSearch : 20,
+				dropdownParent : $(this).next('.dropDownSelect2')
 			});
 		})
 	</script>
 	<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 	<script>
-		$('.js-pscroll').each(function(){
-			$(this).css('position','relative');
-			$(this).css('overflow','hidden');
+		$('.js-pscroll').each(function() {
+			$(this).css('position', 'relative');
+			$(this).css('overflow', 'hidden');
 			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
+				wheelSpeed : 1,
+				scrollingThreshold : 1000,
+				wheelPropagation : false,
 			});
 
-			$(window).on('resize', function(){
+			$(window).on('resize', function() {
 				ps.update();
 			})
 		});

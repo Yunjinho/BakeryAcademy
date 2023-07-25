@@ -4,6 +4,7 @@ package com.example.myapp.board.model;
 
 
 import java.sql.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +31,8 @@ public class Board {
 	private String boardImageType;
 	
 	
-	private MultipartFile file;
+	private List<MultipartFile> file;
+	private List<Integer> productId;
 	private byte[] boardImage;
 	
 	@Override

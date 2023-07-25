@@ -13,25 +13,28 @@
 					<div class="p-r-45 p-r-0-lg">
 						<!-- product-register -->
 						<div class="p-t-40">
-							<h5 class="mtext-113 cl2 p-b-12">
-								카테고리 수정
-							</h5>
-							<form th:action="@{/admin/update-category}" method="post" enctype="multipart/form-data" class="insert-product-form">
-								<label for="productName" class="product-infomation-label">카테고리 이름</label>
+							<h5 class="mtext-113 cl2 p-b-12">카테고리 수정</h5>
+							<form th:action="@{/admin/update-category}" method="post"
+								enctype="multipart/form-data" class="insert-product-form">
+								<label for="productName" class="product-infomation-label">카테고리
+									이름</label>
 								<div class="product-infomation-box">
-									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="text" name="categoryName" placeholder="카테고리 이름" th:value="${category.categoryName}">
+									<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="text"
+										name="categoryName" placeholder="카테고리 이름"
+										th:value="${category.categoryName}">
 								</div>
-								
-								<input type="hidden" name="categoryId" th:value="${category.categoryId}">
-								<br>
-								<button class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
-									등록
-								</button>
+
+								<input type="hidden" name="categoryId"
+									th:value="${category.categoryId}"> <br>
+								<button
+									class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
+									등록</button>
 							</form>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4 col-lg-3 p-b-80" th:replace="~{/admin/admin-menu::admin-menu}"></div>
+				<div class="col-md-4 col-lg-3 p-b-80"
+					th:replace="~{/admin/admin-menu::admin-menu}"></div>
 			</div>
 		</div>
 	</section>	
@@ -47,9 +50,10 @@
 	<script th:src="@{/vendor/select2/select2.min.js}"></script>
  	<script>
 		$(".js-select2").each(function(){
+
 			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
+				minimumResultsForSearch : 20,
+				dropdownParent : $(this).next('.dropDownSelect2')
 			});
 		})
 	</script> 
@@ -67,15 +71,16 @@
 <!--===============================================================================================-->
 	<script th:src="@{/vendor/MagnificPopup/jquery.magnific-popup.min.js}"></script>
  	<script>
+
 		$('.gallery-lb').each(function() { // the containers for all your galleries
 			$(this).magnificPopup({
-		        delegate: 'a', // the selector for gallery item
-		        type: 'image',
-		        gallery: {
-		        	enabled:true
-		        },
-		        mainClass: 'mfp-fade'
-		    });
+				delegate : 'a', // the selector for gallery item
+				type : 'image',
+				gallery : {
+					enabled : true
+				},
+				mainClass : 'mfp-fade'
+			});
 		});
 	</script> 
 <!--===============================================================================================-->
@@ -84,29 +89,34 @@
 	<script th:src="@{/vendor/sweetalert/sweetalert.min.js}"></script>
  	<script>
 		$('.js-addwish-b2').on('click', function(e){
+
 			e.preventDefault();
 		});
 
-		$('.js-addwish-b2').each(function(){
-			var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
-			$(this).on('click', function(){
-				swal(nameProduct, "is added to wishlist !", "success");
+		$('.js-addwish-b2').each(
+				function() {
+					var nameProduct = $(this).parent().parent().find(
+							'.js-name-b2').html();
+					$(this).on('click', function() {
+						swal(nameProduct, "is added to wishlist !", "success");
 
-				$(this).addClass('js-addedwish-b2');
-				$(this).off('click');
-			});
-		});
+						$(this).addClass('js-addedwish-b2');
+						$(this).off('click');
+					});
+				});
 
-		$('.js-addwish-detail').each(function(){
-			var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+		$('.js-addwish-detail').each(
+				function() {
+					var nameProduct = $(this).parent().parent().parent().find(
+							'.js-name-detail').html();
 
-			$(this).on('click', function(){
-				swal(nameProduct, "is added to wishlist !", "success");
+					$(this).on('click', function() {
+						swal(nameProduct, "is added to wishlist !", "success");
 
-				$(this).addClass('js-addedwish-detail');
-				$(this).off('click');
-			});
-		});
+						$(this).addClass('js-addedwish-detail');
+						$(this).off('click');
+					});
+				});
 
 		/*---------------------------------------------*/
 
@@ -124,13 +134,14 @@
 		$('.js-pscroll').each(function(){
 			$(this).css('position','relative');
 			$(this).css('overflow','hidden');
+
 			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
+				wheelSpeed : 1,
+				scrollingThreshold : 1000,
+				wheelPropagation : false,
 			});
 
-			$(window).on('resize', function(){
+			$(window).on('resize', function() {
 				ps.update();
 			})
 		});

@@ -1,68 +1,291 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
+<<<<<<
+<script>
+window.onload=function(){
+	$('.slider-1 > .page-btns > div').click(function(){
+	    var $this = $(this);
+	    var index = $this.index();
+	    
+	    $this.addClass('active');
+	    $this.siblings('.active').removeClass('active');
+	    
+	    var $slider = $this.parent().parent();
+	    
+	    var $current = $slider.find(' > .slides > div.active');
+	    
+	    var $post = $slider.find(' > .slides > div').eq(index);
+	    
+	    $current.removeClass('active');
+	    $post.addClass('active');
+	});
+	 
+	// 좌/우 버튼 추가 슬라이더
+	$('.slider-1 > .side-btns > div').click(function(){
+	    var $this = $(this);
+	    var $slider = $this.closest('.slider-1');
+	    
+	    var index = $this.index();
+	    var isLeft = index == 0;
+	    
+	    var $current = $slider.find(' > .page-btns > div.active');
+	    var $post;
+	    
+	    if ( isLeft ){
+	        $post = $current.prev();
+	    }
+	    else {
+	        $post = $current.next();
+	    };
+	    
+	    if ( $post.length == 0 ){
+	        if ( isLeft ){
+	            $post = $slider.find(' > .page-btns > div:last-child');
+	        }
+	        else {
+	            $post = $slider.find(' > .page-btns > div:first-child');
+	        }
+	    };
+	    
+	    $post.click();
+	});
+	 
+};
+</script>
+<style>
+
+html {
+    font-family: "Noto Sans KR", sans-serif;
+}
+/* 노말라이즈 */
+body, ul, li, h1, h2, h3, h4, h5 {
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+a {
+    color:inherit;
+    text-decoration:none;
+}
+
+/* 슬라이더 1 시작 */
+.slider-1 {
+    height:400px;
+    position:relative;
+}
+
+/* 슬라이더 1 - 페이지 버튼 */
+.slider-1 > .page-btns {
+    text-align:center;
+    position:absolute;
+    bottom:20px;
+    left:0;
+    width:100%;
+}
+
+.slider-1 > .page-btns > div {
+    width:20px;
+    height:20px;
+    background-color:rgba(255,255,255,.5);
+    border-radius:4px;
+    display:inline-block;
+    cursor:pointer;
+}
+
+.slider-1 > .page-btns > div.active {
+    background-color:rgba(255,255,255,1);
+}
+
+/* 슬라이더 1 - 슬라이드 */
+.slider-1 {
+	margin:0 25%;
+}
+.slider-1 > .slides > div {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    opacity:0;
+    transition: opacity 0.3s;
+    background-position:center;
+    background-size:cover;
+    background-repeat:no-repeat;
+}
+
+.slider-1 > .slides > div.active {
+    opacity:1;
+}
+
+/* 슬라이더 좌우 버튼 */
+.slider-1 > .side-btns > div {
+    position:absolute;
+    top:0;
+    left:0;
+    width:25%;
+    height:100%;
+    cursor:pointer;
+}
+.slider-1 > .side-btns > div:last-child {
+    left:auto;
+    right:0;
+}
+.slider-1 >.side-btns > div > span {
+    position:absolute;
+    top:50%;
+    transform:translatey(-50%);
+    opacity:0.5;
+    padding:1px 13px;
+    border-radius:50px;
+    font-size:25px;
+    background-color: black;
+    color:white;
+}
+.slider-1 >.side-btns > div:last-child > span {
+    left:auto;
+    right:-0px;
+}
+.slides>div>img{
+	height:100%;
+	width:100%;
+}
+.board-header{
+	border-bottom: 1px solid black; margin:5% 25% 1% 25%; text-align:center;
+}
+.board-info{
+margin:1% 25%;
+text-align:right;
+font-size:0.5em;	
+}
+.board-content{
+margin:1% 25%;
+border-bottom: 1px solid black;
+padding:0% 0% 2% 0%;
+}
+</style>
+<link rel="stylesheet" type="text/css"
+	th:href="@{../css/board/boardview.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/board/boardview.css}">
 <meta charset="UTF-8">
 
+<header th:replace="~{body-header::body-header}"></header>
 
-<body>
-	<header th:replace="~{body-header::body-header}"></header>
-
-
-	<!-- <a th:href="@{/board/write/{categoryId}(categoryId=${categoryId})}"><button type="button" class="btn btn-info">새글쓰기</button></a> -->
-	<table class="table_bordered" border="1">
-		<tr>
-			<td>글번호</td>
-			<td th:text="${board.boardId}"></td>
-		</tr>
-
-		<tr>
-			<td>작성자</td>
-			<td th:text="${board.memberNickname}"></td>
-		</tr>
-
-		<tr>
-			<td>작성일</td>
-			<td th:text="${board.boardWriteDate}"></td>
-		</tr>
-
-
-
-		<tr>
-			<td>조회수</td>
-			<td th:text="${board.visitCount}"></td>
-		</tr>
-
-		<tr>
-			<td>제목</td>
-			<td th:text="${board.boardTitle}"></td>
-		</tr>
-
-		<tr>
-			<td>내용</td>
-			<td th:text="${board.boardContent}"></td>
-		</tr>
-
-		<tr>
-			<td>첨부파일</td>
-			<td><img
-				th:src="@{/boardImageFile/{boardImageId}(boardImageId=${board.boardImageId})}"
-				th:if="${board.boardImageType == 'image/jpeg' || board.boardImageType == 'image/png' || board.boardImageType == 'image/gif' || board.boardImageType == 'image/jpg'}"
-				class="img-thumbnail" alt="" width="600"><br> <a
-				th:href="@{/file/{boardImageId}(boardImageId=${board.boardImageId})}"
-				th:text="${board.boardImageName}">(<span
-					th:text="${#numbers.formatDecimal(board.fileSize,3,'COMMA',2,'POINT')}">0</span>byte)
-			</a></td>
-		</tr>
-
-		<tr>
-			<td align="right"><a
-				th:href="@{/board/delete/{boardId}(boardId=${board.boardId})}"><button
-						type="button" class="btn btn-info">삭제</button></a></td>
-
-		</tr>
-
-	</table>
+<body class="animsition">
+<div class="contianer" style="height:80%">
+		<div class="board-header">
+			<span th:text="${board.boardTitle}"></span>
+		</div>
+		<div class="board-info">
+			<span>작성자 : </span><span th:text="${board.memberNickname}"></span><br>
+			<span>방문자 수 : </span><span th:text="${board.visitCount}"></span><br>
+			<span>작성일 : </span><span th:text="${board.boardWriteDate}"></span>
+		</div>
+	<div class="slider-1" th:if="${imageList.size!=0}">
+	    <div class="slides" th:each="list:${imageList}">
+	        <div th:each="list:${imageList}" class="active">
+	        	<img th:src="@{/boardImageFile/__${list.boardImageId}__}"
+						th:if="${list.boardImageType == 'image/jpeg' || list.boardImageType == 'image/png' || list.boardImageType == 'image/gif' || list.boardImageType == 'image/jpg'}"
+						class="img-thumbnail" alt="">
+	        </div>
+	    </div>
+	    <div class="page-btns">
+	        <div class="active" th:each="list:${imageList}"></div>
+	    </div>
+	    <div class="side-btns">
+	        <div>
+	            <span><</span>
+	        </div>
+	        <div>
+	            <span>></span>
+	        </div>
+	    </div>
+	</div>
+	<br>
+	<br>
+	<div class="board-content" th:text="${board.boardContent}"></div>
+	<div class="board-product" th:each="list:${prepList}">
+		<span th:text="${list.productName}"></span>
+	</div>
+</div>
 	<footer th:replace="~{footer::footer}"></footer>
+	<!-- Back to top -->
+	<div class="btn-back-to-top" id="myBtn">
+		<span class="symbol-btn-back-to-top"> <i
+			class="zmdi zmdi-chevron-up"></i>
+		</span>
+	</div>
+	<script>
+		$(".js-select2").each(function() {
+			$(this).select2({
+				minimumResultsForSearch : 20,
+				dropdownParent : $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+	<script>
+		$('.js-pscroll').each(function() {
+			$(this).css('position', 'relative');
+			$(this).css('overflow', 'hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed : 1,
+				scrollingThreshold : 1000,
+				wheelPropagation : false,
+			});
 
+			$(window).on('resize', function() {
+				ps.update();
+			})
+		});
+	</script>
+	<!--===============================================================================================-->
+	<script th:src="@{../vendor/jquery/jquery-3.2.1.min.js}"></script>
+	<!--===============================================================================================-->
+	<script th:src="@{../vendor/animsition/js/animsition.min.js}"></script>
+	<!--===============================================================================================-->
+	<script th:src="@{../vendor/bootstrap/js/popper.js}"></script>
+	<script th:src="@{../vendor/bootstrap/js/bootstrap.min.js}"></script>
+	<!--===============================================================================================-->
+	<script th:src="@{../vendor/select2/select2.min.js}"></script>
+	<!--===============================================================================================-->
+	<script
+		th:src="@{../vendor/MagnificPopup/jquery.magnific-popup.min.js}"></script>
+	<!--===============================================================================================-->
+	<script
+		th:src="@{../vendor/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+	<!--===============================================================================================-->
+	<script th:src="@{../js/main.js}"></script>
+		
+
+
+
+<script>
+  function deleteArticleConfirmation() {
+    var confirmResult = confirm("게시물을 삭제하시겠습니까?");
+    if (confirmResult) {
+      deleteYes();
+      return true;
+    } else { 
+    	return false;
+    }
+  }
+
+  function deleteYes() {
+	var mid='[[${board.memberId}]]'
+	  $.ajax({
+			type: "POST",
+			url: "/board/delete",
+			data:{'memberId':mid},
+	  		dataType:"json",
+			success: function(data) {
+				inputContent(data,"1");
+			},
+			error: function (xhr, status, error) {
+		        alert(xhr.responseText);
+		      }
+			
+		});
+  }
+</script>
 </body>
 </html>
