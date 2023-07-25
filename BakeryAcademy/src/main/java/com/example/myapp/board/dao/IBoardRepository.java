@@ -41,6 +41,10 @@ public interface IBoardRepository {
 	//삭제할 게시물 정보
 	void deleteArticleInfo(int boardId);
 	
+	//수정할 게시물
+	int updateArticle(Board board);
+	int updateArticle(Board board, BoardImage file);
+	
 	//게시물에 등록된 이미지 삭제
 	void deleteBoardImage(int boardId);
 	//게시물 삭제
@@ -63,6 +67,8 @@ public interface IBoardRepository {
 	int countKeywordBoard(@Param("keyword")String keyword);
 	
 	int increaseVisitCount(int boardId);
+
+	
 
 	
 }

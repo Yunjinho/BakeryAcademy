@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
-<link rel="stylesheet" type="text/css"
-	th:href="@{../css/board/boardwrite.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/board/boardwrite.css}">
+
+
 <style>
 .modal {
 	display: none; /* 모달 초기에는 숨김 상태로 설정 */
@@ -16,6 +17,7 @@
 	background-color: rgba(0, 0, 0, 0.5); /* 반투명한 배경 색상 */
 	text-align: center;
 }
+
 
 .modal-content {
 	background-color: #fefefe;
