@@ -52,18 +52,13 @@ public class MemberController {
 
 	@Autowired
 	private ICartService cartService;
-
-
-	@InitBinder
-	private void initBinder(WebDataBinder binder) {
-		binder.setValidator(memberValidator);
-	}
   
 	@Autowired
 	private IProductService productService;
 	
 	@Autowired
 	private IProductReviewService productReviewService;
+	
 	 @InitBinder("Member")
 	 private void initBinder(WebDataBinder binder) {
 		 binder.setValidator(memberValidator); 
@@ -117,10 +112,6 @@ public class MemberController {
 	public String logout(HttpSession session) {
 		session.invalidate(); // 세션 무효화
 		return "redirect:/"; // 홈페이지로 리다이렉트
-=======
-	public String logout(HttpSession session, HttpServletRequest request) {
-		session.invalidate(); // 로그아웃
-		return "index";
 	}
   
 	@RequestMapping(value = "/member/update", method = RequestMethod.GET)
