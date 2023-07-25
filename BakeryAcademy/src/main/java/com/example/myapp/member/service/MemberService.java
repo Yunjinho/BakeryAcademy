@@ -13,7 +13,7 @@ public class MemberService implements IMemberService {
 
 	@Autowired
 	IMemberRepository memberRepository;
-
+	
 	@Override
 	public void insertMember(Member member) {
 		memberRepository.insertMember(member);
