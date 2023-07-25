@@ -11,6 +11,8 @@ import com.example.myapp.member.model.Cart;
 import com.example.myapp.member.model.Member;
 import com.example.myapp.member.model.Order;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CartService implements ICartService {
 
@@ -41,5 +43,17 @@ public class CartService implements ICartService {
 	@Override
 	public int countCart(String memberId) {
 		return cartRepository.countCart(memberId);
+	}
+
+	@Transactional
+	@Override
+	public void insertCart(String memberId, List<Integer> productId, List<Integer> amount) {
+		Cart cart=new Cart();
+		cart.setMemberId(memberId);
+		for(int i=0;i<productId.size();i++) {
+			cart.setProductId(productId.get(i));
+			cart.setProductCount(amount.get(i));
+			cartRepository.insertCart(cart);
+		}
 	}
 }

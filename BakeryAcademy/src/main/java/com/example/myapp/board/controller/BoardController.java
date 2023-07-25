@@ -33,6 +33,7 @@ import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
 import com.example.myapp.board.model.BoardPrep;
 import com.example.myapp.board.service.IBoardService;
+import com.example.myapp.member.model.Cart;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -247,6 +248,5 @@ public class BoardController {
 //		}
 //		return "redirect:/board/"+board.getBoardId();
 //	}
-
     
 }

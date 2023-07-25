@@ -43,4 +43,9 @@
 ]]>
 </select>
 
+<select id="insertCart" parameterType="com.example.myapp.member.model.Cart">
+<![CDATA[
+	INSERT INTO cart  VALUES(SEQ_CART_ID.NEXTVAL,#{memberId},#{productId},#{productCount})
+]]>
+</select>
 </mapper>
