@@ -68,7 +68,7 @@ window.onload=function(){
 									<span th:if=${i!=nowPage} style="color:white;">[[${i}]]</span>
 								</a>
 							</span>
-							<a th:if="${nowPageBlock<totalPageBlock}" th:href="@{/board(page=${endPage+1})" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+							<a th:if="${nowPageBlock<totalPageBlock}" th:href="@{/board(page=${endPage+1})}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
 								▶
 							</a>
 						</div>
@@ -84,6 +84,8 @@ window.onload=function(){
 					</div>
 				</div>
 			</div>
+		</div>
+		</div>
 		</div>
 	</section>	
 <footer th:replace="~{footer::footer}"></footer>

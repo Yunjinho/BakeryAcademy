@@ -64,6 +64,7 @@ public class BoardController {
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
+		System.out.println(endPage);
 		return "board/board";
 	}
 
