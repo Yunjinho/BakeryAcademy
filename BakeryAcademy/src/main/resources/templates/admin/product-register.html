@@ -2,6 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::header}"></head>
 <link rel="stylesheet" type="text/css" th:href="@{../css/adminpage.css}">
+<script>
+window.onload=function(){
+	$("#add-product-img").click(function(){
+		$("#product-img").append('<input class="product-image-file" type="file" name="image" placeholder="image">');
+	})
+}
+</script>
 <body class="animsition">
 	<!-- Header -->
 	<header th:replace="~{body-header::body-header}"></header>
@@ -54,21 +61,19 @@
 									상태</label> <select name="productStatus" id="productStatus">
 									<option value="1">판매중</option>
 									<option value="0">판매 중지</option>
-								</select> <label for="productImage" class="product-infomation-label">상품
-									이미지( 1개 ~ 3개 )</label>
-								<div>
-									<input class="product-image-file" type="file" name="image"
-										placeholder="image"> <input class="product-image-file"
-										type="file" name="image2" placeholder="image"> <input
-										class="product-image-file" type="file" name="image3"
-										placeholder="image">
+								</select><br> 
+								<label for="productImage" class="product-infomation-label">상품 이미지
+									<span id="add-product-img"style="text-align:center;width:10px; height:20px; display:inline-block;" class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">이미지 추가</span>
+									</label>
+								<div id="product-img">
+									<input class="product-image-file" type="file" name="image" placeholder="image"> 
 								</div>
-
-
+								<br>
 								<input type="hidden" name="productId" value=0> <br>
-								<button
-									class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
-									등록</button>
+								<div >
+									<button style=" margin: auto;" class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
+									상품 등록</button>
+								</div> 
 							</form>
 						</div>
 					</div>
