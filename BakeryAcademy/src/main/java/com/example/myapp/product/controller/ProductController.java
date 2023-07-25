@@ -39,7 +39,7 @@ public class ProductController {
 
 	@Autowired
 	IProductService productService;
-	
+
 	// 카테고리와 페이지에 따른 상품 목록으로 이동
 	@RequestMapping("/product/{categoryId}/{page}")
 	public String getProductListByCategory(@PathVariable int categoryId, @PathVariable int page, HttpSession session,
@@ -68,7 +68,9 @@ public class ProductController {
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
-//		return "product-prototype";
+
+		List<Category> categoryList = categoryService.selectAllCategory();
+		model.addAttribute("categoryList", categoryList);
 		return "product/product";
 	}
 
@@ -248,13 +250,13 @@ public class ProductController {
 	// 상품 목록 1 페이지로 이동
 	@RequestMapping("/product/{categoryId}")
 	public String getProductListByCategory(@PathVariable int categoryId, HttpSession session, Model model) {
-		return getProductListByCategory(1,1,session, model);
+		return getProductListByCategory(1, 1, session, model);
 	}
 
 	// 카테고리 1의 1페이지로 이동
 	@RequestMapping("/product")
 	public String getProductListByCategory(HttpSession session, Model model) {
-		return getProductListByCategory(1,1,session, model);
+		return getProductListByCategory(1, 1, session, model);
 	}
 
 	// 상품 id의 썸네일 반환

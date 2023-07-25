@@ -23,6 +23,7 @@ public class HomeContrller {
 		return "index";
 	}
 
+	//여기
 	@RequestMapping("/cart-count")
 	@ResponseBody
 	public JSONObject cartCount(HttpSession session) {
