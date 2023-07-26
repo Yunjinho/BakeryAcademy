@@ -12,6 +12,7 @@ import com.example.myapp.board.dao.IBoardRepository;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
 import com.example.myapp.board.model.BoardPrep;
+import com.example.myapp.board.model.BoardReply;
 
 @Service
 public class BoardService implements IBoardService{
@@ -155,4 +156,18 @@ public class BoardService implements IBoardService{
 	public List<BoardPrep> selectArticlePrep(int boardId) {
 		return boardPrepRepository.selectBoardPrepList(boardId);
 	}
+	
+	//댓글조회
+	@Override
+	public List<BoardReply> selectBoardReplyList(int boardId){
+		return boardReplyRepository.selectBoardReplyList(boardId);
+	}
+	
+	//댓글입력
+	@Transactional
+	public void insertBoardReply(BoardReply boardreply) {
+		boardReplyRepository.insertBoardReply(boardreply);
+	}
+	
+	
 }

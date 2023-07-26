@@ -319,6 +319,35 @@ a {
 		</div>
 		<footer th:replace="~{footer::footer}"></footer>
 	</div>
+	<br>
+	<br>
+	<div class="board-content" th:text="${board.boardContent}"></div>
+	<div class="board-product" th:each="list:${prepList}">
+		<span th:text="${list.productName}"></span>
+	</div>
+<!-- 댓글작성 -->
+<div id="reply">
+  <ol class="replyList">
+    <li th:each="reply : ${repList}">
+      <p>
+        작성자 : <span th:text="${reply.memberId}"></span><br />
+        작성 날짜 : <span th:text="${#dates.format(reply.boardReplyWriteDate, 'yyyy-MM-dd')}"></span>
+      </p>
+      <p th:text="${reply.boardReplyContent}"></p>
+    </li>
+  </ol>
+</div>
+
+
+
+	<footer th:replace="~{footer::footer}"></footer>
+	<!-- Back to top -->
+	<div class="btn-back-to-top" id="myBtn">
+		<span class="symbol-btn-back-to-top"> <i
+			class="zmdi zmdi-chevron-up"></i>
+		</span>
+	</div>
+	
 
 	<script>
 		function deleteArticleConfirmation() {

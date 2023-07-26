@@ -29,9 +29,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.myapp.board.dao.IBoardReplyRepository;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
 import com.example.myapp.board.model.BoardPrep;
+import com.example.myapp.board.model.BoardReply;
 import com.example.myapp.board.service.IBoardService;
 import com.example.myapp.member.model.Cart;
 
@@ -43,6 +46,8 @@ public class BoardController {
 
 	@Autowired
 	IBoardService boardService;
+	@Autowired
+	IBoardReplyRepository boardReplyRepository;
 
 	//게시물 전체 조회
 	@RequestMapping("/board")
@@ -113,6 +118,13 @@ public class BoardController {
 		model.addAttribute("board", board);
 		model.addAttribute("imageList", boardImageList);
 		model.addAttribute("prepList", boardPrepList);
+		  
+		 
+		System.out.println(board);
+		
+		List<BoardReply> repList = boardReplyRepository.selectBoardReplyList(boardId);
+		model.addAttribute("repList", repList);
+		System.out.println("repList" + repList);
 		return "board/view";
 	}
 
