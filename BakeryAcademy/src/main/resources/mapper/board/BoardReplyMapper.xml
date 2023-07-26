@@ -9,14 +9,34 @@ VALUES(SEQ_BOARD_REPLY_ID.NEXTVAL,#{boardId},#{memberId},#{boardReplyContent},SY
 ]]>
 </insert>
 
-<select id="selectBoardReplyList" parameterType="Integer" resultType="com.example.myapp.board.model.BoardReply">
+<!-- <select id="selectBoardReplyList" parameterType="Integer" resultType="com.example.myapp.board.model.BoardReply">
 <![CDATA[
-SELECT board_reply_id AS "boardReplyId", board_id AS "boardId", member_id AS "memberId"
-		, board_reply_content AS "boardReplyContent", board_reply_write_date AS "boardReplyWriteDate"
-FROM board_reply
-WHERE board_id=#{boardId}
+SELECT board_reply_id AS "boardReplyId", 
+		board_id AS "boardId", 
+        member_nickname AS "memberNickname",
+		board_reply_content AS "boardReplyContent", 
+		board_reply_write_date AS "boardReplyWriteDate"
+FROM board_reply, member
+WHERE board_reply.member_id = member.member_id AND board_id=#{boardId}
 ]]>
+</select> -->
+
+<select id="selectBoardReplyList" parameterType="Integer" resultType="com.example.myapp.board.model.BoardReply">
+  <![CDATA[
+    SELECT
+      br.board_reply_id AS "boardReplyId",
+      br.board_id AS "boardId",
+      br.member_id AS "memberId",
+      br.board_reply_content AS "boardReplyContent",
+      br.board_reply_write_date AS "boardReplyWriteDate",
+      m.member_id AS "memberId",     
+      m.member_name AS "memberName"   
+    FROM board_reply br
+    LEFT JOIN member m ON br.member_id = m.member_id
+    WHERE br.board_id = #{boardId}
+  ]]>
 </select>
+
 
 <update id="updateBoardReply" parameterType="com.example.myapp.board.model.BoardReply">
 <![CDATA[
@@ -36,4 +56,16 @@ DELETE FROM board_reply WHERE board_reply_id=#{boardReplyId}
 DELETE FROM board_reply WHERE board_id=#{boardId}
 ]]>
 </delete>
+
+<!-- 게시물작성자가 게시글 삭제시 삭제되는 댓글 -->
+<delete id="deleteAllReply" parameterType="Integer">
+<![CDATA[
+DELETE FROM board_reply 
+	WHERE EXISTS(SELECT board_id 
+				FROM board
+				WHERE board_id=#{boardId} 
+				AND board.board_id = board_reply.board_id)
+]]>
+</delete>
+
 </mapper>

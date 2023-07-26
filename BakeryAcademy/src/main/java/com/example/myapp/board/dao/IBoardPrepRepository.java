@@ -27,4 +27,7 @@ public interface IBoardPrepRepository {
 	void deleteAllBoardPrep(int boardId);
 	
 	
+	//게시물작성자가 게시글 삭제시 삭제되는 상품
+	void deleteAllPrep(int boardId);
+	
 }
