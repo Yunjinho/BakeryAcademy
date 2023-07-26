@@ -1,11 +1,6 @@
 package com.example.myapp.board.controller;
 
 import java.io.UnsupportedEncodingException;
-
-
-
-
-
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +31,8 @@ import com.example.myapp.board.model.BoardImage;
 import com.example.myapp.board.model.BoardPrep;
 import com.example.myapp.board.model.BoardReply;
 import com.example.myapp.board.service.IBoardService;
+import com.example.myapp.member.model.Member;
+import com.example.myapp.member.service.IMemberService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -47,7 +44,9 @@ public class BoardController {
 	IBoardService boardService;
 	@Autowired
 	IBoardReplyRepository boardReplyRepository;
-
+	
+	@Autowired
+	IMemberService memberService;
 	//게시물 전체 조회
 	@RequestMapping("/board")
 	public String board(@RequestParam int page,Model model,HttpSession session) {
@@ -132,17 +131,19 @@ public class BoardController {
 	@RequestMapping("/board/{boardId}")
 	public String getBoardDetails(@PathVariable int boardId, Model model, HttpSession session) {
 		session.setAttribute("boardId", boardId);
+		
 		List<BoardImage> boardImageList=new ArrayList<BoardImage>();
 		List<BoardPrep> boardPrepList=new ArrayList<BoardPrep>();
 		List<BoardReply> repList = boardReplyRepository.selectBoardReplyList(boardId);
 		
-		
+		Member member=memberService.selectMember((String)session.getAttribute("memberId"));
 		Board board = boardService.selectArticle(boardId);
 		boardImageList=boardService.selectArticleImage(boardId);
 		boardPrepList=boardService.selectArticlePrep(boardId);
 		model.addAttribute("board", board);
 		model.addAttribute("imageList", boardImageList);
 		model.addAttribute("prepList", boardPrepList);
+		model.addAttribute("member", member);
 		  
 		 
 		
@@ -256,7 +257,21 @@ public class BoardController {
         		e.printStackTrace();
         		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         	}
-}
+        }
+
+        @RequestMapping(value="/board/insert-reply",method=RequestMethod.POST)
+        public String insertReply(BoardReply boardReply,HttpSession session) {
+        	boardReply.setMemberId((String)session.getAttribute("memberId"));
+        	System.out.println(boardReply);
+        	boardService.insertBoardReply(boardReply);
+        	return "redirect:/board/"+boardReply.getBoardId();
+        }
+        
+        @RequestMapping(value="/board/delete-reply",method=RequestMethod.POST)
+        public String deleteReply(BoardReply boardReply) {
+        	boardService.deleteBoardReply(boardReply);
+        	return "redirect:/board/"+boardReply.getBoardId();
+        }
 
 	
 

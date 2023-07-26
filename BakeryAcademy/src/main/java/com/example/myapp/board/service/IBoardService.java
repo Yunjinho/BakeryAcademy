@@ -41,7 +41,7 @@ public interface IBoardService {
 	
 	List<BoardReply> selectBoardReplyList(int boardId);
 	void insertBoardReply(BoardReply boardreply);
-
+	void deleteBoardReply(BoardReply boardreply);
 
 	
 

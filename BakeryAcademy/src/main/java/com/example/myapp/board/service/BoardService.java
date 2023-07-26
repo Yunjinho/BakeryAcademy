@@ -183,6 +183,11 @@ public class BoardService implements IBoardService{
 	public void insertBoardReply(BoardReply boardreply) {
 		boardReplyRepository.insertBoardReply(boardreply);
 	}
-	
+
+
+	@Override
+	public void deleteBoardReply(BoardReply boardreply) {
+		boardReplyRepository.deleteBoardReply(boardreply.getBoardReplyId());
+	}
 	
 }
