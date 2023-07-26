@@ -25,4 +25,7 @@ public interface IBoardReplyRepository {
 
 	//게시물에 있는 댓글 전부 삭제
 	void deleteAllBoardReply(int boardReplyId);
+	
+	//게시물작성자가 게시글 삭제시 삭제되는 댓글
+	void deleteAllReply(int boardId);
 }

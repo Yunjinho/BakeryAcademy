@@ -35,4 +35,12 @@
 DELETE FROM board_prep WHERE board_id=#{boardId}
 ]]>
 </delete>
+
+<delete id="deleteAllPrep" parameterType="Integer">
+<![CDATA[
+DELETE FROM board_prep WHERE board_id=#{boardId}
+]]>
+</delete>
+
+
 </mapper>
