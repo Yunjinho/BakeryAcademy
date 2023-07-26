@@ -359,9 +359,19 @@ a {
 			<div class="btn_delete">
 				<!-- <a th:href="@{/board/delete/{boardId}(boardId=${board.boardId})}"> -->
 				<!-- <input type="submit" class="update_board" value="수정"> -->
-				<a th:href="@{/board/update/{boardId}(boardId=${board.boardId})}"><button
-						type="button" class="update_board">수정</button></a>
-			
+				
+				<form action="/board/update/{boardId}" method="post"></form>		
+				<a th:href="@{/board/update/{boardId}(boardId=${board.boardId})}">
+				<button type="button" class="update_board" 
+				onclick="updateArticleConfirmation()">수정</button></a>
+				
+						
+<!-- 				<form action="/board/update/{boardId}" method="post"></form>		
+				<a th:href="@{/board/update/{boardId}(boardId=${board.boardId})}">
+				<button type="button" class="update_board" 
+				onclick="updateArticleConfirmation()">수정</button></a> -->
+	
+				
 			
 			<form action="/board/delete/{boardId}" method="post"></form>
 				<button type="button" class="delete_board"
@@ -419,8 +429,8 @@ a {
 		</span>
 	</div>
 	
-
-<!-- 	<script>
+<!-- 게시물삭제 -->
+<script>
 		function deleteArticleConfirmation() {
 			var confirmResult = confirm("게시물을 삭제하시겠습니까?");
 			if (confirmResult) {
@@ -439,9 +449,10 @@ a {
 				data : {
 					'memberId' : mid
 				},
-				dataType : "json",
 				success : function(data) {
-					inputContent(data, "1");
+						alert(data)
+			         location.href = '/board?page=1';
+					
 				},
 				error : function(xhr, status, error) {
 					alert(xhr.responseText);
@@ -449,24 +460,25 @@ a {
 
 			});
 		}
-
+	</script>	
 	
-		<script>
-		function deleteArticleConfirmation() {
-			var confirmResult = confirm("게시물을 삭제하시겠습니까?");
+<!-- 게시물수정 -->
+<script>
+		function updateArticleConfirmation() {
+			var confirmResult = confirm("게시물을 수정하시겠습니까?");
 			if (confirmResult) {
-				deleteYes();
+				updateYes();
 				return true;
 			} else {
 				return false;
 			}
 		}
 
-		function deleteYes() {
+		function updateYes() {
 			var mid = '[[${board.memberId}]]'
 			$.ajax({
 				type : "POST",
-				url : "/board/delete",
+				url : "/board/update",
 				data : {
 					'memberId' : mid
 				},

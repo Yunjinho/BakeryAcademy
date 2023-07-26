@@ -149,16 +149,46 @@ public class BoardService implements IBoardService{
 //		
 //	}
 
+
 	@Transactional
-	public void deleteArticle(int boardId) {
-		boardReplyRepository.deleteAllReply(boardId);
-		boardRepository.deleteFileData(boardId);
+	public void deleteArticle(int sessionBoardId) {
+		boardReplyRepository.deleteAllReply(sessionBoardId);
+		boardRepository.deleteFileData(sessionBoardId);
 		//삭제할 게시글의 재료테이블 삭제
-		boardPrepRepository.deleteAllPrep(boardId);
-		boardRepository.deleteArticleInfo(boardId);
+		boardPrepRepository.deleteAllPrep(sessionBoardId);
+		boardRepository.deleteArticleInfo(sessionBoardId);
 		
+	}	
+	
+	@Override
+	public void updateBoardArticle(int sessionBoardId) {
+		boardRepository.updateBoard(sessionBoardId);
 	}
 	
+	
+	
+	@Transactional
+	public void updateBoardArticle(int sessionBoardId, List<BoardImage> fileList ) {
+//		boardRepository.updateBoard(sessionBoardId);
+//		
+//		for(BoardImage file : fileList) {
+//		if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
+//			file.setBoardId(sessionBoardId);
+//			//file.setFileId(boardRepository.selectMaxFileId()+1);
+//			boardRepository.insertFileData(file);
+//		}
+//	}
+//		
+//	if(board.getProductId()!=null) {
+//		for(Integer list:board.getProductId()) {
+//			BoardPrep bp=new BoardPrep();
+//			bp.setBoardId(board.getBoardId());
+//			bp.setProductId(list);
+//			boardPrepRepository.insertBoardPrep(bp);
+//		}
+//	}
+//    return board.getBoardId();
+}
 
 
 	@Override
@@ -185,9 +215,16 @@ public class BoardService implements IBoardService{
 	}
 
 
+	
+
+
+
+	
+
 	@Override
 	public void deleteBoardReply(BoardReply boardreply) {
 		boardReplyRepository.deleteBoardReply(boardreply.getBoardReplyId());
 	}
+
 	
 }
