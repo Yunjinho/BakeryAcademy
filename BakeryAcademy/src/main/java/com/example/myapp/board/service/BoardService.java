@@ -43,11 +43,13 @@ public class BoardService implements IBoardService{
 	@Transactional
 	public int insertArticle(Board board) {
 		boardRepository.insertArticle(board);
-		for(Integer list:board.getProductId()) {
-			BoardPrep bp=new BoardPrep();
-			bp.setBoardId(board.getBoardId());
-			bp.setProductId(list);
-			boardPrepRepository.insertBoardPrep(bp);
+		if(board.getProductId()!=null) {
+			for(Integer list:board.getProductId()) {
+				BoardPrep bp=new BoardPrep();
+				bp.setBoardId(board.getBoardId());
+				bp.setProductId(list);
+				boardPrepRepository.insertBoardPrep(bp);
+			}
 		}
 		return 0;
 	}
@@ -65,11 +67,13 @@ public class BoardService implements IBoardService{
 				boardRepository.insertFileData(file);
 			}
 		}
-		for(Integer list:board.getProductId()) {
-			BoardPrep bp=new BoardPrep();
-			bp.setBoardId(board.getBoardId());
-			bp.setProductId(list);
-			boardPrepRepository.insertBoardPrep(bp);
+		if(board.getProductId()!=null) {
+			for(Integer list:board.getProductId()) {
+				BoardPrep bp=new BoardPrep();
+				bp.setBoardId(board.getBoardId());
+				bp.setProductId(list);
+				boardPrepRepository.insertBoardPrep(bp);
+			}
 		}
         return board.getBoardId();
 	}

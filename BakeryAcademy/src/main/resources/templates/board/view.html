@@ -249,10 +249,10 @@ a {
 		</div>
 		<br> <br>
 		<div class="board-content" th:utext="${board.boardContent}"></div>
-		<div class="board-product">
+		<div class="board-product" th:if=${prepList.size!=0}>
 			<h3>필요한 재료</h3>
 		</div>
-		<div class="board-product">
+		<div class="board-product" th:if=${prepList.size!=0}>
 			<div class="p-r-45 p-r-0-lg">
 				<div class="wrap-table-shopping-cart">
 					<form id="board-product-form">

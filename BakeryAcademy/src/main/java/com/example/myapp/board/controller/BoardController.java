@@ -145,11 +145,9 @@ public class BoardController {
 		model.addAttribute("prepList", boardPrepList);
 		  
 		 
-		System.out.println(board);
 		
 		
 		model.addAttribute("repList", repList);
-		System.out.println("repList" + repList);
 		return "board/view";
 	}
 	// 게시글 입력
