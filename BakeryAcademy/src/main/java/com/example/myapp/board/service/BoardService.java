@@ -12,6 +12,7 @@ import com.example.myapp.board.dao.IBoardRepository;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
 import com.example.myapp.board.model.BoardPrep;
+import com.example.myapp.board.model.BoardReply;
 
 @Service
 public class BoardService implements IBoardService{
@@ -42,11 +43,13 @@ public class BoardService implements IBoardService{
 	@Transactional
 	public int insertArticle(Board board) {
 		boardRepository.insertArticle(board);
-		for(Integer list:board.getProductId()) {
-			BoardPrep bp=new BoardPrep();
-			bp.setBoardId(board.getBoardId());
-			bp.setProductId(list);
-			boardPrepRepository.insertBoardPrep(bp);
+		if(board.getProductId()!=null) {
+			for(Integer list:board.getProductId()) {
+				BoardPrep bp=new BoardPrep();
+				bp.setBoardId(board.getBoardId());
+				bp.setProductId(list);
+				boardPrepRepository.insertBoardPrep(bp);
+			}
 		}
 		return 0;
 	}
@@ -64,11 +67,13 @@ public class BoardService implements IBoardService{
 				boardRepository.insertFileData(file);
 			}
 		}
-		for(Integer list:board.getProductId()) {
-			BoardPrep bp=new BoardPrep();
-			bp.setBoardId(board.getBoardId());
-			bp.setProductId(list);
-			boardPrepRepository.insertBoardPrep(bp);
+		if(board.getProductId()!=null) {
+			for(Integer list:board.getProductId()) {
+				BoardPrep bp=new BoardPrep();
+				bp.setBoardId(board.getBoardId());
+				bp.setProductId(list);
+				boardPrepRepository.insertBoardPrep(bp);
+			}
 		}
         return board.getBoardId();
 	}
@@ -127,22 +132,63 @@ public class BoardService implements IBoardService{
 	
 
 
+//	@Transactional
+//	public void deleteArticle(int boardId) {
+////		if(replyNumber>0) {
+////			boardRepository.deleteReplyFileData(boardId);
+////			boardRepository.deleteArticleByBoardId(boardId);
+////		} else if(replyNumber == 0){
+////			boardRepository.deleteFileData(boardId);
+////			boardRepository.deleteArticleByMasterId(boardId);
+////		} else {
+////			throw new RuntimeException("WRONG_REPLYNUMBER");
+////		}
+////	}
+//		boardRepository.deleteFileData(boardId);
+//		boardRepository.deleteArticleInfo(boardId);
+//		
+//	}
+
+
 	@Transactional
-	public void deleteArticle(int boardId) {
-//		if(replyNumber>0) {
-//			boardRepository.deleteReplyFileData(boardId);
-//			boardRepository.deleteArticleByBoardId(boardId);
-//		} else if(replyNumber == 0){
-//			boardRepository.deleteFileData(boardId);
-//			boardRepository.deleteArticleByMasterId(boardId);
-//		} else {
-//			throw new RuntimeException("WRONG_REPLYNUMBER");
+	public void deleteArticle(int sessionBoardId) {
+		boardReplyRepository.deleteAllReply(sessionBoardId);
+		boardRepository.deleteFileData(sessionBoardId);
+		//삭제할 게시글의 재료테이블 삭제
+		boardPrepRepository.deleteAllPrep(sessionBoardId);
+		boardRepository.deleteArticleInfo(sessionBoardId);
+		
+	}	
+	
+	@Override
+	public void updateBoardArticle(int sessionBoardId) {
+		boardRepository.updateBoard(sessionBoardId);
+	}
+	
+	
+	
+	@Transactional
+	public void updateBoardArticle(int sessionBoardId, List<BoardImage> fileList ) {
+//		boardRepository.updateBoard(sessionBoardId);
+//		
+//		for(BoardImage file : fileList) {
+//		if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
+//			file.setBoardId(sessionBoardId);
+//			//file.setFileId(boardRepository.selectMaxFileId()+1);
+//			boardRepository.insertFileData(file);
 //		}
 //	}
-		boardRepository.deleteFileData(boardId);
-		boardRepository.deleteArticleInfo(boardId);
-		
-	}
+//		
+//	if(board.getProductId()!=null) {
+//		for(Integer list:board.getProductId()) {
+//			BoardPrep bp=new BoardPrep();
+//			bp.setBoardId(board.getBoardId());
+//			bp.setProductId(list);
+//			boardPrepRepository.insertBoardPrep(bp);
+//		}
+//	}
+//    return board.getBoardId();
+}
 
 
 	@Override
@@ -155,4 +201,30 @@ public class BoardService implements IBoardService{
 	public List<BoardPrep> selectArticlePrep(int boardId) {
 		return boardPrepRepository.selectBoardPrepList(boardId);
 	}
+	
+	//댓글조회
+	@Override
+	public List<BoardReply> selectBoardReplyList(int boardId){
+		return boardReplyRepository.selectBoardReplyList(boardId);
+	}
+	
+	//댓글입력
+	@Transactional
+	public void insertBoardReply(BoardReply boardreply) {
+		boardReplyRepository.insertBoardReply(boardreply);
+	}
+
+
+	
+
+
+
+	
+
+	@Override
+	public void deleteBoardReply(BoardReply boardreply) {
+		boardReplyRepository.deleteBoardReply(boardreply.getBoardReplyId());
+	}
+
+	
 }

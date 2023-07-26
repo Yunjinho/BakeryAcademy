@@ -8,6 +8,7 @@ import java.util.List;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
 import com.example.myapp.board.model.BoardPrep;
+import com.example.myapp.board.model.BoardReply;
 
 
 public interface IBoardService {
@@ -29,7 +30,10 @@ public interface IBoardService {
 	
 	
 	
-	void deleteArticle(int boardId);
+	//게시물 삭제
+	void deleteArticle(int sessionBoardId);
+	//게시물 수정
+	void updateBoardArticle(int sessionBoardId);
 	
 	List<Board> selectAllBoardList(int page);
 	List<Board> selectKeywordBoardList(String keyword,int page);
@@ -37,6 +41,16 @@ public interface IBoardService {
 	int countKeywordBoard(String keyword);
 	
 	void deleteBoard(int boardId);
+	
+	List<BoardReply> selectBoardReplyList(int boardId);
+	void insertBoardReply(BoardReply boardreply);
+
+//	void updateBoardArticle(Integer sessionBoardId);
+//	void updateArticle(int sessionBoardId);
+	
+
+
+	void deleteBoardReply(BoardReply boardreply);
 
 
 	

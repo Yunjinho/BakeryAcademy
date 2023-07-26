@@ -53,11 +53,11 @@ public class MemberController {
 	@Autowired
 	private IProductReviewService productReviewService;
 
-	@InitBinder("Member")
-	private void initBinder(WebDataBinder binder) {
-		binder.setValidator(memberValidator);
-	}
-
+	 @InitBinder("Member")
+	 private void initBinder(WebDataBinder binder) {
+		 binder.setValidator(memberValidator); 
+	 }
+	
 	@RequestMapping(value = "/member/signup", method = RequestMethod.GET)
 	public String insertMember(Model model) {
 		model.addAttribute("member", new Member());
@@ -269,12 +269,12 @@ public class MemberController {
 
 	@RequestMapping(value = "/member/order", method = RequestMethod.GET)
 	public String order(@RequestParam(value = "productId") List<Integer> productId,
-			@RequestParam(value = "amount") List<Integer> amount, @RequestParam(value = "totalPrice") int totalPrice,
+			@RequestParam(value = "productCount") List<Integer> productCount, @RequestParam(value = "totalPrice") int totalPrice,
 			HttpSession session, Model model) {
 		Map<Integer, Integer> productList = new HashMap<Integer, Integer>();
 		Member member = new Member();
 		for (int i = 0; i < productId.size(); i++) {
-			productList.put(productId.get(i), amount.get(i));
+			productList.put(productId.get(i), productCount.get(i));
 		}
 		model.addAttribute("productList", productList);
 		member = memberService.selectMember((String) session.getAttribute("memberId"));
@@ -284,7 +284,7 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/member/order", method = RequestMethod.POST)
-	public String insertOrder(@RequestParam(value = "product") List<Integer> product,
+	public String insertOrder(@RequestParam(value = "productId") List<Integer> product,
 			@RequestParam(value = "amount") List<Integer> amount, @RequestParam(value = "memberId") String name,
 			@RequestParam(value = "orderAddress") String orderAddress,
 			@RequestParam(value = "orderAddressDetail") String orderAddressDetail, HttpSession session, Model model) {
@@ -318,4 +318,50 @@ public class MemberController {
 		productReviewService.insertProductReview(productReview);
 		return "redirect:/member/my-orders";
 	}
+    @RequestMapping(value="/member/insert-cart",method=RequestMethod.POST)
+    public String insertCart(@RequestParam List<Integer> productId,@RequestParam List<Integer> productCount,HttpSession session) {
+    	cartService.insertCart((String)session.getAttribute("memberId"), productId, productCount);
+    	return "redirect:/member/shoping-cart";
+    }
+
+    @RequestMapping(value="/member/find-id",method=RequestMethod.GET)
+    public String findId() {
+    	return "/member/find-id";
+    }
+    
+    @RequestMapping(value="/member/find-id-result",method=RequestMethod.GET)
+    public String findIdResult() {
+    	return "/member/find-id-result";
+    }
+    
+    @RequestMapping(value="/member/find-id",method=RequestMethod.POST)
+    public String findId(Member member , Model model) {
+    	String memberId=memberService.findMemberId(member);
+    	if(memberId==null) {
+    		model.addAttribute("message", "존재하지 않는 회원 정보 입니다.");
+    	}else {
+    		model.addAttribute("memberId",memberId);
+    	}
+    	return "/member/find-id-result";
+    }
+
+    @RequestMapping(value="/member/find-password",method=RequestMethod.GET)
+    public String findPassword() {
+    	return "/member/find-password";
+    }
+
+    @RequestMapping(value="/member/find-password-email")
+    @ResponseBody
+    public String findPassword(String memberId,String memberEmail) {
+    	Member member =new Member();
+    	member=memberService.selectMember(memberId);
+    	if(member.getMemberEmail().equals(memberEmail)) {
+    		String newPassword=memberService.joinEmail(memberEmail);
+    		member.setMemberPassword(newPassword);
+    		memberService.updateMember(member);
+    		return "1";
+    	}else {
+    		return "0";
+    	}
+    }
 }

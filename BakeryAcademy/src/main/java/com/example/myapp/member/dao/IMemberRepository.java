@@ -16,4 +16,5 @@ public interface IMemberRepository {
 	void deleteMember(Member member);
 	String getPassword(String memberId);
 	Member duplicateMember(String memberId);
+	String findMemberId(Member member);
 }

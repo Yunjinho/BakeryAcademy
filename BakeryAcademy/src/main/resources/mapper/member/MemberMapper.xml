@@ -34,7 +34,7 @@
 	<update id="updateMember"
 		parameterType="com.example.myapp.member.model.Member">
 		<![CDATA[
-		UPDATE MEMBER
+		UPDATE member
 		SET
 			member_name=#{memberName}, member_password=#{memberPassword}, member_address=#{memberAddress}, member_phone_number=#{memberPhoneNumber}, member_email=#{memberEmail}, member_nickname=#{memberNickName}
 			WHERE
@@ -48,14 +48,13 @@
     	]]>
 	</update>
 
-	<select id="getPassword" parameterType="string"
-		resultType="string">
+	<select id="getPassword" parameterType="string" resultType="string">
 	<![CDATA[
-	SELECT
-	member_password
-	FROM
-	member
-	WHERE member_id=#{memberId}
+		SELECT
+		member_password
+		FROM
+		member
+		WHERE member_id=#{memberId}
 	]]>
 	</select>
 	
@@ -73,6 +72,9 @@
 		]]>
 	</select>
 	
-	
-
+	<select id="findMemberId" parameterType="com.example.myapp.member.model.Member" resultType="string">
+	<![CDATA[
+		SELECT member_id AS "memberId" FROM member WHERE member_name LIKE #{memberName} AND member_phone_number LIKE #{memberPhoneNumber} AND member_email LIKE #{memberEmail}
+	]]>
+	</select>
 </mapper>

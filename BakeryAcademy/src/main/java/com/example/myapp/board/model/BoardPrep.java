@@ -13,4 +13,5 @@ public class BoardPrep {
 	private int productId;
 	
 	private String productName;
+	private int productPrice;
 }
