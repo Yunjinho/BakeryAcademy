@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{header::head}"></head>
+<link rel="stylesheet" type="text/css" th:href="@{../css/login.css}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body>
+	<header th:replace="~{body-header::body-header}"></header>
+	<main>
+		<div class="loginpage-wrap">
+			<div class="section1">
+				<div class="d-div" style="width: 504px; margin: 0 auto;">
+					<span class="login-title" th:text="아이디찾기"></span> 
+					<hr class="hr1">
+					<div class="result-content"> 
+						<span th:if="${message != null}" th:text=${message}></span>
+						<span th:if="${message == null}" th:text=${memberId}></span>
+					</div>
+					
+					<div style="display: inline-block" th:if="${message == null}">
+						<a th:href="@{/member/login}">
+							<button class="d-button" style="color: #fff;" >로그인 하기</button>
+						</a>
+						<a th:href="@{/member/find-password}">
+							<button class="d-button" style="color: #fff;">비밀번호 찾기</button>
+						</a>
+					</div>
+
+					<div style="display: inline-block" th:if="${message != null}">
+						<a th:href="@{/member/signup}">
+							<button class="d-button" style="color: #fff;" >회원가입 하기</button>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer th:replace="~{footer::footer}"></footer>
+<!--===============================================================================================-->	
+	<script src="../../vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/bootstrap/js/popper.js"></script>
+	<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/select2/select2.min.js"></script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="../../vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			$(this).css('position','relative');
+			$(this).css('overflow','hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed: 1,
+				scrollingThreshold: 1000,
+				wheelPropagation: false,
+			});
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="../../js/main.js"></script>
+</body>
+</html>
