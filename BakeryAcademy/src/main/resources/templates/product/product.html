@@ -9,16 +9,10 @@
 	<div class="bg0 m-t-23 p-b-140">
 		<div class="container">
 			<div class="flex-w flex-sb-m p-b-52">
-				<button
-					class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1"
-					data-filter="*">모든 제품</button>
-				<div class="flex-w flex-l-m filter-tope-group m-tb-10"
-					th:each="category:${categoryList}">
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
-						data-filter=".${category.categoryId}"
-						th:text="${category.categoryName}">Category Name</button>
+				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 " data-filter="*">모든 제품</button>
+				<div class="flex-w flex-l-m filter-tope-group m-tb-10" th:each="category:${categoryList}">
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".${category.categoryId}" th:text="${category.categoryName}">Category Name</button>
 				</div>
-
 				<div class="flex-w flex-c-m m-tb-10">
 					<div
 						class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
@@ -40,6 +34,8 @@
 					</div>
 				</div>
 			</div>
+
+				<!-- 상품 리스트 반복 -->
 			<div class="row isotope-grid">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item"
 					th:classappend="${product.categoryId}"
@@ -75,20 +71,14 @@
 			</div>
 
 			<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
-				<a th:if="${nowPageBlock>1}"
-					th:href="@{/product/__${categoryId}__/__${startPage-1}__}"
-					class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-					◀ </a> <span th:each="i: ${#numbers.sequence(startPage, endPage)}"
-					th:classappend="${i==nowPage}?active"> <a
-					th:href="@{/product/__${categoryId}__/__${i}__}"
-					class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-						<span th:if=${i==nowPage} style="color: black;">[[${i}]]</span> <span
-						th:if=${i!=nowPage} style="color: white;">[[${i}]]</span>
-				</a>
-				</span> <a th:if="${nowPageBlock<totalPageBlock}"
-					th:href="@{/product/__${categoryId}__/__${endPage+1}__}"
-					class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-					▶ </a>
+				<a th:if="${nowPageBlock>1}" th:href="@{/product/__${categoryId}__/__${startPage-1}__}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1"> ◀ </a>
+					<span th:each="i: ${#numbers.sequence(startPage, endPage)}" th:classappend="${i==nowPage}?active">
+						<a th:href="@{/product/__${categoryId}__/__${i}__}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+							<span th:if=${i==nowPage} style="color: black;">[[${i}]]</span>
+							<span th:if=${i!=nowPage} style="color: white;">[[${i}]]</span>
+						</a>
+					</span> <a th:if="${nowPageBlock<totalPageBlock}" th:href="@{/product/__${categoryId}__/__${endPage+1}__}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+				▶ </a>
 			</div>
 		</div>
 	</div>
