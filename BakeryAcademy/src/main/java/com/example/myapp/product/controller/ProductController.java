@@ -280,14 +280,14 @@ public class ProductController {
 	@RequestMapping("/product-detail/{productId}")
 	public String getProductDetail(@PathVariable int productId, Model model) {
 		List<Integer> imageIdList = productService.getProductImageList(productId);
-		List<Integer> reviewIdList = productService.getProductImageList(productId);
 		int reviewCount = productReviewService.selectProductReviewCount(productId);
 		if (imageIdList.size() != 0) {
 			model.addAttribute("imageIdList", imageIdList);
 		}
+		List<ProductReview> reviewList = productReviewService.selectAllReviewByProductId(productId);
+		model.addAttribute("reviewList", reviewList);
 		model.addAttribute("product", productService.selectProduct(productId));
 		model.addAttribute("reviewCount", reviewCount);
-		model.addAttribute("reviewIdList", reviewIdList);
 		return "product/product-detail";
 	}
 
@@ -309,12 +309,5 @@ public class ProductController {
 		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
 	}
 
-	@RequestMapping("/test/{productId}")
-	public String test(@PathVariable int productId, Model model) {
-		List<ProductReview> reviewList = productReviewService.selectAllReviewByProductId(productId);
-		model.addAttribute("reviewList", reviewList);
-		System.out.println(reviewList);
-		return "test";
-	}
-	
+
 }

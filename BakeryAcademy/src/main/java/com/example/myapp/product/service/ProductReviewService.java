@@ -25,7 +25,14 @@ public class ProductReviewService implements IProductReviewService{
 
 	@Override
 	public List<ProductReview> selectAllReviewByProductId(int productId) {
-		return productReviewRepository.selectAllReviewByProductId(productId);
+		System.out.println("엄");
+		List<ProductReview> list =productReviewRepository.selectAllReviewByProductId(productId);
+		System.out.println("어엄");
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i));
+		}
+		System.out.println("어어엄");
+		return list;
 	}
 
 }
