@@ -305,12 +305,15 @@ public class MemberController {
     @RequestMapping(value="/member/find-password-email")
     @ResponseBody
     public String findPassword(String memberId,String memberEmail) {
-    	String newPassword=memberService.joinEmail(memberEmail);
     	Member member =new Member();
     	member=memberService.selectMember(memberId);
-    	member.setMemberPassword(newPassword);
-    	System.out.println(member);
-    	memberService.updateMember(member);
-    	return "1";
+    	if(member.getMemberEmail().equals(memberEmail)) {
+    		String newPassword=memberService.joinEmail(memberEmail);
+    		member.setMemberPassword(newPassword);
+    		memberService.updateMember(member);
+    		return "1";
+    	}else {
+    		return "0";
+    	}
     }
 }
