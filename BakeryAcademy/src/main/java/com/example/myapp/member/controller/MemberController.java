@@ -221,12 +221,12 @@ public class MemberController {
 
 	@RequestMapping(value = "/member/order", method = RequestMethod.GET)
 	public String order(@RequestParam(value = "productId") List<Integer> productId,
-			@RequestParam(value = "amount") List<Integer> amount, @RequestParam(value = "totalPrice") int totalPrice,
+			@RequestParam(value = "productCount") List<Integer> productCount, @RequestParam(value = "totalPrice") int totalPrice,
 			HttpSession session, Model model) {
 		Map<Integer, Integer> productList = new HashMap<Integer, Integer>();
 		Member member = new Member();
 		for (int i = 0; i < productId.size(); i++) {
-			productList.put(productId.get(i), amount.get(i));
+			productList.put(productId.get(i), productCount.get(i));
 		}
 		model.addAttribute("productList", productList);
 		member = memberService.selectMember((String) session.getAttribute("memberId"));
@@ -236,7 +236,7 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/member/order", method = RequestMethod.POST)
-	public String insertOrder(@RequestParam(value = "product") List<Integer> product,
+	public String insertOrder(@RequestParam(value = "productId") List<Integer> product,
 			@RequestParam(value = "amount") List<Integer> amount, @RequestParam(value = "memberId") String name,
 			@RequestParam(value = "orderAddress") String orderAddress,
 			@RequestParam(value = "orderAddressDetail") String orderAddressDetail, HttpSession session, Model model) {
@@ -269,4 +269,9 @@ public class MemberController {
 		productReviewService.insertProductReview(productReview);
 		return "redirect:/member/my-orders";
 	}
+    @RequestMapping(value="/member/insert-cart",method=RequestMethod.POST)
+    public String insertCart(@RequestParam List<Integer> productId,@RequestParam List<Integer> productCount,HttpSession session) {
+    	cartService.insertCart((String)session.getAttribute("memberId"), productId, productCount);
+    	return "redirect:/member/shoping-cart";
+    }
 }

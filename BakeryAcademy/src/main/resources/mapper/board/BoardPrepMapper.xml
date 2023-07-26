@@ -11,7 +11,7 @@
 
 <select id="selectBoardPrepList" parameterType="Integer" resultType="com.example.myapp.board.model.BoardPrep">
 <![CDATA[
-	SELECT bp.board_prep_id AS "boardPrepId", bp.board_id AS "boardId", bp.product_id AS "productId", p.product_name AS "productName"
+	SELECT bp.board_prep_id AS "boardPrepId", bp.board_id AS "boardId", bp.product_id AS "productId", p.product_name AS "productName", p.product_price AS "productPrice"
 	FROM board_prep bp JOIN product p ON bp.product_id=p.product_id
 	WHERE board_id=#{boardId}
 ]]>
