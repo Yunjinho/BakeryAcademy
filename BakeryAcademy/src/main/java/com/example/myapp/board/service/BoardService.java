@@ -220,5 +220,11 @@ public class BoardService implements IBoardService{
 
 
 	
+
+	@Override
+	public void deleteBoardReply(BoardReply boardreply) {
+		boardReplyRepository.deleteBoardReply(boardreply.getBoardReplyId());
+	}
+
 	
 }

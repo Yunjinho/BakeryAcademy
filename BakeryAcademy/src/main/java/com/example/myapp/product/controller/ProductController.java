@@ -26,6 +26,8 @@ import com.example.myapp.product.dao.ICategoryRepository;
 import com.example.myapp.product.model.Category;
 import com.example.myapp.product.model.Product;
 import com.example.myapp.product.model.ProductImage;
+import com.example.myapp.product.model.ProductReview;
+import com.example.myapp.product.service.IProductReviewService;
 import com.example.myapp.product.service.IProductService;
 //import com.example.myapp.product.service.ProductService;
 
@@ -33,12 +35,13 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ProductController {
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	ICategoryRepository categoryService;
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 	@Autowired
 	IProductService productService;
+	@Autowired
+	IProductReviewService productReviewService;
 
 	// 카테고리와 페이지에 따른 상품 목록으로 이동
 	@RequestMapping("/product/{categoryId}/{page}")
@@ -149,7 +152,6 @@ public class ProductController {
 		return "redirect:/admin/category";
 	}
 
-
 	// 모달에서 페이징처리
 	@RequestMapping("/board/modal")
 	@ResponseBody
@@ -193,8 +195,7 @@ public class ProductController {
 	@ResponseBody
 	public Object openPopUp(String keyword, int page) {
 		int productCount = 5;
-		List<Product> list = productService.selectSearchKeywordProduct(keyword, productCount * (page - 1) + 1,
-				(productCount * page));
+		List<Product> list = productService.selectSearchKeywordProduct(keyword, productCount * (page - 1) + 1, (productCount * page));
 		int bbsCount = productService.countKeyWordProductList(keyword);
 		int totalPage = 0;
 		if (bbsCount > 0) {
@@ -278,11 +279,15 @@ public class ProductController {
 	// 상품 상세 페이지로 이동
 	@RequestMapping("/product-detail/{productId}")
 	public String getProductDetail(@PathVariable int productId, Model model) {
-		model.addAttribute("product", productService.selectProduct(productId));
 		List<Integer> imageIdList = productService.getProductImageList(productId);
+		int reviewCount = productReviewService.selectProductReviewCount(productId);
 		if (imageIdList.size() != 0) {
 			model.addAttribute("imageIdList", imageIdList);
 		}
+		List<ProductReview> reviewList = productReviewService.selectAllReviewByProductId(productId);
+		model.addAttribute("reviewList", reviewList);
+		model.addAttribute("product", productService.selectProduct(productId));
+		model.addAttribute("reviewCount", reviewCount);
 		return "product/product-detail";
 	}
 
@@ -303,5 +308,6 @@ public class ProductController {
 		}
 		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
 	}
+
 
 }

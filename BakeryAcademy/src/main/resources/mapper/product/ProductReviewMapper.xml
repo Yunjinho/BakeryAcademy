@@ -6,4 +6,27 @@
 INSERT INTO product_review VALUES(SEQ_PRODUCT_REVIEW_ID.NEXTVAL,#{productId},#{memberId},#{productReviewContent},#{rating},#{orderId})
 ]]>
 </insert>
+
+<select id="selectProductReviewCount" parameterType="int" resultType="int">
+<![CDATA[
+SELECT count(*) as reviewCount FROM product_review WHERE product_id=#{productId}
+]]>
+</select>
+
+<select id="selectAllReviewByProductId" parameterType="int" resultType="com.example.myapp.product.model.ProductReview">
+<![CDATA[
+SELECT
+	product_review_id as productReviewId,
+	product_id as productId,
+	member_id as memberId,
+	product_review_content as productReviewContent,
+	rating as rating,
+	order_id as orderId
+FROM
+	product_review
+WHERE
+	product_id=#{productId}
+]]>
+</select>
+
 </mapper>

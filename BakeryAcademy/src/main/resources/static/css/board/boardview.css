@@ -65,7 +65,14 @@
   background-color: red;
   border: none;
 }
-
+.insert-reply{
+	background-color: black;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	margin:2% 2% 2% 5%;
+}
 
 .update_board{
 	background-color: black;

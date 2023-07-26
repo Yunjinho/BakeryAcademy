@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>test</title>
+<meta charset="UTF-8">
+</head>
+<body>
+		<div>와하하!</div>
+		<div th:each="review:${reviewList}">
+			<div th:text="${review.productReviewId}">review id</div>
+			<div th:text="${review.productId}">product id</div>
+			<div th:text="${review.memberId}">member id</div>
+			<div th:text="${review.productReviewContent}">productReviewContent</div>
+			<div th:text="${review.rating}">rating</div>
+			<div th:text="${review.orderId}">order id</div>
+		</div>
+</body>
+</html>

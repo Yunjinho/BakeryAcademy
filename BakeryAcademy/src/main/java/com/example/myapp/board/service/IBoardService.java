@@ -44,9 +44,13 @@ public interface IBoardService {
 	
 	List<BoardReply> selectBoardReplyList(int boardId);
 	void insertBoardReply(BoardReply boardreply);
+
 //	void updateBoardArticle(Integer sessionBoardId);
 //	void updateArticle(int sessionBoardId);
 	
+
+
+	void deleteBoardReply(BoardReply boardreply);
 
 
 	
