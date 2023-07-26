@@ -53,6 +53,7 @@ public class MemberController {
 	@Autowired
 	private IProductReviewService productReviewService;
 	
+	
 	 @InitBinder("Member")
 	 private void initBinder(WebDataBinder binder) {
 		 binder.setValidator(memberValidator); 
@@ -273,5 +274,46 @@ public class MemberController {
     public String insertCart(@RequestParam List<Integer> productId,@RequestParam List<Integer> productCount,HttpSession session) {
     	cartService.insertCart((String)session.getAttribute("memberId"), productId, productCount);
     	return "redirect:/member/shoping-cart";
+    }
+
+    @RequestMapping(value="/member/find-id",method=RequestMethod.GET)
+    public String findId() {
+    	return "/member/find-id";
+    }
+    
+    @RequestMapping(value="/member/find-id-result",method=RequestMethod.GET)
+    public String findIdResult() {
+    	return "/member/find-id-result";
+    }
+    
+    @RequestMapping(value="/member/find-id",method=RequestMethod.POST)
+    public String findId(Member member , Model model) {
+    	String memberId=memberService.findMemberId(member);
+    	if(memberId==null) {
+    		model.addAttribute("message", "존재하지 않는 회원 정보 입니다.");
+    	}else {
+    		model.addAttribute("memberId",memberId);
+    	}
+    	return "/member/find-id-result";
+    }
+
+    @RequestMapping(value="/member/find-password",method=RequestMethod.GET)
+    public String findPassword() {
+    	return "/member/find-password";
+    }
+
+    @RequestMapping(value="/member/find-password-email")
+    @ResponseBody
+    public String findPassword(String memberId,String memberEmail) {
+    	Member member =new Member();
+    	member=memberService.selectMember(memberId);
+    	if(member.getMemberEmail().equals(memberEmail)) {
+    		String newPassword=memberService.joinEmail(memberEmail);
+    		member.setMemberPassword(newPassword);
+    		memberService.updateMember(member);
+    		return "1";
+    	}else {
+    		return "0";
+    	}
     }
 }

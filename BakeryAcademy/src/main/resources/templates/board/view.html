@@ -210,8 +210,6 @@ a {
 }
 </style>
 <link rel="stylesheet" type="text/css"
-	th:href="@{../css/board/boardview.css}">
-<link rel="stylesheet" type="text/css"
 	th:href="@{/css/board/boardview.css}">
 <meta charset="UTF-8">
 
@@ -250,11 +248,11 @@ a {
 			</div>
 		</div>
 		<br> <br>
-		<div class="board-content" th:text="${board.boardContent}"></div>
-		<div class="board-product">
+		<div class="board-content" th:utext="${board.boardContent}"></div>
+		<div class="board-product" th:if=${prepList.size!=0}>
 			<h3>필요한 재료</h3>
 		</div>
-		<div class="board-product">
+		<div class="board-product" th:if=${prepList.size!=0}>
 			<div class="p-r-45 p-r-0-lg">
 				<div class="wrap-table-shopping-cart">
 					<form id="board-product-form">
@@ -306,41 +304,47 @@ a {
 				</div>
 			</div>
 		</div>
+		
 		<div class="btn_location">
 			<div class="btn_delete">
 				<!-- <a th:href="@{/board/delete/{boardId}(boardId=${board.boardId})}"> -->
 				<!-- <input type="submit" class="update_board" value="수정"> -->
 				<a th:href="@{/board/update/{boardId}(boardId=${board.boardId})}"><button
 						type="button" class="update_board">수정</button></a>
-
+			
+			
+			<form action="/board/delete/{boardId}" method="post"></form>
 				<button type="button" class="delete_board"
 					onclick="deleteArticleConfirmation()">삭제</button>
 			</div>
 		</div>
-		<footer th:replace="~{footer::footer}"></footer>
+		
+
+		<!-- 댓글작성 -->
+		<div id="reply">
+			<ol class="replyList">
+				<li class="reply-content"th:each="reply : ${repList}">
+					<p>
+						<span th:text="${board.memberNickname}"></span><br /> 작성
+						<span
+							th:text="${#dates.format(reply.boardReplyWriteDate, 'yyyy-MM-dd')}"></span>
+					</p>
+					<p th:text="${reply.boardReplyContent}"></p>
+				</li>
+			</ol>
+		</div>
+
+
+
+
+		<footer th:replace="~{footer::footer}"></footer>	
 	</div>
 	<br>
 	<br>
-	<div class="board-content" th:text="${board.boardContent}"></div>
-	<div class="board-product" th:each="list:${prepList}">
-		<span th:text="${list.productName}"></span>
-	</div>
-<!-- 댓글작성 -->
-<div id="reply">
-  <ol class="replyList">
-    <li th:each="reply : ${repList}">
-      <p>
-        작성자 : <span th:text="${reply.memberId}"></span><br />
-        작성 날짜 : <span th:text="${#dates.format(reply.boardReplyWriteDate, 'yyyy-MM-dd')}"></span>
-      </p>
-      <p th:text="${reply.boardReplyContent}"></p>
-    </li>
-  </ol>
-</div>
 
 
 
-	<footer th:replace="~{footer::footer}"></footer>
+
 	<!-- Back to top -->
 	<div class="btn-back-to-top" id="myBtn">
 		<span class="symbol-btn-back-to-top"> <i
@@ -349,7 +353,7 @@ a {
 	</div>
 	
 
-	<script>
+<!-- 	<script>
 		function deleteArticleConfirmation() {
 			var confirmResult = confirm("게시물을 삭제하시겠습니까?");
 			if (confirmResult) {
@@ -378,7 +382,40 @@ a {
 
 			});
 		}
-	</script>
+
+	
+		<script>
+		function deleteArticleConfirmation() {
+			var confirmResult = confirm("게시물을 삭제하시겠습니까?");
+			if (confirmResult) {
+				deleteYes();
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		function deleteYes() {
+			var mid = '[[${board.memberId}]]'
+			$.ajax({
+				type : "POST",
+				url : "/board/delete",
+				data : {
+					'memberId' : mid
+				},
+				success : function(data) {
+						alert(data)
+			         location.href = '/board?page=1';
+					
+				},
+				error : function(xhr, status, error) {
+					alert(xhr.responseText);
+				}
+
+			});
+		}
+	</script>	
+	
 	<script>
 		$(".js-select2").each(function() {
 			$(this).select2({
@@ -387,6 +424,7 @@ a {
 			});
 		})
 	</script>
+
 	<script>
 		$('.js-pscroll').each(function() {
 			$(this).css('position', 'relative');
@@ -420,35 +458,6 @@ a {
 	<!--===============================================================================================-->
 	<script th:src="@{../js/main.js}"></script>
 
-	<script>
-		function deleteArticleConfirmation() {
-			var confirmResult = confirm("게시물을 삭제하시겠습니까?");
-			if (confirmResult) {
-				deleteYes();
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		function deleteYes() {
-			var mid = '[[${board.memberId}]]'
-			$.ajax({
-				type : "POST",
-				url : "/board/delete",
-				data : {
-					'memberId' : mid
-				},
-				dataType : "json",
-				success : function(data) {
-					inputContent(data, "1");
-				},
-				error : function(xhr, status, error) {
-					alert(xhr.responseText);
-				}
-
-			});
-		}
-	</script>
+ 
 </body>
 </html>

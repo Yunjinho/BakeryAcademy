@@ -43,11 +43,13 @@ public class BoardService implements IBoardService{
 	@Transactional
 	public int insertArticle(Board board) {
 		boardRepository.insertArticle(board);
-		for(Integer list:board.getProductId()) {
-			BoardPrep bp=new BoardPrep();
-			bp.setBoardId(board.getBoardId());
-			bp.setProductId(list);
-			boardPrepRepository.insertBoardPrep(bp);
+		if(board.getProductId()!=null) {
+			for(Integer list:board.getProductId()) {
+				BoardPrep bp=new BoardPrep();
+				bp.setBoardId(board.getBoardId());
+				bp.setProductId(list);
+				boardPrepRepository.insertBoardPrep(bp);
+			}
 		}
 		return 0;
 	}
@@ -65,11 +67,13 @@ public class BoardService implements IBoardService{
 				boardRepository.insertFileData(file);
 			}
 		}
-		for(Integer list:board.getProductId()) {
-			BoardPrep bp=new BoardPrep();
-			bp.setBoardId(board.getBoardId());
-			bp.setProductId(list);
-			boardPrepRepository.insertBoardPrep(bp);
+		if(board.getProductId()!=null) {
+			for(Integer list:board.getProductId()) {
+				BoardPrep bp=new BoardPrep();
+				bp.setBoardId(board.getBoardId());
+				bp.setProductId(list);
+				boardPrepRepository.insertBoardPrep(bp);
+			}
 		}
         return board.getBoardId();
 	}
@@ -128,22 +132,33 @@ public class BoardService implements IBoardService{
 	
 
 
+//	@Transactional
+//	public void deleteArticle(int boardId) {
+////		if(replyNumber>0) {
+////			boardRepository.deleteReplyFileData(boardId);
+////			boardRepository.deleteArticleByBoardId(boardId);
+////		} else if(replyNumber == 0){
+////			boardRepository.deleteFileData(boardId);
+////			boardRepository.deleteArticleByMasterId(boardId);
+////		} else {
+////			throw new RuntimeException("WRONG_REPLYNUMBER");
+////		}
+////	}
+//		boardRepository.deleteFileData(boardId);
+//		boardRepository.deleteArticleInfo(boardId);
+//		
+//	}
+
 	@Transactional
 	public void deleteArticle(int boardId) {
-//		if(replyNumber>0) {
-//			boardRepository.deleteReplyFileData(boardId);
-//			boardRepository.deleteArticleByBoardId(boardId);
-//		} else if(replyNumber == 0){
-//			boardRepository.deleteFileData(boardId);
-//			boardRepository.deleteArticleByMasterId(boardId);
-//		} else {
-//			throw new RuntimeException("WRONG_REPLYNUMBER");
-//		}
-//	}
+		boardReplyRepository.deleteAllReply(boardId);
 		boardRepository.deleteFileData(boardId);
+		//삭제할 게시글의 재료테이블 삭제
+		boardPrepRepository.deleteAllPrep(boardId);
 		boardRepository.deleteArticleInfo(boardId);
 		
 	}
+	
 
 
 	@Override

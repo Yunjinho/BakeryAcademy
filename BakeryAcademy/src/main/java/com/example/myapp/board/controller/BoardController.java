@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 
 
 
+
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +36,6 @@ import com.example.myapp.board.model.BoardImage;
 import com.example.myapp.board.model.BoardPrep;
 import com.example.myapp.board.model.BoardReply;
 import com.example.myapp.board.service.IBoardService;
-import com.example.myapp.member.model.Cart;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -108,10 +107,36 @@ public class BoardController {
 	}
 	
 	//게시글 상세조회
+//	@RequestMapping("/board/{boardId}")
+//	public String getBoardDetails(@PathVariable int boardId, Model model) {
+//		List<BoardImage> boardImageList=new ArrayList<BoardImage>();
+//		List<BoardPrep> boardPrepList=new ArrayList<BoardPrep>();
+//		List<BoardReply> repList = boardReplyRepository.selectBoardReplyList(boardId);
+//		
+//		
+//		Board board = boardService.selectArticle(boardId);
+//		boardImageList=boardService.selectArticleImage(boardId);
+//		boardPrepList=boardService.selectArticlePrep(boardId);
+//		model.addAttribute("board", board);
+//		model.addAttribute("imageList", boardImageList);
+//		model.addAttribute("prepList", boardPrepList);
+//		  
+//		 
+//		System.out.println(board);
+//		
+//		
+//		model.addAttribute("repList", repList);
+//		System.out.println("repList" + repList);
+//		return "board/view";
+//	}
 	@RequestMapping("/board/{boardId}")
-	public String getBoardDetails(@PathVariable int boardId, Model model) {
+	public String getBoardDetails(@PathVariable int boardId, Model model, HttpSession session) {
+		session.setAttribute("boardId", boardId);
 		List<BoardImage> boardImageList=new ArrayList<BoardImage>();
 		List<BoardPrep> boardPrepList=new ArrayList<BoardPrep>();
+		List<BoardReply> repList = boardReplyRepository.selectBoardReplyList(boardId);
+		
+		
 		Board board = boardService.selectArticle(boardId);
 		boardImageList=boardService.selectArticleImage(boardId);
 		boardPrepList=boardService.selectArticlePrep(boardId);
@@ -120,14 +145,11 @@ public class BoardController {
 		model.addAttribute("prepList", boardPrepList);
 		  
 		 
-		System.out.println(board);
 		
-		List<BoardReply> repList = boardReplyRepository.selectBoardReplyList(boardId);
+		
 		model.addAttribute("repList", repList);
-		System.out.println("repList" + repList);
 		return "board/view";
 	}
-
 	// 게시글 입력
 	@RequestMapping(value = "/board/write", method = RequestMethod.GET)
 	public String writeArticle(Model model, HttpSession session) {
@@ -138,6 +160,7 @@ public class BoardController {
 	public String writeArticle( Board board,BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
 		logger.info("/board/write : " + board.toString());
 		board.setMemberId((String) session.getAttribute("memberId"));
+		
 		try {
 			board.setBoardContent(board.getBoardContent().replace("\r\n", "<br>"));
 			board.setBoardTitle(Jsoup.clean(board.getBoardTitle(), Safelist.basic()));
@@ -189,28 +212,51 @@ public class BoardController {
 	
 	//게시물 삭제
 	@RequestMapping(value="/board/delete", method=RequestMethod.GET)
-	public String deleteArticle(Board board, String memberId, int boardId, Model model, HttpSession session) {
-		boardService.selectDeleteBoard(board.getBoardId());
+	public String deleteArticle(Board board, String memberId, int boardId, HttpSession session) {
+//		boardService.selectDeleteBoard(board.getBoardId());
 		boardService.getMemberId(board.getMemberId());
+		session.setAttribute("boardId", boardId);
+		session.setAttribute("memberId", memberId);
 		return "board/delete";
 	}
 	
-    @RequestMapping(value = "/board/delete", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteArticle(String memberId, HttpSession session) {
-        try {
-            String sessionMemberId = (String) session.getAttribute("memberId");
-            Integer sessionBoardId = (Integer) session.getAttribute("boardId");
-            if (memberId.equals(sessionMemberId)) {
-                boardService.deleteArticle(sessionBoardId);
-                return new ResponseEntity<>("삭제되었습니다.", HttpStatus.OK);
-            } else {
-            	return new ResponseEntity<>("이 게시물의 작성자가 아니므로 삭제가 불가능합니다.", HttpStatus.FORBIDDEN);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        }
+//    @RequestMapping(value = "/board/delete", method = RequestMethod.POST)
+//    public String deleteArticle(Board board, String memberId, HttpSession session) {
+//        try {
+//            String sessionMemberId = (String) session.getAttribute("memberId");
+//            System.out.println("*********************sessionMemberId : " + sessionMemberId);            
+//            Integer sessionBoardId = (Integer) session.getAttribute("boardId");
+//            System.out.println("*********************sessionBoardId : " + sessionBoardId);
+//            if (memberId.equals(sessionMemberId)) {
+//                //boardService.deleteArticle(sessionBoardId);
+//                return "삭제되었습니다.";
+//            } else {
+//            	return "이 게시물의 작성자가 아니므로 삭제가 불가능합니다.";
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return e.getMessage();
+//        }
+        @RequestMapping(value = "/board/delete", method = RequestMethod.POST)
+        @ResponseBody
+        public ResponseEntity<String> deleteArticle(Board board, String memberId, HttpSession session) {
+        	try {
+        		String sessionMemberId = (String) session.getAttribute("memberId");
+        		System.out.println("*********************sessionMemberId : " + sessionMemberId);            
+        		Integer sessionBoardId = (Integer) session.getAttribute("boardId");
+        		
+        		if (memberId.equals(sessionMemberId)) {
+        			boardService.deleteArticle(sessionBoardId);
+        			System.out.println("*********************sessionBoardId : " + sessionBoardId);
+        			return new ResponseEntity<>("삭제되었습니다.", HttpStatus.OK);
+        		} else {
+        			return new ResponseEntity<>("이 게시물의 작성자가 아니므로 삭제가 불가능합니다.", HttpStatus.FORBIDDEN);
+        		}
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        	}
+}
 
 	
 
