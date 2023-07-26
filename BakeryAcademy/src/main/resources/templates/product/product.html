@@ -4,14 +4,18 @@
 <body class="animsition">
 	<header th:replace="~{/body-header::body-header}"></header>
 	<!-- Product -->
-	<div style="height: 75px;"></div>
 	<!-- 	밀어주는 블록 -->
+	<div style="height: 75px;"></div>
 	<div class="bg0 m-t-23 p-b-140">
 		<div class="container">
 			<div class="flex-w flex-sb-m p-b-52">
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 " data-filter="*">모든 제품</button>
-				<div class="flex-w flex-l-m filter-tope-group m-tb-10" th:each="category:${categoryList}">
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".${category.categoryId}" th:text="${category.categoryName}">Category Name</button>
+				<div class="flex-w flex-l-m filter-tope-group m-tb-10" >
+				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter=".*" >모든 제품</button>
+					<div th:each="category:${categoryList}">
+						<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
+							data-filter=".${category.categoryId}"
+							th:text="${category.categoryName}">Category Name</button>
+					</div>
 				</div>
 				<div class="flex-w flex-c-m m-tb-10">
 					<div
@@ -38,9 +42,8 @@
 				<!-- 상품 리스트 반복 -->
 			<div class="row isotope-grid">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item"
-					th:classappend="${product.categoryId}"
 					th:each="product:${productList}">
-					<div class="block2">
+					<div class="block2"th:classappend="${product.categoryId}">
 						<div class="block2-pic hov-img0">
 							<a th:href="@{/product-detail/__${product.productId}__}"><img
 								th:src="@{/product-thumnail/__${product.productId}__}"
