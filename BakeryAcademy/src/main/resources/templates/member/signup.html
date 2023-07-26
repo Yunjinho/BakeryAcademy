@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{header::head}"></head>
+<head th:replace="~{header::head}">
+</head>
 <link rel="stylesheet" type="text/css"
 	th:href="@{../css/signup.css}">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -44,7 +45,7 @@
 					</h5>
 				</div>
 				<div class="sign-info">
-					<input type="password" class="signuppage"  name ="memberPassword" pattern= "(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{6,}"  th:error="memberPassword" required>(6자 이상이며, 최소 하나의 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.)
+					<input type="password" class="signuppage"  name ="memberPassword" pattern= "(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&\^]).{6,}" th:error="memberPassword" required>(6자 이상이며, 최소 하나의 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.)
 					</div>
 					
 					
@@ -53,7 +54,7 @@
 					<h5 style="line-height: 2.5em;">비밀번호 확인<span style="color: red;">*</span></h5>
 				</div>
 				<div class="sign-info">
-			 <input type="password" id="memberPasswordConfirm" class="signuppage"   name="memberPasswordConfirm" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  th:error="memberPasswordConfirm" required>  		
+			 <input type="password"  class="signuppage"   name="memberPasswordConfirm" pattern= "(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&\^]).{6,}" th:error="memberPasswordConfirm" required>  		
 					</div>
 					
 					<hr class="hr2">
@@ -73,7 +74,7 @@
 						</h5>
 						</div>
 						<div class="sign-info">
-			<input type="text" class="signuppage"  name="memberEmail" pattern= ".*@.*\.com" required>
+			<input type="email" class="signuppage"  name="memberEmail"  placeholder="예:code@code.com" required>
 			</div>
 			
 					<hr class="hr2">
@@ -91,7 +92,7 @@
 					<h5 style="line-height: 1.7em;">전화번호<span style="color: red;">*</span></h5>
 					</div>
 				<div class="sign-info">
-					 <input type="text" id="phoneNum" class="signuppage-memberPhoneNumber"   name="memberPhoneNumber" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"  required>
+					 <input type="text" id="phoneNum" class="signuppage-memberPhoneNumber"   name="memberPhoneNumber" pattern="010-[0-9]{4}-[0-9]{4}" maxlength="13" placeholder="010-0000-0000" required>
 					</div>
 					
 					<input type="hidden" id="isAdmin" value=0 required>
@@ -185,16 +186,15 @@
 			<br>
 			<div class="sign-div">
 				<div class="sign-button">
-						   <input type="submit" id="signupBtn"  th:value="회원가입" />
-		<input type="submit" id="cancelBtn" class="btn" th:value="가입취소" />
+						   <input type="submit" id="signupBtn" class="btn" th:value="회원가입" />
+		<input type="reset" id="cancelBtn" class="btn" th:value="가입취소" />
 				</div>
 				</div>
 			</div>
 		</main>
 	</form>
 	<footer th:replace="~{footer::footer}"></footer>
-<script type="text/javascript" th:src="@{../js/member/signup.js}"></script>
 	
-
+<script type="text/javascript" th:src="@{../js/member/signup.js}"></script>
 </body>
 </html>

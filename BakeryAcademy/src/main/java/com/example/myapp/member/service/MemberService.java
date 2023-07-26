@@ -43,4 +43,9 @@ public class MemberService implements IMemberService {
 	public String getPassword(String memberId) {
 		return memberRepository.getPassword(memberId);
 	}
+
+	@Override
+	public Member duplicateMember(String memberId) {
+		return memberRepository.duplicateMember(memberId);
+	}
 }

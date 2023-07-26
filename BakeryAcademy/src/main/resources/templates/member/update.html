@@ -90,10 +90,9 @@
 										<h5 style="line-height: 2.5em;">이메일 주소</h5>
 									</div>
 									<div class="sign-info">
-										<input type="text" class="signuppage" name="memberEmail"
+										<input type="email" class="signuppage" name="memberEmail"
 											th:value="${member.memberEmail}"
-											pattern=".*@.*\.com"
-											required>
+											  placeholder="예:code@code.com" required>
 										<!-- th:value="${member.memberEmail}" -->
 									</div>
 

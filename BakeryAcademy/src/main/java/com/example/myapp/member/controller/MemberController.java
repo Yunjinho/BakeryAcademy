@@ -46,18 +46,18 @@ public class MemberController {
 
 	@Autowired
 	private ICartService cartService;
-  
+
 	@Autowired
 	private IProductService productService;
-	
+
 	@Autowired
 	private IProductReviewService productReviewService;
-	
-	 @InitBinder("Member")
-	 private void initBinder(WebDataBinder binder) {
-		 binder.setValidator(memberValidator); 
-	 }
-	
+
+	@InitBinder("Member")
+	private void initBinder(WebDataBinder binder) {
+		binder.setValidator(memberValidator);
+	}
+
 	@RequestMapping(value = "/member/signup", method = RequestMethod.GET)
 	public String insertMember(Model model) {
 		model.addAttribute("member", new Member());
@@ -71,6 +71,54 @@ public class MemberController {
 		session.invalidate();
 		return "member/login";
 	}
+
+	// Id 중복체크
+	/*
+	 * @RequestMapping("/member/idcheck")
+	 * 
+	 * @ResponseBody // view 없을 때 사용 public String idCheck(String memberId) { String
+	 * result = ""; Member member = null; try { member =
+	 * memberService.duplicateMember(memberId); if (member == null) { result =
+	 * "true"; } else { result = "false"; } } catch (Exception e) {
+	 * e.printStackTrace(); } return result; }
+	 */
+
+	// 닉네임 중복체크
+	  @RequestMapping("/member/nicknamecheck") 
+	  @ResponseBody // view 없을 때 사용 
+	  public String nicknameCheck(String memberNickName) {
+	  String result = ""; Member member = null;
+	  try {
+	member = memberService.duplicateMember(memberNickName);
+	if (member == null) {
+		result = "true"; } 
+	else { result = "false"; } 
+	} catch (Exception e) {
+	  e.printStackTrace(); } return result; }
+	 
+	
+	// 전화번호 중복체크
+	/*
+	 * @RequestMapping("/member/phonenumbercheck")
+	 * 
+	 * @ResponseBody // view 없을 때 사용 public String phonenumberCheck(String
+	 * memberPhoneNumber) { String result = ""; Member member = null; try { member =
+	 * memberService.duplicateMember(memberPhoneNumber);
+	 * 
+	 * if (member == null) { result = "true"; } else { result = "false"; } } catch
+	 * (Exception e) { e.printStackTrace(); } return result; }
+	 */
+		
+		// 이메일 중복체크
+		/*
+		 * @RequestMapping("/member/emailcheck")
+		 * 
+		 * @ResponseBody // view 없을 때 사용 public String emailCheck(String memberEmail) {
+		 * String result = ""; Member member = null; try { member =
+		 * memberService.duplicateMember(memberEmail); if (member == null) { result =
+		 * "true"; } else { result = "false"; } } catch (Exception e) {
+		 * e.printStackTrace(); } return result; }
+		 */
 
 	@RequestMapping(value = "/member/login", method = RequestMethod.GET)
 	public String login() {
@@ -90,7 +138,7 @@ public class MemberController {
 					session.setAttribute("memberId", memberId);
 					session.setAttribute("memberName", member.getMemberName());
 					session.setAttribute("memberEmail", member.getMemberEmail());
-					return "redirect:/"; // memberinfo 페이지로 리다이렉션
+					return "redirect:/"; // 홈페이지로 리다이렉션
 				} else { // 아이디는 있지만 비밀번호가 다른 경우
 					model.addAttribute("message", " 비밀번호를 잘못 입력했습니다.\r\n" + "입력하신 내용을 다시 확인해주세요..");
 				}
@@ -107,7 +155,7 @@ public class MemberController {
 		session.invalidate(); // 세션 무효화
 		return "redirect:/"; // 홈페이지로 리다이렉트
 	}
-	
+
 	@RequestMapping(value = "/member/update", method = RequestMethod.GET)
 	public String updateMember(HttpSession session, Model model) {
 		String memberId = (String) session.getAttribute("memberId");
@@ -245,25 +293,26 @@ public class MemberController {
 		return "redirect:/member/my-orders";
 	}
 
-	@RequestMapping(value="/admin/order-detail",method=RequestMethod.POST)
-	public String updateOrderDetail(Order order,Model model) {
+	@RequestMapping(value = "/admin/order-detail", method = RequestMethod.POST)
+	public String updateOrderDetail(Order order, Model model) {
 		orderService.updateOrderStatus(order);
 		return "redirect:/admin/orders?beforePage=1&ingPage=1&afterPage=1&refunPage=1";
 	}
-	
-	@RequestMapping(value="member/write-review",method=RequestMethod.GET)
-	public String viewReview(@RequestParam int orderId, @RequestParam int productId,Model model) {
-		Product product=new Product();
-		product=productService.selectProduct(productId);
+
+	@RequestMapping(value = "member/write-review", method = RequestMethod.GET)
+	public String viewReview(@RequestParam int orderId, @RequestParam int productId, Model model) {
+		Product product = new Product();
+		product = productService.selectProduct(productId);
 		model.addAttribute("product", product);
-		Order order =new Order();
-		order=orderService.selectOrderDetail(orderId);
+		Order order = new Order();
+		order = orderService.selectOrderDetail(orderId);
 		model.addAttribute("order", order);
 		return "/member/write-review";
 	}
-	@RequestMapping(value="member/write-review",method=RequestMethod.POST)
-	public String writeReview(@RequestParam int orderId,ProductReview productReview, HttpSession session) {
-		String memberId=(String)session.getAttribute("memberId");
+
+	@RequestMapping(value = "member/write-review", method = RequestMethod.POST)
+	public String writeReview(@RequestParam int orderId, ProductReview productReview, HttpSession session) {
+		String memberId = (String) session.getAttribute("memberId");
 		productReview.setMemberId(memberId);
 		productReview.setOrderId(orderId);
 		productReviewService.insertProductReview(productReview);
