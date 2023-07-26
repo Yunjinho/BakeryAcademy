@@ -71,6 +71,8 @@ public interface IBoardRepository {
 	
 	int increaseVisitCount(int boardId);
 
+	void updateBoard(int sessionBoardId);
+
 
 	
 

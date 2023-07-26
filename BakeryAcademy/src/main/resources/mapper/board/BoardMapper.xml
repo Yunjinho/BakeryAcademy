@@ -135,6 +135,17 @@
 		WHERE rowNumber BETWEEN #{start} AND #{end}
 	]]>
 	</select>
+	
+	
+	
+	<update id="updateBoard" parameterType="com.example.myapp.board.model.Board">
+	<![CDATA[
+		UPDATE board 
+		SET 
+			board_title, board_content
+		WHERE board_id=#{boardId}
+	]]>
+	</update>
 
 	<!-- 제목/내용/닉네임으로 게시물 조회 -->
 	<select id="selectKeywordBaord" parameterType="hashmap" resultType="com.example.myapp.board.model.Board">

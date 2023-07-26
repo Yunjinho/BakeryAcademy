@@ -30,7 +30,10 @@ public interface IBoardService {
 	
 	
 	
-	void deleteArticle(int boardId);
+	//게시물 삭제
+	void deleteArticle(int sessionBoardId);
+	//게시물 수정
+	void updateBoardArticle(int sessionBoardId);
 	
 	List<Board> selectAllBoardList(int page);
 	List<Board> selectKeywordBoardList(String keyword,int page);
@@ -41,6 +44,9 @@ public interface IBoardService {
 	
 	List<BoardReply> selectBoardReplyList(int boardId);
 	void insertBoardReply(BoardReply boardreply);
+//	void updateBoardArticle(Integer sessionBoardId);
+//	void updateArticle(int sessionBoardId);
+	
 
 
 	

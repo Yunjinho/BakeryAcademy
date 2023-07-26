@@ -137,17 +137,22 @@ public class BoardController {
 		List<BoardReply> repList = boardReplyRepository.selectBoardReplyList(boardId);
 		
 		
-		Board board = boardService.selectArticle(boardId);
+		Board board = boardService.selectArticle(boardId);		
 		boardImageList=boardService.selectArticleImage(boardId);
 		boardPrepList=boardService.selectArticlePrep(boardId);
 		model.addAttribute("board", board);
 		model.addAttribute("imageList", boardImageList);
 		model.addAttribute("prepList", boardPrepList);
 		  
-		 
 		
 		
 		model.addAttribute("repList", repList);
+		
+		System.out.println(board);
+		
+//		 session.setAttribute("board", board);
+		 
+		 
 		return "board/view";
 	}
 	// 게시글 입력
@@ -213,41 +218,20 @@ public class BoardController {
 	//게시물 삭제
 	@RequestMapping(value="/board/delete", method=RequestMethod.GET)
 	public String deleteArticle(Board board, String memberId, int boardId, HttpSession session) {
-//		boardService.selectDeleteBoard(board.getBoardId());
-		boardService.getMemberId(board.getMemberId());
 		session.setAttribute("boardId", boardId);
 		session.setAttribute("memberId", memberId);
 		return "board/delete";
 	}
-	
-//    @RequestMapping(value = "/board/delete", method = RequestMethod.POST)
-//    public String deleteArticle(Board board, String memberId, HttpSession session) {
-//        try {
-//            String sessionMemberId = (String) session.getAttribute("memberId");
-//            System.out.println("*********************sessionMemberId : " + sessionMemberId);            
-//            Integer sessionBoardId = (Integer) session.getAttribute("boardId");
-//            System.out.println("*********************sessionBoardId : " + sessionBoardId);
-//            if (memberId.equals(sessionMemberId)) {
-//                //boardService.deleteArticle(sessionBoardId);
-//                return "삭제되었습니다.";
-//            } else {
-//            	return "이 게시물의 작성자가 아니므로 삭제가 불가능합니다.";
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return e.getMessage();
-//        }
-        @RequestMapping(value = "/board/delete", method = RequestMethod.POST)
+
+     @RequestMapping(value = "/board/delete", method = RequestMethod.POST)
         @ResponseBody
-        public ResponseEntity<String> deleteArticle(Board board, String memberId, HttpSession session) {
+        public ResponseEntity<String> deleteArticle(String memberId, HttpSession session) {
         	try {
-        		String sessionMemberId = (String) session.getAttribute("memberId");
-        		System.out.println("*********************sessionMemberId : " + sessionMemberId);            
+        		String sessionMemberId = (String) session.getAttribute("memberId");          
         		Integer sessionBoardId = (Integer) session.getAttribute("boardId");
         		
         		if (memberId.equals(sessionMemberId)) {
         			boardService.deleteArticle(sessionBoardId);
-        			System.out.println("*********************sessionBoardId : " + sessionBoardId);
         			return new ResponseEntity<>("삭제되었습니다.", HttpStatus.OK);
         		} else {
         			return new ResponseEntity<>("이 게시물의 작성자가 아니므로 삭제가 불가능합니다.", HttpStatus.FORBIDDEN);
@@ -263,48 +247,67 @@ public class BoardController {
 	
 	
 	//게시물 수정
-//	@RequestMapping(value="/board/update/{boardId}", method=RequestMethod.GET)
-//	public String updateArticle(@PathVariable int boardId, Model model) {
-//
-//		Board board = boardService.selectArticle(boardId);
-//		model.addAttribute("boardTitle", board.getBoardTitle());
-//		board.setBoardContent(board.getBoardContent().replaceAll("<br>", "\r\n"));
-//		model.addAttribute("board", board);
-//		return "board/update";
-//	}
-//	
+	@RequestMapping(value="/board/update/{boardId}", method=RequestMethod.GET)
+	public String updateArticle(@PathVariable int boardId, Model model, String memberId, HttpSession session) {	
+
+		Integer sessionBoardId = (Integer) session.getAttribute("boardId");
+		System.out.println("sessionBoardId = " + sessionBoardId);
+
+//		String sessionMemberId = (String) session.getAttribute("memberId");  
+//		System.out.println("sessionMemberId = " + sessionMemberId);
+		
+		Board board2 = boardService.selectArticle(boardId);
+		model.addAttribute("boardContent", board2.getBoardContent());
+		board2.setBoardContent(board2.getBoardContent().replaceAll("<br>", "\r\n"));
+		model.addAttribute("board2", board2);
+		return "board/board-update";
+	}
+	
 //	@RequestMapping(value="/board/update", method=RequestMethod.POST)
-//	public String updateArticle(Board board, RedirectAttributes redirectAttrs) {
-//		logger.info("/board/update " + board.toString());
-//		String dbPassword = boardService.getPassword(board.getBoardId());
-//		
-//		//멤버아이디랑 세션의멤버아이디가 일치하지 않을 경우
-//		if(!board.getPassword().equals(dbPassword)) {
-//			redirectAttrs.addFlashAttribute("passwordError", "게시글 비밀번호가 다릅니다");
-//			return "redirect:/board/update/" + board.getBoardId();
-//		}
-//		try{
-//			board.setBoardContent(board.getBoardContent().replace("\r\n", "<br>"));
-//			board.setBoardTitle(Jsoup.clean(board.getBoardTitle(), Safelist.basic()));
-//			board.setBoardContent(Jsoup.clean(board.getBoardContent(), Safelist.basic()));
-//			MultipartFile mfile = board.getFile();
-//			if(mfile!=null && !mfile.isEmpty()) {
-//				logger.info("/board/update : " + mfile.getOriginalFilename());
-//				BoardImage file = new BoardImage();
-//				file.setBoardImageName(mfile.getOriginalFilename());
-//				file.setBoardImageSize(mfile.getSize());
-//				file.setBoardImageType(mfile.getContentType());
-//				file.setBoardImage(mfile.getBytes());
-//				logger.info("/board/update : " + file.toString());
-//				boardService.updateArticle(board, file);
-//			}else {
-//				boardService.updateArticle(board);
-//			}
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			redirectAttrs.addFlashAttribute("message", e.getMessage());
-//		}
-//		return "redirect:/board/"+board.getBoardId();
+//	public String updateArticle(Board board, HttpSession session, RedirectAttributes redirectAttrs) {
+//		try {
+//    		String sessionMemberId = (String) session.getAttribute("memberId");  
+//    		System.out.println("sessionMemberId = " + sessionMemberId);
+//    		
+//    		String boardMemberId = board.getMemberId();
+//    		System.out.println("boardMemberId = " + boardMemberId);
+//    		
+//    		Integer sessionBoardId = (Integer) session.getAttribute("boardId");
+//    		System.out.println("sessionBoardId" + sessionBoardId);
+//    		
+//    		if (boardMemberId.equals(sessionMemberId)) {
+////    			boardService.deleteArticle(sessionBoardId);
+//    			
+//    		} else {
+//    			
+//    		}
+//    	} catch (Exception e) {
+//    		e.printStackTrace();
+//    		
+//    	}
+//		return "redirect:/board/view";
 //	}
-    
+	
+    @RequestMapping(value = "/board/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> updateArticle(String memberId, HttpSession session) {
+    	try {
+    		String sessionMemberId = (String) session.getAttribute("memberId");  
+    		System.out.println("sessionMemberId = " + sessionMemberId);
+    		
+    		Integer sessionBoardId = (Integer) session.getAttribute("boardId");
+    		
+    		if (memberId.equals(sessionMemberId)) {
+    			boardService.updateBoardArticle(sessionBoardId);
+    			return new ResponseEntity<>("수정되었습니다.", HttpStatus.OK);
+    		} else {
+    			return new ResponseEntity<>("이 게시물의 작성자가 아니므로 수정이 불가능합니다.", HttpStatus.FORBIDDEN);
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
+}
+	
+	
 }
