@@ -13,8 +13,8 @@ public interface IMemberService {
 	void updateMember(Member member);
 	void deleteMember(Member member);
 	String getPassword(String memberId);
+	Member duplicateMember(String memberId);
 	String findMemberId(Member member);
-	
 	void makeRandomNumber();
 	String joinEmail(String email);
 	void mailSend(String setFrom, String toMail, String title, String content);

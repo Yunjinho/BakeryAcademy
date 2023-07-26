@@ -9,7 +9,7 @@
 		 	INSERT INTO member 
 		 		(member_id, member_password, member_name, member_phone_number, member_email, member_nickname, is_admin, member_address,member_status)
     		VALUES 
-    			(#{memberId}, #{memberPassword}, #{memberName}, #{memberPhoneNumber}, #{memberEmail}, #{memberNickName}, #{isAdmin}, #{memberAddress},1)
+    			(#{memberId}, #{memberPassword}, #{memberName}, #{memberPhoneNumber}, #{memberEmail}, #{memberNickName}, #{isAdmin}, #{memberAddress}, 1)
    		]]>
 	</insert>
 
@@ -58,10 +58,23 @@
 	]]>
 	</select>
 	
+	<!-- 아이디, 닉네임, 이메일, 전화번호 중복체크시 -->
+		<select id="duplicateMember" parameterType="string"
+		resultType="string">
+		<![CDATA[
+			SELECT
+			member_id		AS "memberId",
+			member_nickname AS "memberNickName",
+			member_email    AS "memberEmail",
+			member_phone_number AS "memberPhoneNumber"
+			FROM member
+			WHERE member_status = 1 
+		]]>
+	</select>
+	
 	<select id="findMemberId" parameterType="com.example.myapp.member.model.Member" resultType="string">
 	<![CDATA[
 		SELECT member_id AS "memberId" FROM member WHERE member_name LIKE #{memberName} AND member_phone_number LIKE #{memberPhoneNumber} AND member_email LIKE #{memberEmail}
 	]]>
 	</select>
-	
 </mapper>
