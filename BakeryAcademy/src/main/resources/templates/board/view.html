@@ -3,14 +3,14 @@
 <head th:replace="~{header::head}"></head>
 <script>
 function deleteReply(replyId,boardId){
-		  var insdoc = "<input type='hidden' name='boardReplyId' value='"+ replyId +"'>";
+	var insdoc = "<input type='hidden' name='boardReplyId' value='"+ replyId +"'>";
 		  insdoc += "<input type='hidden' name='boardId' value='"+ boardId +"'>";
-		var goform = $("<form>", {
+	var goform = $("<form>", {
 		  method: "post",
 		  action: '/board/delete-reply',
 		  html:insdoc,
-		}).appendTo("body");
-		goform.submit();
+	}).appendTo("body");
+	goform.submit();
 }
 	window.onload = function() {
 		$('.slider-1 > .page-btns > div').click(function() {
@@ -373,13 +373,13 @@ a {
 		<!-- 댓글작성 -->
 		<div id="reply">
 		<br>
-			<h3>댓글 쓰기</h3>
+			<h3>댓글</h3>
 			<hr>
 			<ol class="replyList">
 				<li class="reply-content"th:each="reply : ${repList}">
 					<div class="reply-nickname">
-						<p th:text="${board.memberNickname}"></p>
-						<span th:if="${session.memberId==board.memberId || member.isAdmin==1}" th:onclick="deleteReply([[${reply.boardReplyId}]],[[${reply.boardId}]])">삭제</span>
+						<p th:text="${reply.memberNickName}"></p>
+						<span th:if="${session.memberId==reply.memberId || member.isAdmin==1}" th:onclick="deleteReply([[${reply.boardReplyId}]],[[${reply.boardId}]])">삭제</span>
 					</div>
 					<div class="reply-text">
 						<p th:text="${reply.boardReplyContent}"></p>
@@ -393,7 +393,7 @@ a {
 				</li>
 			</ol>
 			<div class="after-login-board">
-				<form th:action="@{/board/insert-reply}" method="post">
+				<form th:action="@{/board/insert-reply}" method="post" th:if="${session.memberId!=null}">
 					<textarea name="boardReplyContent"></textarea>
 					<input type="hidden" name="boardId" th:value="${board.boardId}">
 					<button type="submit" class="insert-reply">등록</button>

@@ -135,15 +135,19 @@ public class BoardController {
 		List<BoardImage> boardImageList=new ArrayList<BoardImage>();
 		List<BoardPrep> boardPrepList=new ArrayList<BoardPrep>();
 		List<BoardReply> repList = boardReplyRepository.selectBoardReplyList(boardId);
-		
-		Member member=memberService.selectMember((String)session.getAttribute("memberId"));
+		if(session.getAttribute("memberId")!=null) {
+			Member member=memberService.selectMember((String)session.getAttribute("memberId"));
+			model.addAttribute("member", member);
+		}else {
+			Member member =new Member();
+			model.addAttribute("member", member);
+		}
 		Board board = boardService.selectArticle(boardId);
 		boardImageList=boardService.selectArticleImage(boardId);
 		boardPrepList=boardService.selectArticlePrep(boardId);
 		model.addAttribute("board", board);
 		model.addAttribute("imageList", boardImageList);
 		model.addAttribute("prepList", boardPrepList);
-		model.addAttribute("member", member);
 		  
 		 
 		
@@ -262,7 +266,6 @@ public class BoardController {
         @RequestMapping(value="/board/insert-reply",method=RequestMethod.POST)
         public String insertReply(BoardReply boardReply,HttpSession session) {
         	boardReply.setMemberId((String)session.getAttribute("memberId"));
-        	System.out.println(boardReply);
         	boardService.insertBoardReply(boardReply);
         	return "redirect:/board/"+boardReply.getBoardId();
         }

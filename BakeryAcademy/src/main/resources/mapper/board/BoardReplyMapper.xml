@@ -30,7 +30,8 @@ WHERE board_reply.member_id = member.member_id AND board_id=#{boardId}
       br.board_reply_content AS "boardReplyContent",
       br.board_reply_write_date AS "boardReplyWriteDate",
       m.member_id AS "memberId",     
-      m.member_name AS "memberName"   
+      m.member_name AS "memberName",   
+      m.member_nickname AS "memberNickName"   
     FROM board_reply br
     LEFT JOIN member m ON br.member_id = m.member_id
     WHERE br.board_id = #{boardId}

@@ -1,6 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/header::head}"></head>
+<script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+<script>
+function insertCart(){
+	
+	var productId='[[${product.productId}]]'
+	var amount = $("#num-product").val();
+	
+	var insdoc = "<input type='hidden' name='productId' value='"+ productId +"'>";
+  	insdoc += "<input type='hidden' name='productCount' value='"+ amount +"'>";
+	var goform = $("<form>", {
+		  method: "post",
+		  action: '/member/insert-cart',
+		  html:insdoc,
+	}).appendTo("body");
+	goform.submit();
+}
+function purchase(){
+		
+		var productId='[[${product.productId}]]'
+		//productId.push('[[${product.productId}]]')
+		var amount = $("#num-product").val();
+		var productPrice='[[${product.productPrice}]]'
+		location.href='/member/order?productId='+productId+'&productCount='+amount+'&totalPrice='+(amount*productPrice)
+}
+</script>
+
+<style>
+#product-detail-box{
+	justify-content: center;
+}
+#product-detail-box>div:nth-child(1){
+	width:230px;
+}
+#product-detail-box>div:nth-child(2){
+	display:flex;
+}
+#product-detail-box>div>div>button{
+	margin: 1%;
+}
+</style>
 <body class="animsition">
 	<header th:replace="~{/body-header::body-header}"></header>
 	<div style="height: 75px;"></div>
@@ -28,18 +68,20 @@
 						<p class="stext-102 cl3 p-t-23" th:text="${product.productContent}">PRODUCT CONTENT</p>
 						<div class="p-t-33">
 							<div class="flex-w flex-r-m p-b-10">
-								<div class="size-204 flex-w flex-m respon6-next">
+								<div id="product-detail-box" class="size-204 flex-w flex-m respon6-next">
 									<div class="wrap-num-product flex-w m-r-20 m-tb-10">
 										<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
 											<i class="fs-16 zmdi zmdi-minus"></i>
 										</div>
-										<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
+										<input class="mtext-104 cl3 txt-center num-product" type="number" id="num-product" name="num-product" value="1">
 										<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 											<i class="fs-16 zmdi zmdi-plus"></i>
 										</div>
 									</div>
-									<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"> 담기</button>
-									<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"> 즉시 구매</button>
+									<div>
+										<button id="insert-cart-product" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" th:onclick="insertCart()"> 담기</button>
+										<button id="puchase-cart-product" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" th:onclick="purchase()"> 즉시 구매</button>
+									</div>
 								</div>
 							</div>
 						</div>

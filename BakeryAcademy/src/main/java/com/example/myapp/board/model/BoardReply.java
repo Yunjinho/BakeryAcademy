@@ -15,5 +15,7 @@ public class BoardReply {
 	private String memberId;
 	private String boardReplyContent;
 	private Date boardReplyWriteDate;
+	
+	private String memberNickName;
 
 }
