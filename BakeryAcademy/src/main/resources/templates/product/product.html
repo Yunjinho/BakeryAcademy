@@ -74,25 +74,22 @@
 				</div>
 			</div>
 
-			<table class="table">
-				<tr>
-					<td align="left">
-						<nav aria-label="Page navigation">
-							<ul class="pagination">
-								<li th:if="${nowPageBlock>1}"><a
-									th:href="@{/product/__${categoryId}__/__${startPage-1}__}"
-									aria-label="Previous">◀</a></li>
-								<li th:each="i: ${#numbers.sequence(startPage, endPage)}"
-									th:classappend="${i==nowPage}?active"><a
-									th:href="@{/product/__${categoryId}__/__${i}__}">[[${i}]]</a></li>
-								<li th:if="${nowPageBlock<totalPageBlock}"><a
-									th:href="@{/product/__${categoryId}__/__${endPage+1}__}"
-									aria-label="Next">▶</a></li>
-							</ul>
-						</nav>
-					</td>
-				</tr>
-			</table>
+			<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
+				<a th:if="${nowPageBlock>1}"
+					th:href="@{/product/__${categoryId}__/__${startPage-1}__}"
+					class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+					◀ </a> <span th:each="i: ${#numbers.sequence(startPage, endPage)}"
+					th:classappend="${i==nowPage}?active"> <a
+					th:href="@{/product/__${categoryId}__/__${i}__}"
+					class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+						<span th:if=${i==nowPage} style="color: black;">[[${i}]]</span> <span
+						th:if=${i!=nowPage} style="color: white;">[[${i}]]</span>
+				</a>
+				</span> <a th:if="${nowPageBlock<totalPageBlock}"
+					th:href="@{/product/__${categoryId}__/__${endPage+1}__}"
+					class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+					▶ </a>
+			</div>
 		</div>
 	</div>
 
