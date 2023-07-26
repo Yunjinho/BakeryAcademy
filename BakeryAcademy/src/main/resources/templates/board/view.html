@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
-<<<<<<
 <script>
 window.onload=function(){
 	$('.slider-1 > .page-btns > div').click(function(){
@@ -208,6 +207,21 @@ padding:0% 0% 2% 0%;
 		<span th:text="${list.productName}"></span>
 	</div>
 </div>
+<!-- 댓글작성 -->
+<div id="reply">
+  <ol class="replyList">
+    <li th:each="reply : ${repList}">
+      <p>
+        작성자 : <span th:text="${reply.memberId}"></span><br />
+        작성 날짜 : <span th:text="${#dates.format(reply.boardReplyWriteDate, 'yyyy-MM-dd')}"></span>
+      </p>
+      <p th:text="${reply.boardReplyContent}"></p>
+    </li>
+  </ol>
+</div>
+
+
+
 	<footer th:replace="~{footer::footer}"></footer>
 	<!-- Back to top -->
 	<div class="btn-back-to-top" id="myBtn">
@@ -215,6 +229,30 @@ padding:0% 0% 2% 0%;
 			class="zmdi zmdi-chevron-up"></i>
 		</span>
 	</div>
+	
+<!-- 	<div class="reply-background">
+    <ol class="reply-List">
+        <li th:each="repList : ${repList}">
+            <p>
+                작성자 : <span th:text="${repList.writer}"></span><br />
+                작성 날짜 : <span th:text="${#dates.format(repList.regDate, 'yyyy-MM-dd')}"></span>
+            </p>
+            <p th:text="${repList.content}"></p>
+        </li>
+    </ol>
+</div> -->
+
+
+<!-- <div class="reply-background">
+	<div class="reply-list">
+		<span>댓글작성자 : </span><span th:text="${board.memberNickname}"></span><br>
+	</div>
+</div> -->
+
+
+
+
+
 	<script>
 		$(".js-select2").each(function() {
 			$(this).select2({

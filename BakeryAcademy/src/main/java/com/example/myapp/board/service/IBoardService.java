@@ -8,6 +8,7 @@ import java.util.List;
 import com.example.myapp.board.model.Board;
 import com.example.myapp.board.model.BoardImage;
 import com.example.myapp.board.model.BoardPrep;
+import com.example.myapp.board.model.BoardReply;
 
 
 public interface IBoardService {
@@ -37,6 +38,9 @@ public interface IBoardService {
 	int countKeywordBoard(String keyword);
 	
 	void deleteBoard(int boardId);
+	
+	List<BoardReply> selectBoardReplyList(int boardId);
+	void insertBoardReply(BoardReply boardreply);
 
 
 	
