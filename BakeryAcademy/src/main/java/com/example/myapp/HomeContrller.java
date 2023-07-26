@@ -19,12 +19,11 @@ public class HomeContrller {
 		return "index";
 	}
 
-	//여기
-	@RequestMapping("/cart-count")
-	@ResponseBody
-	public JSONObject cartCount(HttpSession session) {
-		JSONObject jobj = new JSONObject();
-		jobj.put("cartCount", cartService.countCart((String)session.getAttribute("memberId")));
-		return jobj;
-	}
+//	@RequestMapping("/cart-count")
+//	@ResponseBody
+//	public JSONObject cartCount(HttpSession session) {
+//		JSONObject jobj = new JSONObject();
+//		jobj.put("cartCount", cartService.countCart((String)session.getAttribute("memberId")));
+//		return jobj;
+//	}
 }

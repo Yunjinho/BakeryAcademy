@@ -149,7 +149,6 @@ public class ProductController {
 		return "redirect:/admin/category";
 	}
 
-
 	// 모달에서 페이징처리
 	@RequestMapping("/board/modal")
 	@ResponseBody
