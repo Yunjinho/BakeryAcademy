@@ -52,10 +52,10 @@
 	</insert>
 
 	<!-- 게시글입력 -->
-	<insert id="increaseVisitCount" parameterType="Integer">
+	<update id="increaseVisitCount" parameterType="Integer">
 		UPDATE board SET visit_count=( SELECT visit_count+1 FROM board WHERE board_id=#{boardId} )
 		 WHERE board_id=#{boardId}
-	</insert>
+	</update>
 
 	<insert id="insertFileData" parameterType="com.example.myapp.board.model.BoardImage">
 	<![CDATA[
@@ -142,7 +142,7 @@
 	<![CDATA[
 		UPDATE board 
 		SET 
-			board_title, board_content
+			board_title=#{boardTitle}, board_content=#{boardContent}
 		WHERE board_id=#{boardId}
 	]]>
 	</update>
@@ -184,4 +184,17 @@
 		WHERE m.member_nickname LIKE '%'||#{keyword}||'%' OR b.board_title LIKE '%'||#{keyword}||'%' OR b.board_content LIKE '%'||#{keyword}||'%'
 	]]>
 	</select>
+	
+	<update id="updateArticle" parameterType="com.example.myapp.board.model.Board">
+		UPDATE board SET board_title=#{boardTitle} , board_content=#{boardContent} WHERE board_id=#{boardId}
+		<selectKey resultType="int" keyProperty="boardId" order="AFTER">
+			select nvl(max(board_id), 0) as "boardId" from board
+		</selectKey>
+	</update>
+	
+	<delete id="deleteBoardPrep" parameterType="Integer">
+	<![CDATA[
+		DELETE FROM board_prep WHERE board_id=#{boardId}
+	]]>
+	</delete>
 </mapper>

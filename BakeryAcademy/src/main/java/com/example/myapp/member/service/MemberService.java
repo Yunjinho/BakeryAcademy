@@ -54,11 +54,11 @@ public class MemberService implements IMemberService {
 		return memberRepository.getPassword(memberId);
 	}
 
-	@Override
 	public Member duplicateMember(Member member) {
 		return memberRepository.duplicateMember(member);
 	}
 	@Override
+
 	public String findMemberId(Member member) {
 		return memberRepository.findMemberId(member);
 	}

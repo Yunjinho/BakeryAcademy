@@ -47,6 +47,8 @@ public class ProductService implements IProductService {
 			productRepository.deleteProductImage(product.getProductId());
 
 			ProductImage productImage = new ProductImage();
+			productImage.setProductId(product.getProductId());
+			System.out.println(product.getProductId());
 			for(MultipartFile mfile:product.getImage()) {
 				if (mfile != null && !mfile.isEmpty()) {
 					productImage.setProductImageName(mfile.getOriginalFilename());
@@ -128,5 +130,11 @@ public class ProductService implements IProductService {
 	@Override
 	public int selectTotalProductCount() {
 		return productRepository.selectTotalProductCount();
+	}
+
+	@Override
+	public List<Product> getStopProductList(int page) {
+		int start = (page - 1) * 12 + 1;
+		return productRepository.getStopProductList(start, start + 11);
 	}
 }

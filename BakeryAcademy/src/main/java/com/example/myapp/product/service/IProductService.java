@@ -33,5 +33,7 @@ public interface IProductService {
 	public ProductImage getProductImageByImageId(int productImageId);
 	
 	public List<Product> getAllProductList(int page);
+	public List<Product> getStopProductList(int page);
+	
 	public int selectTotalProductCount();
 }

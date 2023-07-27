@@ -33,7 +33,7 @@ public interface IBoardService {
 	//게시물 삭제
 	void deleteArticle(int sessionBoardId);
 	//게시물 수정
-	void updateBoardArticle(int sessionBoardId);
+	void updateBoardArticle(Board board);
 	
 	List<Board> selectAllBoardList(int page);
 	List<Board> selectKeywordBoardList(String keyword,int page);
@@ -53,8 +53,8 @@ public interface IBoardService {
 	void deleteBoardReply(BoardReply boardreply);
 
 
-	
-
+	public int updateArticle(Board board);
+	public int updateArticle(Board board, List<BoardImage> fileList);
 
 	
 }

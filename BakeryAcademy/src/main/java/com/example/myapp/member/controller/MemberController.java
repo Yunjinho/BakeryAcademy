@@ -323,7 +323,119 @@ public class MemberController {
 		model.addAttribute("totalPrice", totalPrice);
 		return "/member/order";
 	}
+	
+	
+	@RequestMapping(value="/admin/orders",method=RequestMethod.GET)
+	public String managerOrders(@RequestParam int beforePage,@RequestParam int ingPage,@RequestParam int afterPage,@RequestParam int refunPage,Model model) {
 
+		//
+		List<Order> orderList=orderService.selectAdminDeliveryList("상품 준비중");
+		model.addAttribute("beforeDeliveryList", orderList);
+		int bbsCount = orderService.countOrder("상품 준비중");
+		int totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
+		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("beforeTotalPageCount", totalPage);
+		model.addAttribute("beforeNowPage", beforePage);
+		model.addAttribute("beforeTotalPageBlock", totalPageBlock);
+		model.addAttribute("beforeNowPageBlock", nowPageBlock);
+		model.addAttribute("beforeStartPage", startPage);
+		model.addAttribute("beforeEndPage", endPage);
+		//
+		//
+		orderList=orderService.selectAdminDeliveryList("배송중");
+		model.addAttribute("delivering", orderList);
+		bbsCount = orderService.countOrder("배송중");
+		totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
+		startPage = (nowPageBlock - 1) * 10 + 1;
+		endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("ingTotalPageCount", totalPage);
+		model.addAttribute("ingNowPage", beforePage);
+		model.addAttribute("ingTotalPageBlock", totalPageBlock);
+		model.addAttribute("ingNowPageBlock", nowPageBlock);
+		model.addAttribute("ingStartPage", startPage);
+		model.addAttribute("ingEndPage", endPage);
+		//
+		//
+		orderList=orderService.selectAdminDeliveryList("배송 완료");
+		model.addAttribute("afterDeliveryList", orderList);
+		bbsCount = orderService.countOrder("배송 완료");
+		totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
+		startPage = (nowPageBlock - 1) * 10 + 1;
+		endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("afterTotalPageCount", totalPage);
+		model.addAttribute("afterNowPage", beforePage);
+		model.addAttribute("afterTotalPageBlock", totalPageBlock);
+		model.addAttribute("afterNowPageBlock", nowPageBlock);
+		model.addAttribute("afterStartPage", startPage);
+		model.addAttribute("afterEndPage", endPage);
+		//
+		//
+		orderList=orderService.selectAdminDeliveryList("환불 요청중");
+		model.addAttribute("refunList", orderList);
+		bbsCount = orderService.countOrder("배송중");
+		totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
+		}
+		totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
+		startPage = (nowPageBlock - 1) * 10 + 1;
+		endPage=0;
+		if(totalPage>nowPageBlock*10) {
+			endPage=nowPageBlock*10;
+		}else {
+			endPage=totalPage;
+		}
+		model.addAttribute("refunTotalPageCount", totalPage);
+		model.addAttribute("refunNowPage", beforePage);
+		model.addAttribute("refunTotalPageBlock", totalPageBlock);
+		model.addAttribute("refunNowPageBlock", nowPageBlock);
+		model.addAttribute("refunStartPage", startPage);
+		model.addAttribute("refunEndPage", endPage);
+		//
+
+		return "/admin/orders";
+	}
+
+	@RequestMapping(value="/admin/order-detail",method=RequestMethod.GET)
+	public String viewOrderDetail(@RequestParam int orderId,Model model) {
+		Order order=new Order();
+		order=orderService.selectOrderDetail(orderId);
+		model.addAttribute("order", order);
+		return "/admin/orders-detail";
+	}
+	
 	@RequestMapping(value = "/member/order", method = RequestMethod.POST)
 	public String insertOrder(@RequestParam(value = "productId") List<Integer> product,
 			@RequestParam(value = "amount") List<Integer> amount, @RequestParam(value = "memberId") String name,

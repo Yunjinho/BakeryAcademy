@@ -4,6 +4,7 @@ package com.example.myapp.board.model;
 
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -34,14 +35,15 @@ public class Board {
 	private List<MultipartFile> file;
 	private List<Integer> productId;
 	private byte[] boardImage;
-	
 	@Override
 	public String toString() {
-		return "Board [boardId=" + boardId + ", memberId=" + memberId + ", boardTitle=" + boardTitle + ", visitCount="
-				+ visitCount + ", memberNickname=" + memberNickname + ", boardImageId=" + boardImageId
-				+ ", boardImageName=" + boardImageName + ", boardImageSize=" + boardImageSize + ", boardImageType="
-				+ boardImageType + "]";
+		return "Board [boardId=" + boardId + ", memberId=" + memberId + ", boardTitle=" + boardTitle + ", boardContent="
+				+ boardContent + ", boardWriteDate=" + boardWriteDate + ", visitCount=" + visitCount
+				+ ", memberNickname=" + memberNickname + ", boardImageId=" + boardImageId + ", boardImageName="
+				+ boardImageName + ", boardImageSize=" + boardImageSize + ", boardImageType=" + boardImageType
+				+ ", productId=" + productId + ", boardImage=" + Arrays.toString(boardImage) + "]";
 	}
+	
 
 	
 	

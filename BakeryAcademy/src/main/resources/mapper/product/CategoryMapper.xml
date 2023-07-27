@@ -15,7 +15,7 @@
 </delete>
 <update id="updateCategory" parameterType="com.example.myapp.product.model.Category">
 <![CDATA[
-	UPDATE category SET category_name=#{categoryName}
+	UPDATE category SET category_name=#{categoryName} WHERE category_Id=#{categoryId}
 ]]>
 </update>
 <select id="selectCategory" parameterType="com.example.myapp.product.model.Category">

@@ -74,6 +74,37 @@ public class ProductController {
 		model.addAttribute("categoryList", categoryList);
 		return "product/product";
 	}
+	//모든 상품 반환
+	@RequestMapping("/product/stop/{page}")
+	public String getStopProductList(@PathVariable int page, HttpSession session, Model model) {
+		session.setAttribute("page", page);
+		List<Product> productList = productService.getStopProductList(page);
+		model.addAttribute("productList", productList);
+		int bbsCount = productService.selectTotalProductCount();
+		int totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 12.0);
+		}
+		int totalPageBlock = (int) (Math.ceil(totalPage / 12.0));
+		int nowPageBlock = (int) Math.ceil(page / 12.0);
+		int startPage = (nowPageBlock - 1) * 12 + 1;
+		int endPage = 0;
+		if (totalPage > nowPageBlock * 12) {
+			endPage = nowPageBlock * 12;
+		} else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		
+		List<Category> categoryList = categoryService.selectAllCategory();
+		model.addAttribute("categoryList", categoryList);
+		return "product/product";
+	}
 	
 	// 카테고리와 페이지에 따른 상품 목록으로 이동
 	@RequestMapping("/product/{categoryId}/{page}")
@@ -135,7 +166,7 @@ public class ProductController {
 	@RequestMapping(value = "/admin/update-product", method = RequestMethod.POST)
 	public String productUpdate(@Validated Product product, Model model) {
 		productService.updateProduct(product);
-		return "redirect:/";
+		return "redirect:/product/all/1";
 	}
 
 	// 카테고리 목록 리스트 페이지로 이동
@@ -171,6 +202,7 @@ public class ProductController {
 	// 카테고리 업데이트
 	@RequestMapping(value = "/admin/update-category", method = RequestMethod.POST)
 	public String categoryUpdate(@Validated Category category, Model model) {
+		System.out.println(category);
 		categoryService.updateCategory(category);
 		model.addAttribute("categoryList", categoryService.selectAllCategory());
 		return "redirect:/admin/category";

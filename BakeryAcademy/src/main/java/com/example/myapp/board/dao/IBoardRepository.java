@@ -38,6 +38,7 @@ public interface IBoardRepository {
 	
 	//삭제할 파일 데이터
 	void deleteFileData(int boardId);
+	void deleteBoardPrep(int boardId);
 	//삭제할 게시물 정보
 	void deleteArticleInfo(int boardId);
 
@@ -46,7 +47,6 @@ public interface IBoardRepository {
 	
 	//수정할 게시물
 	int updateArticle(Board board);
-	int updateArticle(Board board, BoardImage file);
 	
 	//게시물에 등록된 이미지 삭제
 	void deleteBoardImage(int boardId);
@@ -71,7 +71,7 @@ public interface IBoardRepository {
 	
 	int increaseVisitCount(int boardId);
 
-	void updateBoard(int sessionBoardId);
+	void updateBoard(Board board);
 
 
 	
