@@ -55,6 +55,8 @@ public class MemberService implements IMemberService {
 	}
 
 	@Override
+=
+=======
 	public Member duplicateMember(Member member) {
 		return memberRepository.duplicateMember(member);
 	}
