@@ -26,6 +26,8 @@ import com.example.myapp.product.dao.ICategoryRepository;
 import com.example.myapp.product.model.Category;
 import com.example.myapp.product.model.Product;
 import com.example.myapp.product.model.ProductImage;
+import com.example.myapp.product.model.ProductReview;
+import com.example.myapp.product.service.IProductReviewService;
 import com.example.myapp.product.service.IProductService;
 //import com.example.myapp.product.service.ProductService;
 
@@ -33,17 +35,17 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ProductController {
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	ICategoryRepository categoryService;
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 	@Autowired
 	IProductService productService;
+	@Autowired
+	IProductReviewService productReviewService;
 
 	// 카테고리와 페이지에 따른 상품 목록으로 이동
 	@RequestMapping("/product/{categoryId}/{page}")
-	public String getProductListByCategory(@PathVariable int categoryId, @PathVariable int page, HttpSession session,
-			Model model) {
+	public String getProductListByCategory(@PathVariable int categoryId, @PathVariable int page, HttpSession session, Model model) {
 		session.setAttribute("page", page);
 		model.addAttribute("categoryId", categoryId);
 		List<Product> productList = productService.selectProductListByCategory(categoryId, page);
@@ -51,14 +53,14 @@ public class ProductController {
 		int bbsCount = productService.selectTotalProductCountByCategory(categoryId);
 		int totalPage = 0;
 		if (bbsCount > 0) {
-			totalPage = (int) Math.ceil(bbsCount / 10.0);
+			totalPage = (int) Math.ceil(bbsCount / 12.0);
 		}
-		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
-		int nowPageBlock = (int) Math.ceil(page / 10.0);
-		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int totalPageBlock = (int) (Math.ceil(totalPage / 12.0));
+		int nowPageBlock = (int) Math.ceil(page / 12.0);
+		int startPage = (nowPageBlock - 1) * 12 + 1;
 		int endPage = 0;
-		if (totalPage > nowPageBlock * 10) {
-			endPage = nowPageBlock * 10;
+		if (totalPage > nowPageBlock * 12) {
+			endPage = nowPageBlock * 12;
 		} else {
 			endPage = totalPage;
 		}
@@ -68,7 +70,10 @@ public class ProductController {
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
-		return "product";
+
+		List<Category> categoryList = categoryService.selectAllCategory();
+		model.addAttribute("categoryList", categoryList);
+		return "product/product";
 	}
 
 	// 상품 등록페이지로 이동
@@ -147,12 +152,6 @@ public class ProductController {
 		return "redirect:/admin/category";
 	}
 
-	// 상품 인서트 모달
-	@RequestMapping("/board/insert-product-register")
-	public String insertProductModal(Model model, HttpSession session) {
-		return "/board/insert-product-modal";
-	}
-
 	// 모달에서 페이징처리
 	@RequestMapping("/board/modal")
 	@ResponseBody
@@ -196,8 +195,7 @@ public class ProductController {
 	@ResponseBody
 	public Object openPopUp(String keyword, int page) {
 		int productCount = 5;
-		List<Product> list = productService.selectSearchKeywordProduct(keyword, productCount * (page - 1) + 1,
-				(productCount * page));
+		List<Product> list = productService.selectSearchKeywordProduct(keyword, productCount * (page - 1) + 1, (productCount * page));
 		int bbsCount = productService.countKeyWordProductList(keyword);
 		int totalPage = 0;
 		if (bbsCount > 0) {
@@ -247,13 +245,13 @@ public class ProductController {
 	// 상품 목록 1 페이지로 이동
 	@RequestMapping("/product/{categoryId}")
 	public String getProductListByCategory(@PathVariable int categoryId, HttpSession session, Model model) {
-		return "redirect:/product/{categoryId}/1";
+		return getProductListByCategory(1, 1, session, model);
 	}
 
 	// 카테고리 1의 1페이지로 이동
 	@RequestMapping("/product")
 	public String getProductListByCategory(HttpSession session, Model model) {
-		return "redirect:/product/1/1";
+		return getProductListByCategory(1, 1, session, model);
 	}
 
 	// 상품 id의 썸네일 반환
@@ -281,12 +279,16 @@ public class ProductController {
 	// 상품 상세 페이지로 이동
 	@RequestMapping("/product-detail/{productId}")
 	public String getProductDetail(@PathVariable int productId, Model model) {
-		model.addAttribute("product", productService.selectProduct(productId));
 		List<Integer> imageIdList = productService.getProductImageList(productId);
+		int reviewCount = productReviewService.selectProductReviewCount(productId);
 		if (imageIdList.size() != 0) {
 			model.addAttribute("imageIdList", imageIdList);
 		}
-		return "product-detail";
+		List<ProductReview> reviewList = productReviewService.selectAllReviewByProductId(productId);
+		model.addAttribute("reviewList", reviewList);
+		model.addAttribute("product", productService.selectProduct(productId));
+		model.addAttribute("reviewCount", reviewCount);
+		return "product/product-detail";
 	}
 
 	// 이미지 번호에 따른 이미지 반환
@@ -306,5 +308,6 @@ public class ProductController {
 		}
 		return new ResponseEntity<byte[]>(file.getProductImage(), headers, HttpStatus.OK);
 	}
+
 
 }

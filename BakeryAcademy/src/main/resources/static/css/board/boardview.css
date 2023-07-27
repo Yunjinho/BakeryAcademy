@@ -1,0 +1,100 @@
+@charset "UTF-8";
+*{
+	color : black;
+}
+
+.td_text{
+	font-weight: bold;
+}
+
+.table_bordered{
+	display: flex;
+	justify-content: center;
+	margin-top : 200px;
+	width:700px;
+	
+}
+
+.table_bordered {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table_bordered th, .table_bordered td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.table_bordered th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.table_bordered td {
+  text-align: left;
+}
+
+
+
+/* .btn_delete button {
+  background-color: black;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+
+  border-radius: 5px;
+} */
+
+.delete_board{
+	background-color: black;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+.update_board{
+	background-color: black;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+.delete_board:hover {
+  background-color: red;
+  border: none;
+}
+.insert-reply{
+	background-color: black;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	margin:2% 2% 2% 5%;
+}
+
+.update_board{
+	background-color: black;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+.update_board:hover{
+	background-color: #333;
+}
+
+.btn_delete{
+	display: flex; /* 버튼들을 가로로 배치 */
+    justify-content: center;
+    gap : 30px;
+	margin-top:60px;
+	margin-bottom : 69px;
+}
+
+.img-thumbnail {
+  max-width: 100%;
+  height: auto;
+}

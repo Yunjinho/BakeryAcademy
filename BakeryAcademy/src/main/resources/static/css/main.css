@@ -505,7 +505,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   min-width: 15px;
   height: 15px;
   padding: 0 3px;
-  background-color: #717fe0;
+  /* background-color: #717fe0; */
 }
 
 /*---------------------------------------------*/
@@ -1944,7 +1944,7 @@ input.num-product::-webkit-inner-spin-button {
 .table-shopping-cart .column-5 {
   width: 172px;
   padding-right: 50px;
-  text-align: right;
+  text-align: center;
   font-size: 16px;
 }
 

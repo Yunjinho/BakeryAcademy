@@ -33,11 +33,11 @@ public class BoardReplyTest {
 		repository.deleteBoardReply(5);
 	}
 	public void update(){
-		BoardReply board=new BoardReply(4,1,"my","난 진짜 불가능",new Date(0));
-		repository.updateBoardReply(board);
+		//BoardReply board=new BoardReply(4,1,"my","난 진짜 불가능",new Date(0));
+		//repository.updateBoardReply(board);
 	}
 	public void insert(){
-		BoardReply board=new BoardReply(4,1,"my","난 진짜 불가능",new Date(0));
-		repository.insertBoardReply(board);
+		//BoardReply board=new BoardReply(4,1,"my","난 진짜 불가능",new Date(0));
+		//repository.insertBoardReply(board);
 	}
 }

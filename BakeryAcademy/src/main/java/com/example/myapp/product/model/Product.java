@@ -1,5 +1,7 @@
 package com.example.myapp.product.model;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -19,9 +21,7 @@ public class Product {
 	private int productStatus;
 
 	// 추가 변수
-	private MultipartFile image;
-	private MultipartFile image2;
-	private MultipartFile image3;
+	private List<MultipartFile> image;
 	private int rowNumber;
 	
 }

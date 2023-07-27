@@ -1,75 +1,542 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
+<script>
+function deleteReply(replyId,boardId){
+	var insdoc = "<input type='hidden' name='boardReplyId' value='"+ replyId +"'>";
+		  insdoc += "<input type='hidden' name='boardId' value='"+ boardId +"'>";
+	var goform = $("<form>", {
+		  method: "post",
+		  action: '/board/delete-reply',
+		  html:insdoc,
+	}).appendTo("body");
+	goform.submit();
+}
+	window.onload = function() {
+		$('.slider-1 > .page-btns > div').click(function() {
+			var $this = $(this);
+			var index = $this.index();
+
+			$this.addClass('active');
+			$this.siblings('.active').removeClass('active');
+
+			var $slider = $this.parent().parent();
+
+			var $current = $slider.find(' > .slides > div.active');
+
+			var $post = $slider.find(' > .slides > div').eq(index);
+
+			$current.removeClass('active');
+			$post.addClass('active');
+		});
+
+		// 좌/우 버튼 추가 슬라이더
+		$('.slider-1 > .side-btns > div').click(function() {
+			var $this = $(this);
+			var $slider = $this.closest('.slider-1');
+
+			var index = $this.index();
+			var isLeft = index == 0;
+
+			var $current = $slider.find(' > .page-btns > div.active');
+			var $post;
+
+			if (isLeft) {
+				$post = $current.prev();
+			} else {
+				$post = $current.next();
+			}
+			;
+
+			if ($post.length == 0) {
+				if (isLeft) {
+					$post = $slider.find(' > .page-btns > div:last-child');
+				} else {
+					$post = $slider.find(' > .page-btns > div:first-child');
+				}
+			}
+			;
+
+			$post.click();
+		});
+		$("#insert-cart").click(function() {
+			$('#board-product-form').attr('method', 'post');
+			$('#board-product-form').attr('action', '/member/insert-cart');
+			$('#board-product-form').submit();
+		})
+		$("#order")
+				.click(
+						function() {
+							var checkbox = $("input[name=select-board-product]:checked");
+							var totalPrice = 0;
+							checkbox.each(function(i) {
+								var tr = checkbox.parent().parent().eq(i);
+								var td = tr.children();
+								var price = td.eq(2).text();
+								var amount = td.eq(3).children().eq(0)
+										.children().eq(1).val();
+								totalPrice += (price * amount)
+							});
+							var content = $("#total").html();
+							content += '<input type="hidden" id="totalPrice" name="totalPrice" value='+totalPrice+'>';
+							$("#total").html(content);
+
+							$('#board-product-form').attr('method', 'get');
+							$('#board-product-form').attr('action',
+									'/member/order');
+							$('#board-product-form').submit();
+						})
+	};
+</script>
+<style>
+html {
+	clear: both;
+	font-family: "Noto Sans KR", sans-serif;
+}
+/* 노말라이즈 */
+body, ul, li, h1, h2, h3, h4, h5 {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* 슬라이더 1 시작 */
+.slider-1 {
+	height: 400px;
+	position: relative;
+}
+
+/* 슬라이더 1 - 페이지 버튼 */
+.slider-1>.page-btns {
+	text-align: center;
+	position: absolute;
+	bottom: 20px;
+	left: 0;
+	width: 100%;
+}
+
+.slider-1>.page-btns>div {
+	width: 20px;
+	height: 20px;
+	background-color: rgba(255, 255, 255, .5);
+	border-radius: 4px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.slider-1>.page-btns>div.active {
+	background-color: rgba(255, 255, 255, 1);
+}
+
+/* 슬라이더 1 - 슬라이드 */
+.slider-1 {
+	margin: 0 25%;
+}
+
+.slider-1>.slides>div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	opacity: 0;
+	transition: opacity 0.3s;
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.slider-1>.slides>div.active {
+	opacity: 1;
+}
+
+/* 슬라이더 좌우 버튼 */
+.slider-1>.side-btns>div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 25%;
+	height: 100%;
+	cursor: pointer;
+}
+
+.slider-1>.side-btns>div:last-child {
+	left: auto;
+	right: 0;
+}
+
+.slider-1>.side-btns>div>span {
+	position: absolute;
+	top: 50%;
+	transform: translatey(-50%);
+	opacity: 0.5;
+	padding: 1px 13px;
+	border-radius: 50px;
+	font-size: 25px;
+	background-color: black;
+	color: white;
+}
+
+.slider-1>.side-btns>div:last-child>span {
+	left: auto;
+	right: -0px;
+}
+
+.slides>div>img {
+	height: 100%;
+	width: 100%;
+}
+
+.board-header {
+	margin: 5% 25% 1% 25%;
+	text-align: center;
+}
+
+.board-info {
+	margin: 1% 25%;
+	padding: 0% 0% 1% 0%;
+	text-align: right;
+	font-size: 0.5em;
+	border-bottom: 1px solid black;
+}
+
+.board-content {
+	margin: 1% 25%;
+	padding: 0% 0% 2% 0%;
+	border-bottom: 1px solid black;
+}
+
+.board-product {
+	margin: 1% 25%;
+}
+
+.board-product>h3 {
+	text-align: center;
+}
+#reply{
+	margin: 1% 25%;
+	background:rgb(247,247,247);
+}
+#reply>div>form>textarea{
+    width: 90%;
+    height: 6.25em;
+    border: 0.5px solid;
+    resize: none;
+    margin: 0% auto;
+}
+#reply>span{
+	margin: 3% 3%;
+}
+#reply>hr{
+	width:90%;
+	margin : 2% auto;
+}
+.reply-content>div{
+	width:90%;
+	margin:auto;
+}
+.reply-nickname>p{
+	font-weight: bold;
+	display:inline-block;
+}
+.reply-nickname>span{
+	font-weight: lighter;
+	font-size:0.8em;
+	display:inline-block;
+}
+.reply-nickname>span:hover{
+	cursor:pointer;
+	text-decoration:underline;
+}
+.reply-date>p{
+	font-weight: lighter;
+	font-size:0.8em;
+}
+
+</style>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/board/boardview.css}">
 <meta charset="UTF-8">
 
-
-<body>
 <header th:replace="~{body-header::body-header}"></header>
 
+<body class="animsition">
+	<div class="contianer" style="height: 80%">
+		<div class="board-header">
+			<h1>
+				<span th:text="${board.boardTitle}"></span>
+			</h1>
+		</div>
+		<div class="board-info">
+			<span>작성자 : </span><span th:text="${board.memberNickname}"></span><br>
+			<span>조회수 : </span><span th:text="${board.visitCount}"></span><br>
+			<span>작성일 : </span><span th:text="${board.boardWriteDate}"></span>
+		</div>
+		<div class="slider-1" th:if="${imageList.size!=0}">
+			<div class="slides" th:each="list:${imageList}">
+				<div th:each="list:${imageList}" class="active">
+					<img th:src="@{/boardImageFile/__${list.boardImageId}__}"
+						th:if="${list.boardImageType == 'image/jpeg' || list.boardImageType == 'image/png' || list.boardImageType == 'image/gif' || list.boardImageType == 'image/jpg'}"
+						class="img-thumbnail" alt="">
+				</div>
+			</div>
+			<div class="page-btns">
+				<div class="active" th:each="list:${imageList}"></div>
+			</div>
+			<div class="side-btns">
+				<div>
+					<span><</span>
+				</div>
+				<div>
+					<span>></span>
+				</div>
+			</div>
+		</div>
+		<br> <br>
+		<div class="board-content" th:utext="${board.boardContent}"></div>
+		<div class="board-product" th:if=${prepList.size!=0}>
+			<h3>필요한 재료</h3>
+		</div>
+		<div class="board-product" th:if=${prepList.size!=0}>
+			<div class="p-r-45 p-r-0-lg">
+				<div class="wrap-table-shopping-cart">
+					<form id="board-product-form">
+						<table class="table-shopping-cart">
+							<tr class="table_head">
+								<th class="column-1">#</th>
+								<th class="column-3">상품</th>
+								<th class="column-3">가격</th>
+								<th class="column-5">수량</th>
+							</tr>
+							<tr class="table_row" th:each="list:${prepList}">
+								<td class="column-1"><input type="checkbox"
+									name="select-board-product"></td>
+								<td class="column-3">
+									<div class="how-itemcart1">
+										<img th:src="@{/product-thumnail/__${list.productId}__}"
+											style="width: 70px; height: 70px;">
+									</div> <span th:text="${list.productName}"></span>
+								</td>
+								<td class="column-3" th:text="${list.productPrice}"></td>
+								<td class="column-5">
+									<div class="wrap-num-product flex-w m-l-auto m-r-0"
+										id="order-product">
+										<div
+											class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+											<i class="fs-16 zmdi zmdi-minus"></i>
+										</div>
+										<input class="mtext-104 cl3 txt-center num-product"
+											type="number" id="productCount" name="productCount" value=1>
+										<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+											<i class="fs-16 zmdi zmdi-plus"></i>
+										</div>
+										<input type="hidden" id="productId" name="productId"
+											th:value="${list.productId}">
+									</div>
+								</td>
+							</tr>
+						</table>
+						<div id="total"></div>
+					</form>
+				</div>
+				<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
+					<div
+						class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10"
+						id="insert-cart">장바구니에 담기</div>
+					<div
+						class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10"
+						id="order">바로 결제하기</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="btn_location">
+			<div class="btn_delete">
+				<!-- <a th:href="@{/board/delete/{boardId}(boardId=${board.boardId})}"> -->
+				<!-- <input type="submit" class="update_board" value="수정"> -->
+				
+				<form action="/board/update/{boardId}" method="post"></form>		
+				<a th:href="@{/board/update/{boardId}(boardId=${board.boardId})}">
+				<button type="button" class="update_board" 
+				onclick="updateArticleConfirmation()">수정</button></a>
+				
+						
+<!-- 				<form action="/board/update/{boardId}" method="post"></form>		
+				<a th:href="@{/board/update/{boardId}(boardId=${board.boardId})}">
+				<button type="button" class="update_board" 
+				onclick="updateArticleConfirmation()">수정</button></a> -->
+	
+				
+			
+			<form action="/board/delete/{boardId}" method="post"></form>
+				<button type="button" class="delete_board"
+					onclick="deleteArticleConfirmation()">삭제</button>
+			</div>
+		</div>
+		
 
-<!-- <a th:href="@{/board/write/{categoryId}(categoryId=${categoryId})}"><button type="button" class="btn btn-info">새글쓰기</button></a> -->
-<table class ="table_bordered" border="1">
-<tr>
-	<td>글번호</td>
-	<td th:text="${board.boardId}">
-	</td>
-</tr>
-
-<tr>
-	<td>작성자</td>
-	<td th:text ="${board.memberNickname}"></td>
-</tr>
-
-<tr>
-	<td>작성일</td>
-	<td th:text ="${board.boardWriteDate}"></td>
-</tr>
-
-
-
-<tr>
-	<td>조회수</td>
-	<td th:text ="${board.visitCount}"></td>
-</tr>
-
-<tr>
-	<td>제목</td>
-	<td th:text ="${board.boardTitle}"></td>
-</tr>
-
-<tr>
-	<td>내용</td>
-	<td th:text ="${board.boardContent}"></td>
-</tr>
-
-<tr>
-	<td>첨부파일</td>
-	<td>
-     <img th:src="@{/boardImageFile/{boardImageId}(boardImageId=${board.boardImageId})}" 
-     th:if="${board.boardImageType == 'image/jpeg' || board.boardImageType == 'image/png' || board.boardImageType == 'image/gif' || board.boardImageType == 'image/jpg'}" 
-     class="img-thumbnail" alt="" width="600"><br>
-     
-     <a th:href="@{/file/{boardImageId}(boardImageId=${board.boardImageId})}" 
-     th:text="${board.boardImageName}">(<span th:text="${#numbers.formatDecimal(board.fileSize,3,'COMMA',2,'POINT')}">0</span>byte)</a>
-	</td>
-</tr>
-
-<tr>
-	<td align="right">
-	<a th:href="@{/board/delete/{boardId}(boardId=${board.boardId})}"><button type="button" class="btn btn-info">삭제</button></a>
-
-	</td>
-
-
-</tr>
+		<!-- 댓글작성 -->
+		<div id="reply">
+		<br>
+			<h3>댓글</h3>
+			<hr>
+			<ol class="replyList">
+				<li class="reply-content"th:each="reply : ${repList}">
+					<div class="reply-nickname">
+						<p th:text="${reply.memberNickName}"></p>
+						<span th:if="${session.memberId==reply.memberId || member.isAdmin==1}" th:onclick="deleteReply([[${reply.boardReplyId}]],[[${reply.boardId}]])">삭제</span>
+					</div>
+					<div class="reply-text">
+						<p th:text="${reply.boardReplyContent}"></p>
+					</div>
+					<div class="reply-date">
+						<p th:text="${#dates.format(reply.boardReplyWriteDate, 'yyyy-MM-dd')}"></p>
+					</div>
+					<div>
+						<hr>
+					</div>
+				</li>
+			</ol>
+			<div class="after-login-board">
+				<form th:action="@{/board/insert-reply}" method="post" th:if="${session.memberId!=null}">
+					<textarea name="boardReplyContent"></textarea>
+					<input type="hidden" name="boardId" th:value="${board.boardId}">
+					<button type="submit" class="insert-reply">등록</button>
+				</form>
+			</div>
+		</div>
 
 
 
 
-</table>
- <footer th:replace="~{footer::footer}"></footer>
+		<footer th:replace="~{footer::footer}"></footer>	
+	</div>
+	<br>
+	<br>
 
 
+
+
+	<!-- Back to top -->
+	<div class="btn-back-to-top" id="myBtn">
+		<span class="symbol-btn-back-to-top"> <i
+			class="zmdi zmdi-chevron-up"></i>
+		</span>
+	</div>
+	
+<!-- 게시물삭제 -->
+<script>
+		function deleteArticleConfirmation() {
+			var confirmResult = confirm("게시물을 삭제하시겠습니까?");
+			if (confirmResult) {
+				deleteYes();
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		function deleteYes() {
+			var mid = '[[${board.memberId}]]'
+			$.ajax({
+				type : "POST",
+				url : "/board/delete",
+				data : {
+					'memberId' : mid
+				},
+				success : function(data) {
+						alert(data)
+			         location.href = '/board?page=1';
+					
+				},
+				error : function(xhr, status, error) {
+					alert(xhr.responseText);
+				}
+
+			});
+		}
+	</script>	
+	
+<!-- 게시물수정 -->
+<script>
+		function updateArticleConfirmation() {
+			var confirmResult = confirm("게시물을 수정하시겠습니까?");
+			if (confirmResult) {
+				updateYes();
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		function updateYes() {
+			var mid = '[[${board.memberId}]]'
+			$.ajax({
+				type : "POST",
+				url : "/board/update",
+				data : {
+					'memberId' : mid
+				},
+				success : function(data) {
+						alert(data)
+			         location.href = '/board?page=1';
+					
+				},
+				error : function(xhr, status, error) {
+					alert(xhr.responseText);
+				}
+
+			});
+		}
+	</script>	
+	
+	<script>
+		$(".js-select2").each(function() {
+			$(this).select2({
+				minimumResultsForSearch : 20,
+				dropdownParent : $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+
+	<script>
+		$('.js-pscroll').each(function() {
+			$(this).css('position', 'relative');
+			$(this).css('overflow', 'hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed : 1,
+				scrollingThreshold : 1000,
+				wheelPropagation : false,
+			});
+
+			$(window).on('resize', function() {
+				ps.update();
+			})
+		});
+	</script>
+	<!--===============================================================================================-->
+	<script th:src="@{../vendor/jquery/jquery-3.2.1.min.js}"></script>
+	<!--===============================================================================================-->
+	<script th:src="@{../vendor/animsition/js/animsition.min.js}"></script>
+	<!--===============================================================================================-->
+	<script th:src="@{../vendor/bootstrap/js/popper.js}"></script>
+	<script th:src="@{../vendor/bootstrap/js/bootstrap.min.js}"></script>
+	<!--===============================================================================================-->
+	<script th:src="@{../vendor/select2/select2.min.js}"></script>
+	<!--===============================================================================================-->
+	<script
+		th:src="@{../vendor/MagnificPopup/jquery.magnific-popup.min.js}"></script>
+	<!--===============================================================================================-->
+	<script
+		th:src="@{../vendor/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+	<!--===============================================================================================-->
+	<script th:src="@{../js/main.js}"></script>
+
+ 
 </body>
 </html>

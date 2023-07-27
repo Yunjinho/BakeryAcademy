@@ -4,29 +4,29 @@
 
 <insert id="insertBoardPrep" parameterType="com.example.myapp.board.model.BoardPrep">
 <![CDATA[
-INSERT INTO board_prep 
-VALUES(SEQ_BOARD_PREP_ID.NEXTVAL,#{boardId},#{productId})
+	INSERT INTO board_prep 
+	VALUES(SEQ_BOARD_PREP_ID.NEXTVAL,#{boardId},#{productId})
 ]]>
 </insert>
 
 <select id="selectBoardPrepList" parameterType="Integer" resultType="com.example.myapp.board.model.BoardPrep">
 <![CDATA[
-SELECT board_prep_id AS "boardPrepId", board_id AS "boardId", product_id AS "productId" 
-FROM board_prep
-WHERE board_id=#{boardId}
+	SELECT bp.board_prep_id AS "boardPrepId", bp.board_id AS "boardId", bp.product_id AS "productId", p.product_name AS "productName", p.product_price AS "productPrice"
+	FROM board_prep bp JOIN product p ON bp.product_id=p.product_id
+	WHERE board_id=#{boardId}
 ]]>
 </select>
 
 <update id="updateBoardPrep" parameterType="com.example.myapp.board.model.BoardPrep">
 <![CDATA[
-UPDATE board_prep SET product_id=#{productId} 
-WHERE board_prep_id=#{boardPrepId}
+	UPDATE board_prep SET product_id=#{productId} 
+	WHERE board_prep_id=#{boardPrepId}
 ]]>
 </update>
 
 <delete id="deleteBoardPrep" parameterType="Integer">
 <![CDATA[
-DELETE FROM board_prep WHERE board_prep_id=#{boardPrepId}
+	DELETE FROM board_prep WHERE board_prep_id=#{boardPrepId}
 ]]>
 </delete>
 
@@ -35,4 +35,12 @@ DELETE FROM board_prep WHERE board_prep_id=#{boardPrepId}
 DELETE FROM board_prep WHERE board_id=#{boardId}
 ]]>
 </delete>
+
+<delete id="deleteAllPrep" parameterType="Integer">
+<![CDATA[
+DELETE FROM board_prep WHERE board_id=#{boardId}
+]]>
+</delete>
+
+
 </mapper>

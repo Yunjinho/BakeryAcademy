@@ -1,49 +1,408 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
-<link rel="stylesheet" type="text/css" th:href="@{../css/board/boardwrite.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/board/boardwrite.css}">
 
+
+<style>
+.modal {
+	display: none; /* 모달 초기에는 숨김 상태로 설정 */
+	position: fixed; /* 화면에 고정 */
+	z-index: 1; /* 다른 요소보다 위에 표시되도록 설정 */
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto; /* 모달 내용이 화면 크기를 초과할 경우 스크롤 가능하도록 설정 */
+	background-color: rgba(0, 0, 0, 0.5); /* 반투명한 배경 색상 */
+	text-align: center;
+}
+
+
+.modal-content {
+	background-color: #fefefe;
+	margin: 20% auto; /* 모달을 수직, 수평 가운데로 위치시킴 */
+	padding: 20px;
+	border: 1px solid #888;
+	width: 30%;
+	height: 55%;
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.modal-content img {
+	width: 35px;
+	height: 35px;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.confirm {
+	padding: 5px;
+	margin-top: 10px;
+	border: none;
+	border-radius: 20px;
+	background-color: #c9dbff;
+	color: white;
+	width: 100px;
+	cursor: pointer;
+	float: right;
+}
+
+.confirm:hover {
+	color: black;
+}
+
+.search {
+	text-align: center;
+	margin: 10px;
+}
+
+.search input{
+	border:1px solid;
+	display:inline-block;
+}
+
+.search-img:hover {
+	cursor:pointer
+}
+
+.table {
+	text-align: center;
+}
+
+.pagination {
+	text-align: center;
+}
+
+.pagination>ul {
+	list-style: none;
+	margin: 0 auto;
+}
+
+.pagination li {
+	color: black;
+	float: left;
+	margin: 2px;
+}
+
+.pagination button {
+	margin: 0 3%;
+}
+
+.page-number>p:hover {
+	cursor: pointer;
+}
+
+.pagination-confirm {
+	display: inline-block
+}
+
+.board-insert-product {
+	border: 3px solid black;
+	width: 30%;
+	height: 300px;
+}
+#add-file:hover{
+	cursor:pointer;
+}
+</style>
+<script>
+	function tableContent(data) {
+		var inputTableString = "";
+		var productCount = data.length - 1//한 페이지에 보여줄 상품의 수
+
+		//보여줄 상품 수만큼 테이블 행 추가
+		for (var i = 0; i < productCount; i++) {
+			inputTableString += '<tr>\n'
+					+ '<td><input type="checkbox" name="select-product"></td>\n'
+					+ '<td style="display:none;">' + data[i].product.productId
+					+ '</td>\n' + '<td>' + data[i].product.productName
+					+ '</td>\n' + '</tr>\n'
+		}
+		var content = '<table class="table">\n' + '<thead>\n' + '<tr>\n'
+				+ '<td><strong>#</strong></td>\n'
+				+ '<td><strong>상품 이름</strong></td>\n' + '</tr>\n'
+				+ '</thead>\n' + '<tbody>\n' + inputTableString + '</tbody>\n'
+				+ '</table>\n'
+		$(".table-form").html(content)
+	}
+	function pagingContent(data, flag) {
+		var functionName = "";
+		var index = data.length - 1//마지막 JASONObject에 접근할 인덱스
+		var nowPageBlock = data[index].nowPageBlock//현재 페이지 블럭
+		var startPage = data[index].startPage// 현재 페이지 블럭에서 시작점
+		var endPage = data[index].endPage// 현재 페이지 블럭에서 끝점
+		var totalPageBlock = data[index].totalPageBlock//총 보여줄 수 있는 페이지 블럭
+		var nowPage = data[index].nowPage;
+		var inputPagingString = "";
+		if (flag == "1") {
+			functionName = "searchPaging("
+		} else {
+			functionName = "paging("
+		}
+
+		if (nowPageBlock > 1) {//첫 페이지 블럭
+			inputPagingString += '<li class="page-number">' + '<p onclick="'
+					+ functionName + (startPage - 1) + ')">◀</p>\n' + '</li>\n'
+		}
+		for (var i = startPage; i <= endPage; i++) {
+			if (i == nowPage) {
+				inputPagingString += '<li class="page-number">'
+						+ '<p onclick="' + functionName + i
+						+ ')" style="text-decoration:underline;"><b>' + i
+						+ '</b></p>\n' + '</li>\n'
+			} else {
+				inputPagingString += '<li class="page-number">'
+						+ '<p onclick="' + functionName + i + ')">' + i
+						+ '</p>\n' + '</li>\n'
+			}
+		}
+		if (nowPageBlock < totalPageBlock) { //마지막 페이지 블럭
+			inputPagingString += '<li class="page-number">' + '<p onclick="'
+					+ functionName + (endPage + 1) + ')">▶</p>\n' + '</li>\n'
+		}
+		$(".pagination").html(inputPagingString)
+	}
+	function inputContent(data, flag) {
+		tableContent(data)
+		pagingContent(data, flag)
+	}
+	function paging(page) {
+		$.ajax({
+			type : "GET",
+			url : "/board/modal",
+			data : {
+				'page' : page
+			},
+			dataType : "json",
+			success : function(data) {
+				inputContent(data, "0");
+			}
+		});
+	}
+	function searchPaging(page) {
+		var keyword = $(".keyword").val();
+		$.ajax({
+			type : "GET",
+			url : "/board/modal/search",
+			data : {
+				'page' : page,
+				'keyword' : keyword
+			},
+			dataType : "json",
+			success : function(data) {
+				inputContent(data, "1");
+			}
+		});
+	}
+	function inputBoardContent(data) {
+		var product = $("#insert-product").html();
+		for (var i = 0; i < data.length; i++) {
+			product += '<tr>\n'
+					+ '<td><input type="checkbox" name="select-board-product"></td>\n'
+					+ '<td style="display:none;">'+'<input type="text" name="productId" value=\"' +data[i].product.productId+'\" readonly>'
+					+ '</td>\n' + '<td>' +'<input type="text" name="productName" value=\"' +data[i].product.productName+'\" readonly>'
+					+ '</td>\n' + '</tr>\n'
+		}
+		$("#insert-product").html(product);
+	}
+
+	function insertBoardProduct(productIdList) {
+		$.ajax({
+			type : "GET",
+			url : "/board/insert-product",
+			dataType : "json",
+			data : {
+				'list' : productIdList
+			},
+			success : function(data) {
+				inputBoardContent(data);
+			}
+		});
+	}
+
+	function deleteBoardProduct() {
+		var checkbox = $("input[name=select-board-product]:checked");
+		checkbox.each(function(i) {
+			checkbox.eq(i).closest('tr').remove();
+		});
+	}
+	window.onload = function() {
+		document.getElementById("mo").onclick = function() {
+			$('#myModal').css("display", "block");
+			paging(1)
+		}
+
+		window.addEventListener("click", function(event) {
+			if (event.target == document.getElementById("myModal")) {
+				document.getElementById("myModal").style.display = "none"; // 모달을 숨김으로 설정
+			}
+		});
+
+		document.querySelector(".confirm").onclick = function() {
+			var rowData = new Array();
+			var tdArr = new Array();
+			var checkbox = $("input[name=select-product]:checked");
+			// 체크된 체크박스 값을 가져온다
+			checkbox.each(function(i) {
+				// checkbox.parent() : checkbox의 부모는 <td>이다.
+				// checkbox.parent().parent() : <td>의 부모이므로 <tr>이다.
+				var tr = checkbox.parent().parent().eq(i);
+				var td = tr.children();
+				// 체크된 row의 모든 값을 배열에 담는다.
+				rowData.push(tr.text());
+				// td.eq(0)은 체크박스 이므로  td.eq(1)의 값부터 가져온다.
+				var no = td.eq(1).text()
+				// 가져온 값을 배열에 담는다.
+				tdArr.push(no);
+			});
+			insertBoardProduct(tdArr);
+			$('#myModal').css("display", "none");
+		}
+
+		$(".search-img").click(function() {
+			searchPaging(1);
+		});
+		
+		$("#add-file").click(function(){
+			var content=$("#board-file").html();
+			content ='<input type="file" id="boardImage" name="file" multiple>'
+			$("#board-file").append(content);
+		});
+	}
+</script>
 <meta charset="UTF-8">
-
 <body>
-<header th:replace="~{body-header::body-header}"></header>
-    <form action="/board/write" method="post" enctype="multipart/form-data" class="form-horizontal">
+	<header th:replace="~{body-header::body-header}"></header>
 
-<div class="whole">
-        <div class="form-group">
-            <label class="title" for="boardTitle">제목</label>
-            <div class="col-sm-8">
-                <input type="text" name="boardTitle" id="boardTitle" th:value="${boardTitle}" class="form-control" required>
-            </div>
-        </div>
+	<section class="bg0 p-t-52 p-b-20">
+		<div class="container">
+			<div class="row">
+				<div class="p-r-45 p-r-0-lg">
+					<div class="p-t-40">
+						<h5 class="mtext-113 cl2 p-b-12" style="text-align:center;">게시글 등록</h5>
+						<form th:action="@{/board/write}" method="post"
+							enctype="multipart/form-data" class="form-horizontal">
+								<div class="form-group">
+									<label class="title" for="boardTitle">제목</label>
+									<div class="col-sm-8">
+										<input type="text" name="boardTitle" id="boardTitle"
+											th:value="${boardTitle}" class="form-control" required>
+									</div>
+								</div>
 
-        <div class="form-group">
-            <label class="content" for="boardContent">내용</label>
-            <div class="col-sm-8">
-                <textarea name="boardContent" rows="15" cols="200" class="form-control" required></textarea>
-            </div>
-        </div>
+								<div class="form-group">
+									<label class="content" for="boardContent">내용</label>
+									<div class="col-sm-8">
+										<textarea name="boardContent" rows="15" cols="200"
+											class="form-control" required></textarea>
+									</div>
+								</div>
 
-        <div class="form-group">
-            <label class="image" for="boardImage">첨부파일</label>
-            <div class="col-sm-8">
-                <input type="file" id="boardImage" name="file" multiple>
-            </div>
-        </div>
-        
-       
+								<div class="form-group">
+									<label class="content" for="boardContent">상품</label>
+									<div class="col-sm-8"
+										id="insert-product"></div>
+								</div>
 
-        <div class="form-group">
-            <div class="btn">
-                <input type="submit" id="i_submit" class="btn btn-info" value="저장">
-                <input type="reset" class="btn btn-info" value="취소">
-            </div>
-        </div>
-        </div>
+								<div class="form-group">
+									<button type="button" id="mo"
+										class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">등록</button>
+									<button
+										class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04"
+										id="deleteProduct" onclick="deleteBoardProduct()">삭제</button>
+								</div>
 
-    </form>
-    
+								<div class="form-group">
+									<label class="image" for="boardImage">첨부파일</label><br>
+									<div class="col-sm-8" id="board-file">
+										<div>
+											<input type="file" id="boardImage" name="file" multiple>
+										</div>
+									</div>
+								</div>
 
- <footer th:replace="~{footer::footer}"></footer>	    
+								<div class="form-group">
+									<div id="add-file" class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04" >파일 추가</div>
+								</div>
+
+								<div class="form-group2">
+									<input type="submit" class="board_write_safe" value="저장">
+									<input type="reset" class="board_write_cancel" value="취소">
+								</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+			<div class="paging-content">
+				<div class="search">
+					<input type="text" class="keyword" onkeyup="if(window.event.keyCode==13){searchPaging(1)}">
+						<img th:src="@{../../images/icons/search.png}" class="search-img">
+				</div>
+			</div>
+			<!-- 여기에 넣어줘야함 -->
+			<div class="table-form"></div>
+			<div class="pagination-confirm">
+				<div class="pagination"></div>
+				<a href="#"><button class="confirm"
+						onclick="deleteBoardProduct()">등록</button></a>
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="~{footer::footer}"></footer>
+
+	<!--===============================================================================================-->
+	<script src="../../vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="../../vendor/animsition/js/animsition.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="../../vendor/bootstrap/js/popper.js"></script>
+	<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="../../vendor/select2/select2.min.js"></script>
+	<script>
+		$(".js-select2").each(function() {
+			$(this).select2({
+				minimumResultsForSearch : 20,
+				dropdownParent : $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+	<!--===============================================================================================-->
+	<script src="../../vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="../../vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script>
+		$('.js-pscroll').each(function() {
+			$(this).css('position', 'relative');
+			$(this).css('overflow', 'hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed : 1,
+				scrollingThreshold : 1000,
+				wheelPropagation : false,
+			});
+
+			$(window).on('resize', function() {
+				ps.update();
+			})
+		});
+	</script>
+	<!--===============================================================================================-->
+	<script src="../../js/main.js"></script>
 </body>
 </html>

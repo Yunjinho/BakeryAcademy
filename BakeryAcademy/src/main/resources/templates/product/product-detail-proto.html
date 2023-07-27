@@ -8,20 +8,15 @@
 	<div>
 	</div>
 	<h2>ID</h2>
-	<div th:text="${product.productId}">ID</div>
-	<br>
+	<div th:text="${product.productId}">ID</div><br>
 	<h2>NAME</h2>
-	<div th:text="${product.productName}">NAME</div>
-	<br>
+	<div th:text="${product.productName}">NAME</div><br>
 	<h2>PRICE</h2>
-	<div th:text="${product.productPrice}">PRICE</div>
-	<br>
+	<div th:text="${product.productPrice}">PRICE</div><br>
 	<h2>CONTENT</h2>
-	<div th:text="${product.productContent}">CONTENT</div>
-	<br>
+	<div th:text="${product.productContent}">CONTENT</div><br>
 	<h2>STOCK</h2>
-	<div th:text="${product.productStock}">STOCK</div>
-	<br>
+	<div th:text="${product.productStock}">STOCK</div><br>
 	<h2>Images</h2>
 	<div th:each="imageId : ${imageIdList}">
 		<p th:text = ${imageId}></p>

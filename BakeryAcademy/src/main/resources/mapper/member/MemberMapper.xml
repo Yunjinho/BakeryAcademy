@@ -9,7 +9,7 @@
 		 	INSERT INTO member 
 		 		(member_id, member_password, member_name, member_phone_number, member_email, member_nickname, is_admin, member_address,member_status)
     		VALUES 
-    			(#{memberId}, #{memberPassword}, #{memberName}, #{memberPhoneNumber}, #{memberEmail}, #{memberNickName}, #{isAdmin}, #{memberAddress},1)
+    			(#{memberId}, #{memberPassword}, #{memberName}, #{memberPhoneNumber}, #{memberEmail}, #{memberNickName}, #{isAdmin}, #{memberAddress}, 1)
    		]]>
 	</insert>
 
@@ -20,7 +20,7 @@
 			member_id		AS "memberId",
 			member_password		AS "memberPassword",		 		
 			member_name		AS "memberName",
-			member_phone_number		"memberPhoneNumber",
+			member_phone_number AS "memberPhoneNumber",
 			member_email		AS "memberEmail",
 			member_nickname		AS "memberNickName",
 			member_address	AS	"memberAddress",
@@ -34,7 +34,7 @@
 	<update id="updateMember"
 		parameterType="com.example.myapp.member.model.Member">
 		<![CDATA[
-		UPDATE MEMBER
+		UPDATE member
 		SET
 			member_name=#{memberName}, member_password=#{memberPassword}, member_address=#{memberAddress}, member_phone_number=#{memberPhoneNumber}, member_email=#{memberEmail}, member_nickname=#{memberNickName}
 			WHERE
@@ -48,14 +48,33 @@
     	]]>
 	</update>
 
-<select id="getPassword" parameterType="string" resultType="string">
-<![CDATA[
-SELECT
-	member_password
-FROM
-	member
-WHERE member_id=#{memberId}
-]]>
-</select>
-
+	<select id="getPassword" parameterType="string" resultType="string">
+	<![CDATA[
+		SELECT
+		member_password
+		FROM
+		member
+		WHERE member_id=#{memberId}
+	]]>
+	</select>
+	
+	<!-- 아이디, 닉네임, 이메일, 전화번호 중복체크시 -->
+		<select id="duplicateMember" parameterType="com.example.myapp.member.model.Member"
+		resultType="com.example.myapp.member.model.Member">
+		<![CDATA[
+			SELECT
+				member_id		AS "memberId",
+				member_nickname AS "memberNickName",
+				member_email    AS "memberEmail",
+				member_phone_number AS "memberPhoneNumber"
+			FROM member
+			WHERE member_status = 1 AND  member_id=#{memberId} OR member_nickname=#{memberNickName} OR member_email=#{memberEmail} OR member_phone_number=#{memberPhoneNumber}
+		]]>
+	</select>
+	
+	<select id="findMemberId" parameterType="com.example.myapp.member.model.Member" resultType="string">
+	<![CDATA[
+		SELECT member_id AS "memberId" FROM member WHERE member_name LIKE #{memberName} AND member_phone_number LIKE #{memberPhoneNumber} AND member_email LIKE #{memberEmail}
+	]]>
+	</select>
 </mapper>

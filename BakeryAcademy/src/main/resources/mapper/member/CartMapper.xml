@@ -3,40 +3,49 @@
 <mapper namespace="com.example.myapp.member.dao.ICartRepository">
 <select id="selectCartList" resultType="com.example.myapp.member.model.Cart">
 <![CDATA[
-SELECT c.product_id AS "productId",
+	SELECT c.product_id AS "productId",
 		 c.cart_id AS "cartId", 
 		 p.product_price AS "productPrice",
 		 c.product_count AS "productCount",
 		 p.product_name AS "productName" 
-FROM cart c JOIN product p ON c.product_id=p.product_id
-WHERE member_id=#{memberId}
+	FROM cart c JOIN product p ON c.product_id=p.product_id
+	WHERE member_id=#{memberId}
 ]]>
 </select>
 
 <select id="totalProductPrice" resultType="Integer">
 <![CDATA[
-SELECT SUM(c.product_count*p.product_price) 
-FROM cart c JOIN product p ON c.product_id=p.product_id 
-WHERE member_id=#{memberId}
+	SELECT SUM(c.product_count*p.product_price) 
+	FROM cart c JOIN product p ON c.product_id=p.product_id 
+	WHERE member_id=#{memberId}
 ]]>
 </select>
+
 <update id="updateCartList" parameterType="hashmap">
 <![CDATA[
-UPDATE cart SET product_count=#{amount} WHERE cart_id=#{cartId}
+	UPDATE cart SET product_count=#{amount} WHERE cart_id=#{cartId}
 ]]>
 </update>
 
 <delete id="deleteCart" parameterType="string">
 <![CDATA[
-DELETE FROM cart WHERE member_id=#{memberId}
+	DELETE FROM cart WHERE member_id=#{memberId}
 ]]>
 </delete>
+
 <delete id="deleteCartProduct" parameterType="integer">
-DELETE FROM cart WHERE cart_id=#{cartId}
+		DELETE FROM cart WHERE cart_id=#{cartId}
 </delete>
+
 <select id="countCart" resultType="Integer">
 <![CDATA[
-SELECT COUNT(*) FROM cart WHERE member_id=#{memberId}
+	SELECT COUNT(*) FROM cart WHERE member_id=#{memberId}
+]]>
+</select>
+
+<select id="insertCart" parameterType="com.example.myapp.member.model.Cart">
+<![CDATA[
+	INSERT INTO cart  VALUES(SEQ_CART_ID.NEXTVAL,#{memberId},#{productId},#{productCount})
 ]]>
 </select>
 </mapper>

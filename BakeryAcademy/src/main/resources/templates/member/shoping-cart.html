@@ -30,13 +30,14 @@ window.onload=function(){
 <header th:replace="~{body-header::body-header}"></header>
 	<br>
 	<br>
+	<section class="bg0 p-t-52 p-b-20">	
 	<!-- Shoping Cart -->
 	<form class="bg0 p-t-75 p-b-85" id="cart-form">
 		<div class="container">
-			<h3 style="text-align:center;">장바구니</h3><br>
+			<h3 style="padding:0% 30%;">장바구니</h3><br>
 			<div class="row">
-				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
-					<div class="m-l-25 m-r--38 m-lr-0-xl">
+				<div class="col-md-8 col-lg-9 p-b-80">
+					<div class="p-r-45 p-r-0-lg">
 						<div class="wrap-table-shopping-cart">
 							<table class="table-shopping-cart">
 								<tr class="table_head">
@@ -50,7 +51,8 @@ window.onload=function(){
 								<tr class="table_row" th:each="list:${cartList}">
 									<td class="column-1">
 										<div class="how-itemcart1">
-											<img th:src="@{/product-thumnail/__${list.productId}__}" style="width: 100px; height: 100px;">
+											<img th:src="@{/product-thumnail/__${list.productId}__}" 
+     											style="width: 100px; height: 100px;">
 										</div>
 									</td>
 									<td><input type="hidden" id="cartId" name="cartId" th:value="${list.cartId}"></td>
@@ -62,7 +64,7 @@ window.onload=function(){
 												<i class="fs-16 zmdi zmdi-minus"></i>
 											</div>
 
-											<input class="mtext-104 cl3 txt-center num-product" type="number" id="amount" name="amount" th:value="${list.productCount}">
+											<input class="mtext-104 cl3 txt-center num-product" type="number" id="productCount" name="productCount" th:value="${list.productCount}">
 
 											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 												<i class="fs-16 zmdi zmdi-plus"></i>
@@ -91,6 +93,7 @@ window.onload=function(){
 			</div>
 		</div>
 	</form>
+	</section>
 <footer th:replace="~{footer::footer}"></footer>
 	<!-- Back to top -->
 	<div class="btn-back-to-top" id="myBtn">

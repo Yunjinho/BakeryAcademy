@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import com.example.myapp.member.model.Cart;
 import com.example.myapp.member.model.Order;
 
-@Service
 public interface ICartService {
 	List<Cart> selectCartList(String memberId);
 	int totalProductPrice(String memberId);
 	void updateCartList(List<Integer>cartId,List<Integer>amount);
 	int countCart(String memberId);
+	void insertCart(String memberId,List<Integer>productId,List<Integer>amount);
 }

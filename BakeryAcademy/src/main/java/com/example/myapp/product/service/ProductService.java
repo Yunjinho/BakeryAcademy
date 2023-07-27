@@ -23,33 +23,15 @@ public class ProductService implements IProductService {
 	public void insertProduct(Product product) {
 		try {
 			productRepository.insertProduct(product);
-
-			MultipartFile mfile = product.getImage();
 			ProductImage productImage = new ProductImage();
-			if (mfile != null && !mfile.isEmpty()) {
-				productImage.setImageName(mfile.getOriginalFilename());
-				productImage.setProductImage(mfile.getBytes());
-				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
-				productImage.setProductImageType(mfile.getContentType());
-				productRepository.insertProductImage(productImage);
-			}
-
-			mfile = product.getImage2();
-			if (mfile != null && !mfile.isEmpty()) {
-				productImage.setImageName(mfile.getOriginalFilename());
-				productImage.setProductImage(mfile.getBytes());
-				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
-				productImage.setProductImageType(mfile.getContentType());
-				productRepository.insertProductImage(productImage);
-			}
-
-			mfile = product.getImage3();
-			if (mfile != null && !mfile.isEmpty()) {
-				productImage.setImageName(mfile.getOriginalFilename());
-				productImage.setProductImage(mfile.getBytes());
-				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
-				productImage.setProductImageType(mfile.getContentType());
-				productRepository.insertProductImage(productImage);
+			for(MultipartFile mfile:product.getImage()) {
+				if (mfile != null && !mfile.isEmpty()) {
+					productImage.setImageName(mfile.getOriginalFilename());
+					productImage.setProductImage(mfile.getBytes());
+					productImage.setProductImageSize(String.valueOf(mfile.getSize()));
+					productImage.setProductImageType(mfile.getContentType());
+					productRepository.insertProductImage(productImage);
+				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -64,33 +46,15 @@ public class ProductService implements IProductService {
 			productRepository.updateProduct(product);
 			productRepository.deleteProductImage(product.getProductId());
 
-			MultipartFile mfile = product.getImage();
 			ProductImage productImage = new ProductImage();
-			productImage.setProductId(product.getProductId());
-			if (mfile != null && !mfile.isEmpty()) {
-				productImage.setImageName(mfile.getOriginalFilename());
-				productImage.setProductImage(mfile.getBytes());
-				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
-				productImage.setProductImageType(mfile.getContentType());
-				productRepository.updateProductImage(productImage);
-			}
-
-			mfile = product.getImage2();
-			if (mfile != null && !mfile.isEmpty()) {
-				productImage.setImageName(mfile.getOriginalFilename());
-				productImage.setProductImage(mfile.getBytes());
-				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
-				productImage.setProductImageType(mfile.getContentType());
-				productRepository.updateProductImage(productImage);
-			}
-
-			mfile = product.getImage3();
-			if (mfile != null && !mfile.isEmpty()) {
-				productImage.setImageName(mfile.getOriginalFilename());
-				productImage.setProductImage(mfile.getBytes());
-				productImage.setProductImageSize(String.valueOf(mfile.getSize()));
-				productImage.setProductImageType(mfile.getContentType());
-				productRepository.updateProductImage(productImage);
+			for(MultipartFile mfile:product.getImage()) {
+				if (mfile != null && !mfile.isEmpty()) {
+					productImage.setImageName(mfile.getOriginalFilename());
+					productImage.setProductImage(mfile.getBytes());
+					productImage.setProductImageSize(String.valueOf(mfile.getSize()));
+					productImage.setProductImageType(mfile.getContentType());
+					productRepository.insertProductImage(productImage);
+				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -132,7 +96,7 @@ public class ProductService implements IProductService {
 	@Override
 	public List<Product> selectProductListByCategory(int categoryId, int page) {
 		int start = (page - 1) * 10 + 1;
-		return productRepository.getProductListByCategory(categoryId, start, start + 9);
+		return productRepository.getProductListByCategory(categoryId, start, start + 11);
 	}
 
 	@Override

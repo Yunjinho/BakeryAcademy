@@ -1,114 +1,130 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<link rel="stylesheet" type="text/css" th:href="@{../css/adminpage.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminpage.css}">
 <head th:replace="~{header::head}"></head>
 <style>
-.table-shopping-cart{
+.table-shopping-cart {
 	table-layout: fixed;
-	text-align:center;
+	text-align: center;
 }
 </style>
 <script>
-window.onload=function(){
-	var status=$(".order-status");
-	for(var i=0;i<status.length;i++){
-		if(status[i].text=='[[${order.orderStatus}]]'){
-			status[i].setAttribute("selected",true);
+	window.onload = function() {
+		var status = $(".order-status");
+		for (var i = 0; i < status.length; i++) {
+			if (status[i].text == '[[${order.orderStatus}]]') {
+				status[i].setAttribute("selected", true);
+			}
 		}
 	}
-}
 </script>
 <body class="animsition">
-<header th:replace="~{body-header::body-header}"></header>
+	<header th:replace="~{body-header::body-header}"></header>
 	<!-- Content page -->
-	<br><br><br><br><br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
 	<section class="bg0 p-t-52 p-b-20">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 col-lg-9 p-b-80">
 					<div class="p-r-45 p-r-0-lg">
-					<form th:action="@{/admin/order-detail}" method="post">
-					<div class="wrap-table-shopping-cart">
-							<table class="table-shopping-cart">
-								<tr class="table_head">
-									<th style="width:32%;">상품</th>
-									<th style="width:17%;">주문자</th>
-									<th style="width:17%;">수량</th>
-									<th style="width:17%;">주문 날짜</th>
-									<th style="width:17%;">상품 상태</th>
-								</tr>
+						<form th:action="@{/admin/order-detail}" method="post">
+							<div class="wrap-table-shopping-cart">
+								<table class="table-shopping-cart">
+									<tr class="table_head">
+										<th style="width: 32%;">상품</th>
+										<th style="width: 17%;">주문자</th>
+										<th style="width: 17%;">수량</th>
+										<th style="width: 17%;">주문 날짜</th>
+										<th style="width: 17%;">상품 상태</th>
+									</tr>
 
-								<tr class="table_row">
-									<td>
-										<div class="how-itemcart1">
-											<img th:src="@{/product-thumnail/__${order.productId}__}" style="width: 100px; height: 100px;">
-										</div>
-										<input type="hidden" name="orderId" th:value="${order.orderId}">
-										<input type="text" th:value="${order.productName}"readonly>
-									</td>
-									<td style="width:10%;"><input type="text" th:value="${order.memberId}" readonly></td>
-									<td style="width:10%;"><input type="text" th:value="${order.orderCount}" readonly></td>
-									<td style="width:16%;"><input type="text" th:value="${order.orderDate}" readonly></td>
-									<td style="width:16%;">
-									<select  name="orderStatus">
-										<option class="order-status" value="배송 완료">배송 완료</option>
-										<option class="order-status" value="배송중">배송중</option>
-										<option class="order-status" value="상품 준비중">상품 준비중</option>
-										<option class="order-status" value="환불 요청중">환불 요청중</option>
-										<option class="order-status" value="환불 완료">환불 완료</option>
-									</select>
-									</td>
-								</tr>
-							</table>
-						</div>
-						<br>
-						<button type="submit" id="status-update"class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">수정</button>
+									<tr class="table_row">
+										<td>
+											<div class="how-itemcart1">
+												<img th:src="@{/product-thumnail/__${order.productId}__}"
+													style="width: 100px; height: 100px;">
+											</div> <input type="hidden" name="orderId"
+											th:value="${order.orderId}"> <input type="text"
+											th:value="${order.productName}" readonly>
+										</td>
+										<td style="width: 10%;"><input type="text"
+											th:value="${order.memberId}" readonly></td>
+										<td style="width: 10%;"><input type="text"
+											th:value="${order.orderCount}" readonly></td>
+										<td style="width: 16%;"><input type="text"
+											th:value="${order.orderDate}" readonly></td>
+										<td style="width: 16%;"><select name="orderStatus">
+												<option class="order-status" value="배송 완료">배송 완료</option>
+												<option class="order-status" value="배송중">배송중</option>
+												<option class="order-status" value="상품 준비중">상품 준비중</option>
+												<option class="order-status" value="환불 요청중">환불 요청중</option>
+												<option class="order-status" value="환불 완료">환불 완료</option>
+										</select></td>
+									</tr>
+								</table>
+							</div>
+							<br>
+							<button type="submit" id="status-update"
+								class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">수정</button>
 						</form>
 					</div>
 				</div>
-				<br><br><br><br><br><br><br><br>
-<div th:replace="~{admin/admin-menu::admin-menu}"></div>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<div th:replace="~{admin/admin-menu::admin-menu}"></div>
 			</div>
 		</div>
 	</section>	
 <footer th:replace="~{footer::footer}"></footer>
 <!--===============================================================================================-->	
-	<script src="../../vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/animsition/js/animsition.min.js"></script>
+	<script src="/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/bootstrap/js/popper.js"></script>
-	<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/select2/select2.min.js"></script>
+	<script src="/vendor/select2/select2.min.js"></script>
+
 	<script>
-		$(".js-select2").each(function(){
+		$(".js-select2").each(function() {
 			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
+				minimumResultsForSearch : 20,
+				dropdownParent : $(this).next('.dropDownSelect2')
 			});
 		})
 	</script>
 <!--===============================================================================================-->
-	<script src="../../vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<script src="/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
 <!--===============================================================================================-->
-	<script src="../../vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 	<script>
-		$('.js-pscroll').each(function(){
-			$(this).css('position','relative');
-			$(this).css('overflow','hidden');
+		$('.js-pscroll').each(function() {
+			$(this).css('position', 'relative');
+			$(this).css('overflow', 'hidden');
 			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
+				wheelSpeed : 1,
+				scrollingThreshold : 1000,
+				wheelPropagation : false,
 			});
 
-			$(window).on('resize', function(){
+			$(window).on('resize', function() {
 				ps.update();
 			})
 		});
 	</script>
 <!--===============================================================================================-->
-	<script src="../../js/main.js"></script>
+	<script src="/js/main.js"></script>
+
 </body>
 </html>
