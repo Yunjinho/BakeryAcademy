@@ -1620,7 +1620,7 @@ button.mfp-close {
   padding: 0;
   border-radius: 0px;
   border: none;
-  border-bottom: 1px solid transparent;
+/*   border-bottom: 1px solid transparent; */
 
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
@@ -1628,15 +1628,15 @@ button.mfp-close {
   transition: all 0.4s;
 }
 
-.tab01 .nav-link.active {
-  color: #333;
-  border-color: #797979;
-}
+/* .tab01 .nav-link.active { */
+/*   color: #333; */
+/*   border-color: #797979; */
+/* } */
 
-.tab01 .nav-link:hover {
-  color: #333;
-  border-color: #797979;
-}
+/* .tab01 .nav-link:hover { */
+/*   color: #333; */
+/*   border-color: #797979; */
+/* } */
 
 
 
