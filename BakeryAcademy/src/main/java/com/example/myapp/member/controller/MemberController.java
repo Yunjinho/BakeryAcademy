@@ -73,52 +73,92 @@ public class MemberController {
 	}
 
 	// Id 중복체크
-	/*
-	 * @RequestMapping("/member/idcheck")
-	 * 
-	 * @ResponseBody // view 없을 때 사용 public String idCheck(String memberId) { String
-	 * result = ""; Member member = null; try { member =
-	 * memberService.duplicateMember(memberId); if (member == null) { result =
-	 * "true"; } else { result = "false"; } } catch (Exception e) {
-	 * e.printStackTrace(); } return result; }
-	 */
+	
+	 @RequestMapping("/member/idcheck")
+	 @ResponseBody // view 없을 때 사용 
+	 public String idCheck(String memberId) { 
+		 String result = ""; 
+		 Member member = new Member("","","","","","","","",0,"");  
+		 member.setMemberId(memberId);
+		 try { 
+			 member = memberService.duplicateMember(member); 
+		 		if (member == null) { 
+		 			result = "true"; 
+	 			} else { 
+	 				result = "false"; 
+ 				} 
+	 		} catch (Exception e) {
+	 			e.printStackTrace(); 
+	 			}
+		 
+
+		 return result; 
+ 	}
+	 
 
 	// 닉네임 중복체크
 	  @RequestMapping("/member/nicknamecheck") 
 	  @ResponseBody // view 없을 때 사용 
 	  public String nicknameCheck(String memberNickName) {
-	  String result = ""; Member member = null;
-	  try {
-	member = memberService.duplicateMember(memberNickName);
-	if (member == null) {
-		result = "true"; } 
-	else { result = "false"; } 
-	} catch (Exception e) {
-	  e.printStackTrace(); } return result; }
+		  String result = ""; 
+		  Member member = new Member("","","","","","","","",0,""); 
+		  member.setMemberNickName(memberNickName);
+		  try {
+			  member = memberService.duplicateMember(member);
+			  if (member == null) {
+				  result = "true"; 
+			  } else { 
+				  result = "false"; 
+			  } 
+		  	} catch (Exception e) {
+		  		e.printStackTrace(); 
+	  		} 
+		  return result; 
+	  }
 	 
 	
 	// 전화번호 중복체크
-	/*
-	 * @RequestMapping("/member/phonenumbercheck")
-	 * 
-	 * @ResponseBody // view 없을 때 사용 public String phonenumberCheck(String
-	 * memberPhoneNumber) { String result = ""; Member member = null; try { member =
-	 * memberService.duplicateMember(memberPhoneNumber);
-	 * 
-	 * if (member == null) { result = "true"; } else { result = "false"; } } catch
-	 * (Exception e) { e.printStackTrace(); } return result; }
-	 */
+	
+	 @RequestMapping("/member/phonenumbercheck")
+	 @ResponseBody // view 없을 때 사용 
+	 public String phonenumberCheck(String memberPhoneNumber) { 
+		 String result = ""; 
+		 Member member = new Member("","","","","","","","",0,""); 
+		 member.setMemberPhoneNumber(memberPhoneNumber);
+		 try { member = memberService.duplicateMember(member);
+		 	if (member == null) { 
+		 		result = "true"; 
+	 		} else { 
+	 			result = "false"; 
+ 			} 
+	 	} catch (Exception e) { 
+	 		e.printStackTrace(); 
+ 		}
+		 return result; 
+	 }
+	 
 		
 		// 이메일 중복체크
-		/*
-		 * @RequestMapping("/member/emailcheck")
-		 * 
-		 * @ResponseBody // view 없을 때 사용 public String emailCheck(String memberEmail) {
-		 * String result = ""; Member member = null; try { member =
-		 * memberService.duplicateMember(memberEmail); if (member == null) { result =
-		 * "true"; } else { result = "false"; } } catch (Exception e) {
-		 * e.printStackTrace(); } return result; }
-		 */
+		
+	 @RequestMapping("/member/emailcheck")
+	 @ResponseBody // view 없을 때 사용 
+	 public String emailCheck(String memberEmail) {
+		 String result = ""; 
+		 Member member = new Member("","","","","","","","",0,""); 
+		 member.setMemberEmail(memberEmail);
+		 try { 
+			 member = memberService.duplicateMember(member); 
+			 if (member == null) { 
+				 result = "true"; 
+			 } else { 
+				 result = "false"; 
+			 } 
+		 } catch (Exception e) {
+		 	e.printStackTrace(); 
+		 } 
+		 return result; 
+	 }
+		 
 
 	@RequestMapping(value = "/member/login", method = RequestMethod.GET)
 	public String login() {
@@ -138,6 +178,7 @@ public class MemberController {
 					session.setAttribute("memberId", memberId);
 					session.setAttribute("memberName", member.getMemberName());
 					session.setAttribute("memberEmail", member.getMemberEmail());
+					session.setAttribute("isAdmin", member.getIsAdmin());
 					return "redirect:/"; // 홈페이지로 리다이렉션
 				} else { // 아이디는 있지만 비밀번호가 다른 경우
 					model.addAttribute("message", " 비밀번호를 잘못 입력했습니다.\r\n" + "입력하신 내용을 다시 확인해주세요..");
@@ -261,9 +302,9 @@ public class MemberController {
 
 	@RequestMapping(value = "/member/update-cart", method = RequestMethod.POST)
 	public String updateCart(@RequestParam(value = "cartId") List<Integer> cartId,
-			@RequestParam(value = "amount") List<Integer> amount,
+			@RequestParam(value = "productCount") List<Integer> productCount,
 			@RequestParam(value = "productId") List<Integer> productId) {
-		cartService.updateCartList(cartId, amount);
+		cartService.updateCartList(cartId, productCount);
 		return "redirect:/member/shoping-cart";
 	}
 

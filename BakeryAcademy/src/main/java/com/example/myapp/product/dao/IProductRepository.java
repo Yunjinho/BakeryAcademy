@@ -17,10 +17,11 @@ public interface IProductRepository {
 
 	void insertProduct(Product product);
 
-	List<Product> getProductListByCategory(@Param("categoryId") int categoryId, @Param("start") int start,
-			@Param("end") int end);
+	List<Product> getAllProductList(@Param("start") int start, @Param("end") int end);
+	List<Product> getProductListByCategory(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end);
 
 	int selectTotalProductCountByCategoryId(int categoryId);
+	int selectTotalProductCount();
 
 	void insertProductImage(ProductImage productImage);
 

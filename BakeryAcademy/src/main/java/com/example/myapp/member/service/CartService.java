@@ -49,11 +49,23 @@ public class CartService implements ICartService {
 	@Override
 	public void insertCart(String memberId, List<Integer> productId, List<Integer> amount) {
 		Cart cart=new Cart();
-		cart.setMemberId(memberId);
 		for(int i=0;i<productId.size();i++) {
+			cart.setMemberId(memberId);
 			cart.setProductId(productId.get(i));
-			cart.setProductCount(amount.get(i));
-			cartRepository.insertCart(cart);
+			cart=cartRepository.checkCartproduct(cart);
+			
+			if(cart!=null) {
+				cart.setProductCount(cart.getProductCount()+amount.get(i));
+				cartRepository.updateCartList(cart.getCartId(), cart.getProductCount());
+			}else {
+				cart=new Cart();
+				cart.setMemberId(memberId);
+				cart.setProductId(productId.get(i));
+				cart.setProductCount(amount.get(i));
+				cartRepository.insertCart(cart);
+			}
 		}
 	}
+	
+	
 }

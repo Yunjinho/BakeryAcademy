@@ -183,13 +183,18 @@ function purchase(){
 				</div>
 			</div>
 		</div>
-
-		<div class="bg6 flex-c-m flex-w size-302 m-t-73 p-tb-15">
-			<span class="stext-107 cl6 p-lr-25"> SKU: JAK-01 </span> <span
-				class="stext-107 cl6 p-lr-25"> Categories: Jacket, Men </span>
+		
+		<div th:if="${session.isAdmin==1}">
+			<a th:href="@{/admin/update-product(productId=${product.productId})}">
+				<button style="margin:1% auto;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">상품 수정</button>
+			</a>
 		</div>
-	</section>
 
+<!-- 		<div class="bg6 flex-c-m flex-w size-302 m-t-73 p-tb-15"> -->
+<!-- 			<span class="stext-107 cl6 p-lr-25"> SKU: JAK-01 </span> <span -->
+<!-- 				class="stext-107 cl6 p-lr-25"> Categories: Jacket, Men </span> -->
+<!-- 		</div> -->
+	</section>
 	<footer th:replace="~{/footer::footer}"></footer>
 
 	<!--===============================================================================================-->
