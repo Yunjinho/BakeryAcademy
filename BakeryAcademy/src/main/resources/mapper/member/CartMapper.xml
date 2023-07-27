@@ -15,7 +15,7 @@
 
 <select id="totalProductPrice" resultType="Integer">
 <![CDATA[
-	SELECT SUM(c.product_count*p.product_price) 
+	SELECT nvl(SUM(c.product_count*p.product_price),0) 
 	FROM cart c JOIN product p ON c.product_id=p.product_id 
 	WHERE member_id=#{memberId}
 ]]>
@@ -46,6 +46,11 @@
 <select id="insertCart" parameterType="com.example.myapp.member.model.Cart">
 <![CDATA[
 	INSERT INTO cart  VALUES(SEQ_CART_ID.NEXTVAL,#{memberId},#{productId},#{productCount})
+]]>
+</select>
+<select id="checkCartproduct" parameterType="com.example.myapp.member.model.Cart" resultType="com.example.myapp.member.model.Cart">
+<![CDATA[
+	SELECT cart_id AS "cartId" , product_count AS "productCount" FROM cart WHERE product_id=#{productId} AND member_id=#{memberId}
 ]]>
 </select>
 </mapper>

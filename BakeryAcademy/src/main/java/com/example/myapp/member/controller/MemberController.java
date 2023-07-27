@@ -302,9 +302,9 @@ public class MemberController {
 
 	@RequestMapping(value = "/member/update-cart", method = RequestMethod.POST)
 	public String updateCart(@RequestParam(value = "cartId") List<Integer> cartId,
-			@RequestParam(value = "amount") List<Integer> amount,
+			@RequestParam(value = "productCount") List<Integer> productCount,
 			@RequestParam(value = "productId") List<Integer> productId) {
-		cartService.updateCartList(cartId, amount);
+		cartService.updateCartList(cartId, productCount);
 		return "redirect:/member/shoping-cart";
 	}
 

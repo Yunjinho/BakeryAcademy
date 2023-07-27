@@ -180,6 +180,7 @@ function validateAndRedirect(event) {
 		type:'GET',
 		url: '/member/idcheck', //Controller에서 요청 받을 주소
 		data: { 'memberId': memberId },
+		async: false,
 		success: function(result) {
 			if (result == 'true') {
 
@@ -200,6 +201,7 @@ function validateAndRedirect(event) {
 		type:'GET',
 		url: '/member/nicknamecheck', //Controller에서 요청 받을 주소
 		data: { 'memberNickName': memberNickName },
+		async: false,
 		success: function(result) {
 			console.log("nicknamecheck", result);
 			if (result == 'true') {
@@ -222,6 +224,7 @@ function validateAndRedirect(event) {
 		type:'GET',
 		url: '/member/phonenumbercheck', //Controller에서 요청 받을 주소
 		data: { 'memberPhoneNumber': memberPhoneNumber },
+		async: false,
 		success: function(result) {
 			if (result == 'true') {
 
@@ -242,6 +245,7 @@ function validateAndRedirect(event) {
 		type:'GET',
 		url: '/member/emailcheck', //Controller에서 요청 받을 주소
 		data: { 'memberEmail': memberEmail },
+		async: false,
 		success: function(result) {
 			if (result == 'true') {
 
