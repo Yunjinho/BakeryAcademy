@@ -129,4 +129,10 @@ public class ProductService implements IProductService {
 	public int selectTotalProductCount() {
 		return productRepository.selectTotalProductCount();
 	}
+
+	@Override
+	public List<Product> getStopProductList(int page) {
+		int start = (page - 1) * 12 + 1;
+		return productRepository.getStopProductList(start, start + 11);
+	}
 }

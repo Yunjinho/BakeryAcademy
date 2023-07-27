@@ -12,6 +12,8 @@
 				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
 <!-- 					<div class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter=".0">모든 제품</div> -->
 					<a th:href="@{/product/all/1}" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">모든 제품</a>
+					<a th:if="${session.isAdmin==1}" th:href="@{/product/stop/1}" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">판매 중지된 제품</a>
+					<br>
 					<div th:each="category:${categoryList}">
 						<!-- 						<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" th:attr="data-filter=${category.categoryId}" th:text="${category.categoryName}">Category Name</button> -->
 						<a th:href="@{/product/__${category.categoryId}__}" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"

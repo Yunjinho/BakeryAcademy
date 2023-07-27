@@ -30,6 +30,46 @@
 				product_stock
 			FROM
 				product
+			WHERE
+				product_status=1
+			ORDER BY
+				product_id DESC
+		)
+		)
+	WHERE
+		rnum BETWEEN #{start} AND #{end}
+]]>
+	</select>
+	
+<select id="getStopProductList" parameterType="hashmap" resultType="com.example.myapp.product.model.Product">
+<![CDATA[
+	SELECT
+		product_id as "productId",
+		product_name as "productName",
+		product_price as "productPrice",
+		product_content as "productContent",
+		product_stock as "productStock"
+	FROM
+		(
+		SELECT
+			product_id,
+			product_name,
+			product_price,
+			product_content,
+			product_stock,
+			ROWNUM as rnum
+		FROM
+		(
+			SELECT
+				product_id,
+				product_name,
+				product_price,
+				product_content,
+				product_stock
+			FROM
+				product
+			WHERE
+				product_status=0
 			ORDER BY
 				product_id DESC
 		)
@@ -69,6 +109,8 @@
 				product
 			WHERE
 				category_id=#{categoryId}
+				AND
+				product_status=1
 			ORDER BY
 				product_id DESC
 		)
@@ -153,13 +195,13 @@
 	<insert id="insertProductImage"
 		parameterType="com.example.myapp.product.model.ProductImage">
 		INSERT INTO product_image
-		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,SEQ_PRODUCT_ID.CURRVAL,#{productImage},#{imageName},#{productImageSize},#{productImageType})
+		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,SEQ_PRODUCT_ID.CURRVAL,#{productImage},#{productImageName},#{productImageSize},#{productImageType})
 	</insert>
 
 	<insert id="updateProductImage"
 		parameterType="com.example.myapp.product.model.ProductImage">
 		INSERT INTO product_image
-		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,#{productId},#{productImage},#{imageName},#{productImageSize},#{productImageType})
+		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,#{productId},#{productImage},#{productImageName},#{productImageSize},#{productImageType})
 	</insert>
 
 	<update id="updateProduct"> 

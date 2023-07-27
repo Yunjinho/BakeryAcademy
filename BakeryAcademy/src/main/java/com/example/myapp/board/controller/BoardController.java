@@ -240,7 +240,7 @@ public class BoardController {
         		String sessionMemberId = (String) session.getAttribute("memberId");          
         		Integer sessionBoardId = (Integer) session.getAttribute("boardId");
         		
-        		if (memberId.equals(sessionMemberId)) {
+        		if (memberId.equals(sessionMemberId) || (Integer)session.getAttribute("isAdmin")==1) {
         			boardService.deleteArticle(sessionBoardId);
         			return new ResponseEntity<>("삭제되었습니다.", HttpStatus.OK);
         		} else {
