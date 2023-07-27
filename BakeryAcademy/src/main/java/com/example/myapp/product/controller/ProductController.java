@@ -43,6 +43,38 @@ public class ProductController {
 	@Autowired
 	IProductReviewService productReviewService;
 
+	//모든 상품 반환
+	@RequestMapping("/product/all/{page}")
+	public String getAllProductList(@PathVariable int page, HttpSession session, Model model) {
+		session.setAttribute("page", page);
+		List<Product> productList = productService.getAllProductList(page);
+		model.addAttribute("productList", productList);
+		int bbsCount = productService.selectTotalProductCount();
+		int totalPage = 0;
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 12.0);
+		}
+		int totalPageBlock = (int) (Math.ceil(totalPage / 12.0));
+		int nowPageBlock = (int) Math.ceil(page / 12.0);
+		int startPage = (nowPageBlock - 1) * 12 + 1;
+		int endPage = 0;
+		if (totalPage > nowPageBlock * 12) {
+			endPage = nowPageBlock * 12;
+		} else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+
+		List<Category> categoryList = categoryService.selectAllCategory();
+		model.addAttribute("categoryList", categoryList);
+		return "product/product";
+	}
+	
 	// 카테고리와 페이지에 따른 상품 목록으로 이동
 	@RequestMapping("/product/{categoryId}/{page}")
 	public String getProductListByCategory(@PathVariable int categoryId, @PathVariable int page, HttpSession session, Model model) {
@@ -245,13 +277,18 @@ public class ProductController {
 	// 상품 목록 1 페이지로 이동
 	@RequestMapping("/product/{categoryId}")
 	public String getProductListByCategory(@PathVariable int categoryId, HttpSession session, Model model) {
-		return getProductListByCategory(1, 1, session, model);
+		return getProductListByCategory(categoryId, 1, session, model);
 	}
 
 	// 카테고리 1의 1페이지로 이동
 	@RequestMapping("/product")
 	public String getProductListByCategory(HttpSession session, Model model) {
-		return getProductListByCategory(1, 1, session, model);
+		return getAllProductList(1,session,model);
+	}
+	// 모든 제품 리스트 1페이지로 이동
+	@RequestMapping("/product/all")
+	public String getProductListNoPage(HttpSession session, Model model) {
+		return getAllProductList(1,session,model);
 	}
 
 	// 상품 id의 썸네일 반환
