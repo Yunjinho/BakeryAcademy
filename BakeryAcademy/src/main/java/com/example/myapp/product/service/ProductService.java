@@ -47,6 +47,8 @@ public class ProductService implements IProductService {
 			productRepository.deleteProductImage(product.getProductId());
 
 			ProductImage productImage = new ProductImage();
+			productImage.setProductId(product.getProductId());
+			System.out.println(product.getProductId());
 			for(MultipartFile mfile:product.getImage()) {
 				if (mfile != null && !mfile.isEmpty()) {
 					productImage.setProductImageName(mfile.getOriginalFilename());

@@ -187,15 +187,13 @@
 	</select>
 
 	<insert id="insertProduct" parameterType="com.example.myapp.product.model.Product">
-<![CDATA[
-	INSERT INTO product VALUES(SEQ_PRODUCT_ID.NEXTVAL,#{categoryId},#{productName},#{productPrice},#{productContent},#{productStock},#{productStatus})
-]]>
+			INSERT INTO product VALUES(SEQ_PRODUCT_ID.NEXTVAL,#{categoryId},#{productName},#{productPrice},#{productContent},#{productStock},#{productStatus})
 	</insert>
 
 	<insert id="insertProductImage"
 		parameterType="com.example.myapp.product.model.ProductImage">
 		INSERT INTO product_image
-		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,SEQ_PRODUCT_ID.CURRVAL,#{productImage},#{productImageName},#{productImageSize},#{productImageType})
+		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,#{productId},#{productImage},#{productImageName},#{productImageSize},#{productImageType})
 	</insert>
 
 	<insert id="updateProductImage"
@@ -205,11 +203,9 @@
 	</insert>
 
 	<update id="updateProduct"> 
-<![CDATA[
 	UPDATE product
 	SET category_id=#{categoryId}, product_name=#{productName}, product_price=#{productPrice}, product_content=#{productContent}, product_stock=#{productStock}, product_status=#{productStatus}
 	WHERE product_id=#{productId}
-]]>
 	</update>
 
 	<select id="selectProduct" parameterType="Integer"

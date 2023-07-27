@@ -166,7 +166,7 @@ public class ProductController {
 	@RequestMapping(value = "/admin/update-product", method = RequestMethod.POST)
 	public String productUpdate(@Validated Product product, Model model) {
 		productService.updateProduct(product);
-		return "redirect:/";
+		return "redirect:/product/all/1";
 	}
 
 	// 카테고리 목록 리스트 페이지로 이동
