@@ -51,7 +51,7 @@ window.onload=function(){
 							</h5>
 							<form class="insert-order-form">
 	 							<ul th:each="list:${productList}" style="display:none">
-									<li><input name="product" th:value="${list.key}">
+									<li><input name="productId" th:value="${list.key}">
 									<li><input name="amount" th:value="${list.value}">
 								</ul> 
 								<label for="memberId" class="product-infomation-label">받는 사람</label>
