@@ -66,7 +66,6 @@ public class MemberController {
 
 	@RequestMapping(value = "/member/signup", method = RequestMethod.POST)
 	public String memberInsert(Member member, HttpSession session, BindingResult result, Model model) {
-		System.out.println(member);
 		memberService.insertMember(member);
 		session.invalidate();
 		return "member/login";
@@ -215,7 +214,6 @@ public class MemberController {
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
 	public String updateMember(Member member, HttpSession session, Model model) {
-		System.out.println(member);
 		memberService.updateMember(member);
 		return "redirect:/";
 	}

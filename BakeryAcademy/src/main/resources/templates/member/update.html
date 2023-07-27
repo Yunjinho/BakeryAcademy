@@ -21,50 +21,59 @@ window.onload=function(){
 		var memberEmail = document.querySelector('.sign-info input[name="memberEmail"]').value;
 		var memberAddress = document.querySelector('.sign-info input[name="memberAddress"]').value;
 		var memberPhoneNumber = document.querySelector('.sign-info input[name="memberPhoneNumber"]').value;
-	
+		var flag=true;
 		// 각 필드에 대한 입력 확인
 		if (memberName === "") {
 			alert("이름을 입력해주세요.");
+			flag=false;
 			return;
 		}
 	
 		if (memberId === "") {
 			alert("아이디를 입력해주세요.");
+			flag=false;
 			return;
 		}
 	
 		if (memberPassword === "") {
 			alert("비밀번호를 입력해주세요.");
+			flag=false;
 			return;
 		}
 	
 		if (memberPasswordConfirm === "") {
 			alert("비밀번호 확인을 입력해주세요.");
+			flag=false;
 			return;
 		}
 	
 		if (memberNickName === "") {
 			alert("닉네임을 입력해주세요.");
+			flag=false;
 			return;
 		}
 	
 		if (memberEmail === "") {
 			alert("이메일을 입력해주세요.");
+			flag=false;
 			return;
 		}
 	
 		if (memberAddress === "") {
 			alert("주소를 입력해주세요.");
+			flag=false;
 			return;
 		}
 	
 		if (memberPhoneNumber === "") {
 			alert("전화번호를 입력해주세요.");
+			flag=false;
 			return;
 		}
 		// 비밀번호와 비밀번호 확인이 일치하는지 확인
 		if (memberPassword !== memberPasswordConfirm) {
 			alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+			flag=false;
 			return;
 		}
 	
@@ -72,6 +81,7 @@ window.onload=function(){
 		var nameRegex = /^[가-힣]{2,}$/;
 		if (!nameRegex.test(memberName)) {
 			alert("한글을 두 글자 이상 입력해야 합니다.");
+			flag=false;
 			return;
 		}
 	
@@ -79,6 +89,7 @@ window.onload=function(){
 		var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&^]).{6,}$/;
 		if (!passwordRegex.test(memberPassword)) {
 			alert("비밀번호는 6자 이상이며, 최소 하나의 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.");
+			flag=false;
 			return;
 		}
 	
@@ -86,12 +97,14 @@ window.onload=function(){
 		var emailRegex = /@/;
 		if (!emailRegex.test(memberEmail)) {
 			alert("이메일 형식이 올바르지 않습니다. 이메일 주소에는 '@' 문자가 포함되어야 합니다.");
+			flag=false;
 			return;
 		}
 		// 전화번호 유효성 검사
 		var phoneRegex = /^010-[0-9]{4}-[0-9]{4}$/;
 		if (!phoneRegex.test(memberPhoneNumber)) {
 			alert("전화번호는 '010-0000-0000' 형식으로 입력해야 합니다.");
+			flag=false;
 			return;
 		}
 	
@@ -106,14 +119,16 @@ window.onload=function(){
 				success: function(result) {
 					console.log("nicknamecheck", result);
 					if (result == 'true') {
-						
+						flag=true;
 					} else {
 						// 닉네임이 존재하였을 때, 오류 메시지 표시
 						alert('이미 존재하는 닉네임 입니다.');
+						flag=false;
 						return;
 					}
 				},
 				error: function(request, status, error) {
+					flag=false;
 					console.log("Error", request, status, error);
 					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 					return;
@@ -130,14 +145,16 @@ window.onload=function(){
 				async: false,
 				success: function(result) {
 					if (result == 'true') {
-		
+						flag=true;
 					} else {
+						flag=false;
 						// 전화번호가 존재하였을 때, 오류 메시지 표시
 						alert('이미 존재하는 전화번호 입니다.');
 						return;
 					}
 				},
 				error: function(request, status, error) {
+					flag=false;
 					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 					return;
 				}
@@ -153,20 +170,24 @@ window.onload=function(){
 				async: false,
 				success: function(result) {
 					if (result == 'true') {
-		
+						flag=true;
 					} else {
 						// 이메일이 존재하였을 때, 오류 메시지 표시
+						flag=false;
 						alert('이미 존재하는 이메일 입니다.');
 						return;
 					}
 				},
 				error: function(request, status, error) {
+					flag=false;
 					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 					return;
 				}
 			});
 		}
-		$("#member-update").submit();
+		if(flag==true){
+			$("#member-update").submit();
+		}
 	});
 }
 </script>

@@ -202,7 +202,6 @@ public class ProductController {
 	// 카테고리 업데이트
 	@RequestMapping(value = "/admin/update-category", method = RequestMethod.POST)
 	public String categoryUpdate(@Validated Category category, Model model) {
-		System.out.println(category);
 		categoryService.updateCategory(category);
 		model.addAttribute("categoryList", categoryService.selectAllCategory());
 		return "redirect:/admin/category";

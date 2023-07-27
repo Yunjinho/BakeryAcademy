@@ -136,7 +136,6 @@ public class BoardController {
 		
 		model.addAttribute("repList", repList);
 		
-		System.out.println(board);
 		
 		 session.setAttribute("board", board);
 		 
@@ -249,7 +248,6 @@ public class BoardController {
 		public String updateArticle(@PathVariable int boardId, Model model, HttpSession session) {	
 			
 			Integer sessionBoardId = (Integer) session.getAttribute("boardId");
-			System.out.println("sessionBoardId = " + sessionBoardId);
 			
 			Board board = boardService.selectArticle(boardId);
 			List<BoardPrep> boardPrep = boardService.selectArticlePrep(boardId);
@@ -298,7 +296,6 @@ public class BoardController {
 	  
 		@RequestMapping(value = "/board/update-board", method = RequestMethod.POST)
 		public String updateArticle(Board board,HttpSession session) {
-			System.out.println(board);
 			logger.info("/board/write : " + board.toString());
 			board.setMemberId((String) session.getAttribute("memberId"));
 			
