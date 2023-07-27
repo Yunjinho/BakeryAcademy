@@ -14,8 +14,7 @@
 					<span th:if="${message != null}">[[${message}]]</span> <br>
 					<hr class="hr1">
 					<form th:action="@{/member/login}" method="post" id="login" class="form-horizontal">
-						<input type="text" name="memberId" id="memberId"
-							pattern="(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{1,10}" class="signin"
+						<input type="text" name="memberId" id="memberId" class="signin"
 							placeholder=" 아이디 " aria-describedby="basic-addon1" required>
 						<input type="password" name="memberPassword" id="pw"
 							pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" class="signin"

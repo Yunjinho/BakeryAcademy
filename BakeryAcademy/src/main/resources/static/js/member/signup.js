@@ -176,7 +176,7 @@ function validateAndRedirect(event) {
 	}
 
 	// 아이디 중복 체크
-	/*$.ajax({
+	$.ajax({
 		url: '/member/idcheck', //Controller에서 요청 받을 주소
 		data: { 'memberId': memberId },
 		success: function(result) {
@@ -192,7 +192,7 @@ function validateAndRedirect(event) {
 			alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 			return;
 		}
-	});*/
+	});
 
 	// 닉네임 중복 체크
 	$.ajax({
@@ -201,7 +201,7 @@ function validateAndRedirect(event) {
 		success: function(result) {
 			console.log("nicknamecheck", result);
 			if (result == 'true') {
-
+				
 			} else {
 				// 닉네임이 존재하였을 때, 오류 메시지 표시
 				alert('이미 존재하는 닉네임 입니다.');
