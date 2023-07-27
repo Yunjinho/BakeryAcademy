@@ -52,10 +52,10 @@
 	</insert>
 
 	<!-- 게시글입력 -->
-	<insert id="increaseVisitCount" parameterType="Integer">
+	<update id="increaseVisitCount" parameterType="Integer">
 		UPDATE board SET visit_count=( SELECT visit_count+1 FROM board WHERE board_id=#{boardId} )
 		 WHERE board_id=#{boardId}
-	</insert>
+	</update>
 
 	<insert id="insertFileData" parameterType="com.example.myapp.board.model.BoardImage">
 	<![CDATA[
@@ -142,7 +142,7 @@
 	<![CDATA[
 		UPDATE board 
 		SET 
-			board_title, board_content
+			board_title=#{boardTitle}, board_content=#{boardContent}
 		WHERE board_id=#{boardId}
 	]]>
 	</update>

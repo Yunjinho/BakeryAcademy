@@ -33,7 +33,7 @@ public interface IBoardService {
 	//게시물 삭제
 	void deleteArticle(int sessionBoardId);
 	//게시물 수정
-	void updateBoardArticle(int sessionBoardId);
+	void updateBoardArticle(Board board);
 	
 	List<Board> selectAllBoardList(int page);
 	List<Board> selectKeywordBoardList(String keyword,int page);

@@ -289,13 +289,13 @@
 				<div class="p-r-45 p-r-0-lg">
 					<div class="p-t-40">
 						<h5 class="mtext-113 cl2 p-b-12" style="text-align:center;">게시글 수정</h5>
-						<form th:action="@{/board/update/{boardId}}" method="post"
-							enctype="multipart/form-data" class="form-horizontal">
+						<!-- <form th:action="@{/board/update/{boardId}}" method="post"
+							enctype="multipart/form-data" class="form-horizontal"> -->
 								<div class="form-group">
 									<label class="title" for="boardTitle">제목</label>
 									<div class="col-sm-8">
 										<input type="text" name="boardTitle" id="boardTitle"
-											th:value="*{board2.boardTitle}" class="form-control" required >
+											th:value="${board.boardTitle}" class="form-control" required >
 									</div>
 								</div>
 
@@ -303,7 +303,7 @@
 									<label class="content" for="boardContent">내용</label>
 									<div class="col-sm-8">
 										<textarea name="boardContent" rows="15" cols="200"
-											class="form-control" th:text="${board2.boardContent}" required></textarea>
+											class="form-control" th:text="${board.boardContent}" required></textarea>
 									</div>
 								</div>
 
@@ -335,10 +335,18 @@
 								</div>
 
 								<div class="form-group2">
-									<input type="submit" class="board_write_safe" value="저장">
+								
+								
+												
+										<a th:href="@{/board/{boardId}(boardId=${board.boardId})}">
+										<button type="button" class="finish" onclick="updateArticleConfirmation()" >완료</button></a>
+										
+										
+										
+										
 									<input type="reset" class="board_write_cancel" value="취소">
 								</div>
-						</form>
+						<!-- </form> -->
 					</div>
 				</div>
 			</div>
@@ -404,5 +412,9 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="../../js/main.js"></script>
+	
+	
+	
+	
 </body>
 </html>
