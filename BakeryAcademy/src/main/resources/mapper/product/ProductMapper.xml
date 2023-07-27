@@ -193,7 +193,11 @@
 	<insert id="insertProductImage"
 		parameterType="com.example.myapp.product.model.ProductImage">
 		INSERT INTO product_image
+<<<<<<< HEAD
+		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,SEQ_PRODUCT_ID.CURRVAL,#{productImage},#{productImageName},#{productImageSize},#{productImageType})
+=======
 		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,#{productId},#{productImage},#{productImageName},#{productImageSize},#{productImageType})
+>>>>>>> branch 'develop' of https://github.com/Yunjinho/BakeryAcademy.git
 	</insert>
 
 	<insert id="updateProductImage"
