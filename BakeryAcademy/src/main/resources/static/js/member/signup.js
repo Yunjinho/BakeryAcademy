@@ -76,7 +76,6 @@ var autoHypenPhone = function(str) {
 
 // 핸드폰번호 입력칸 요소를 가져옵니다.
 var phoneNum = document.getElementById('phoneNum');
-
 // 핸드폰번호 입력칸에 키를 누를 때마다 자동으로 하이픈을 추가하는 이벤트 리스너를 등록합니다.
 phoneNum.onkeyup = function() {
 	this.value = autoHypenPhone(this.value);
@@ -177,7 +176,7 @@ function validateAndRedirect(event) {
 	}
 
 	// 아이디 중복 체크
-	/*$.ajax({
+	$.ajax({
 		url: '/member/idcheck', //Controller에서 요청 받을 주소
 		data: { 'memberId': memberId },
 		success: function(result) {
@@ -193,7 +192,7 @@ function validateAndRedirect(event) {
 			alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 			return;
 		}
-	});*/
+	});
 
 	// 닉네임 중복 체크
 	$.ajax({
@@ -202,7 +201,7 @@ function validateAndRedirect(event) {
 		success: function(result) {
 			console.log("nicknamecheck", result);
 			if (result == 'true') {
-
+				
 			} else {
 				// 닉네임이 존재하였을 때, 오류 메시지 표시
 				alert('이미 존재하는 닉네임 입니다.');
@@ -290,4 +289,8 @@ window.onload = function() {
 	document.getElementById("signupBtn").addEventListener("click", function(event) {
 		validateAndRedirect(event);
 	});
+}
+
+function goToLoginPage() { //가입 취소 버튼 클릭시 로그인 페이지로 이동
+   window.location.href = '/member/login';
 }
