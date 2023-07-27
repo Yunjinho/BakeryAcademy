@@ -63,10 +63,10 @@
 		resultType="string">
 		<![CDATA[
 			SELECT
-			member_id		AS "memberId",
-			member_nickname AS "memberNickName",
-			member_email    AS "memberEmail",
-			member_phone_number AS "memberPhoneNumber"
+				member_id		AS "memberId",
+				member_nickname AS "memberNickName",
+				member_email    AS "memberEmail",
+				member_phone_number AS "memberPhoneNumber"
 			FROM member
 			WHERE member_status = 1 
 		]]>
