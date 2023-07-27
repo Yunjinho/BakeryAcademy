@@ -374,7 +374,7 @@
 
 						<div class="form-group2">
 							<button type="submit" class="board_write_cancel" id="confirm-update">완료</button>
-							<input type="reset" class="board_write_cancel" value="취소">
+							<input type="reset" class="board_write_cancel"  th:onclick="'location.href=\''+ @{/board/{boardId}(boardId=${board.boardId})} + '\''"  value="취소">
 						</div>
 					</form>
 					</div>
