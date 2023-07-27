@@ -178,6 +178,7 @@ function validateAndRedirect(event) {
 
 	// 아이디 중복 체크
 	$.ajax({
+		type:'GET',
 		url: '/member/idcheck', //Controller에서 요청 받을 주소
 		data: { 'memberId': memberId },
 		success: function(result) {
@@ -197,6 +198,7 @@ function validateAndRedirect(event) {
 
 	// 닉네임 중복 체크
 	$.ajax({
+		type:'GET',
 		url: '/member/nicknamecheck', //Controller에서 요청 받을 주소
 		data: { 'memberNickName': memberNickName },
 		success: function(result) {
@@ -217,7 +219,8 @@ function validateAndRedirect(event) {
 	});
 
 	// 전화번호 중복 체크
-	/*$.ajax({
+	$.ajax({
+		type:'GET',
 		url: '/member/phonenumbercheck', //Controller에서 요청 받을 주소
 		data: { 'memberPhoneNumber': memberPhoneNumber },
 		success: function(result) {
@@ -234,9 +237,10 @@ function validateAndRedirect(event) {
 			return;
 		}
 	});
-*/
+
 	// 이메일 중복 체크
-/*	$.ajax({
+	$.ajax({
+		type:'GET',
 		url: '/member/emailcheck', //Controller에서 요청 받을 주소
 		data: { 'memberEmail': memberEmail },
 		success: function(result) {
@@ -252,7 +256,7 @@ function validateAndRedirect(event) {
 			alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 			return;
 		}
-	});*/
+	});
 
 	// AJAX 요청 코드
 	var xhr = new XMLHttpRequest();

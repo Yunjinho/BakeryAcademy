@@ -78,7 +78,7 @@ public class MemberController {
 	 @ResponseBody // view 없을 때 사용 
 	 public String idCheck(String memberId) { 
 		 String result = ""; 
-		 Member member = new Member(); 
+		 Member member = new Member("","","","","","","","",0,"");  
 		 member.setMemberId(memberId);
 		 try { 
 			 member = memberService.duplicateMember(member); 
@@ -89,7 +89,9 @@ public class MemberController {
  				} 
 	 		} catch (Exception e) {
 	 			e.printStackTrace(); 
-	 			} 
+	 			}
+		 
+
 		 return result; 
  	}
 	 
@@ -99,7 +101,7 @@ public class MemberController {
 	  @ResponseBody // view 없을 때 사용 
 	  public String nicknameCheck(String memberNickName) {
 		  String result = ""; 
-		  Member member = new Member(); 
+		  Member member = new Member("","","","","","","","",0,""); 
 		  member.setMemberNickName(memberNickName);
 		  try {
 			  member = memberService.duplicateMember(member);
@@ -121,7 +123,7 @@ public class MemberController {
 	 @ResponseBody // view 없을 때 사용 
 	 public String phonenumberCheck(String memberPhoneNumber) { 
 		 String result = ""; 
-		 Member member = new Member();
+		 Member member = new Member("","","","","","","","",0,""); 
 		 member.setMemberPhoneNumber(memberPhoneNumber);
 		 try { member = memberService.duplicateMember(member);
 		 	if (member == null) { 
@@ -131,7 +133,7 @@ public class MemberController {
  			} 
 	 	} catch (Exception e) { 
 	 		e.printStackTrace(); 
- 		} 
+ 		}
 		 return result; 
 	 }
 	 
@@ -142,7 +144,7 @@ public class MemberController {
 	 @ResponseBody // view 없을 때 사용 
 	 public String emailCheck(String memberEmail) {
 		 String result = ""; 
-		 Member member = new Member();
+		 Member member = new Member("","","","","","","","",0,""); 
 		 member.setMemberEmail(memberEmail);
 		 try { 
 			 member = memberService.duplicateMember(member); 
