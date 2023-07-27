@@ -31,4 +31,7 @@ public interface IProductService {
 	public List<Integer> getProductImageList(int productId);
 
 	public ProductImage getProductImageByImageId(int productImageId);
+	
+	public List<Product> getAllProductList(int page);
+	public int selectTotalProductCount();
 }
