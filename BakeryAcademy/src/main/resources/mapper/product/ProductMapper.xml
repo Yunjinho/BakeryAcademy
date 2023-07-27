@@ -187,7 +187,8 @@
 	</select>
 
 	<insert id="insertProduct" parameterType="com.example.myapp.product.model.Product">
-			INSERT INTO product VALUES(SEQ_PRODUCT_ID.NEXTVAL,#{categoryId},#{productName},#{productPrice},#{productContent},#{productStock},#{productStatus})
+			INSERT INTO product 
+			VALUES(SEQ_PRODUCT_ID.NEXTVAL,#{categoryId},#{productName},#{productPrice},#{productContent},#{productStock},#{productStatus})
 	</insert>
 
 	<insert id="insertProductImage"
@@ -236,7 +237,11 @@
 	<select id="selectProductListAtModal" parameterType="hashmap"
 		resultType="com.example.myapp.product.model.Product">
 <![CDATA[
-	SELECT rowNumber, product_id AS productId, category_id AS categoryId, product_name AS productName, product_price AS productPrice, product_stock AS productStock
+	SELECT rowNumber, product_id AS productId, 
+			category_id AS categoryId, 
+			product_name AS productName, 
+			product_price AS productPrice, 
+			product_stock AS productStock
 	FROM ( SELECT rownum AS rowNumber, product_id, category_id, product_name, product_price, product_stock
         	FROM product WHERE product_status=1)
 	WHERE rowNumber BETWEEN #{start} AND #{end}  

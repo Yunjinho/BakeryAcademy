@@ -34,7 +34,6 @@ public class ProductService implements IProductService {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -59,33 +59,51 @@ function deleteReply(replyId,boardId){
 
 			$post.click();
 		});
+		
 		$("#insert-cart").click(function() {
-			$('#board-product-form').attr('method', 'post');
-			$('#board-product-form').attr('action', '/member/insert-cart');
-			$('#board-product-form').submit();
+			var checkbox = $("input[name=select-board-product]:checked");
+			var insdoc="";
+			checkbox.each(function(i) {
+				var tr = checkbox.parent().parent().eq(i);
+				var td = tr.children();
+				var productCount = td.eq(4).children().eq(0).children().eq(1).val();
+				var productId = td.eq(3).text();
+				insdoc += "<input type='hidden' name='productCount' value='"+ productCount +"'>";
+				insdoc += "<input type='hidden' name='productId' value='"+ productId +"'>";
+			});
+			
+			var goform = $("<form>", {
+			  	method: "post",
+			  	action: '/member/insert-cart',
+			  	html:insdoc,
+			}).appendTo("body");
+			goform.submit();
+			
 		})
-		$("#order")
-				.click(
-						function() {
-							var checkbox = $("input[name=select-board-product]:checked");
-							var totalPrice = 0;
-							checkbox.each(function(i) {
-								var tr = checkbox.parent().parent().eq(i);
-								var td = tr.children();
-								var price = td.eq(2).text();
-								var amount = td.eq(3).children().eq(0)
-										.children().eq(1).val();
-								totalPrice += (price * amount)
-							});
-							var content = $("#total").html();
-							content += '<input type="hidden" id="totalPrice" name="totalPrice" value='+totalPrice+'>';
-							$("#total").html(content);
+		
+		$("#order").click(function() {
+			var checkbox = $("input[name=select-board-product]:checked");
+			var totalPrice = 0;
+			var content=""
+			checkbox.each(function(i) {
+				var tr = checkbox.parent().parent().eq(i);
+				var td = tr.children();
+				var price = td.eq(2).text();
+				var productId = td.eq(3).text();
+				var productCount = td.eq(4).children().eq(0).children().eq(1).val();
+				content += "<input type='hidden' name='productCount' value='"+ productCount +"'>";
+				content += "<input type='hidden' name='productId' value='"+ productId +"'>";
+				totalPrice += (price * productCount)
+			});
+			content += '<input type="hidden" id="totalPrice" name="totalPrice" value='+totalPrice+'>';
 
-							$('#board-product-form').attr('method', 'get');
-							$('#board-product-form').attr('action',
-									'/member/order');
-							$('#board-product-form').submit();
-						})
+			var goform = $("<form>", {
+			  	method: "get",
+			  	action: '/member/order',
+			  	html:content,
+			}).appendTo("body");
+			goform.submit();
+		})
 	};
 </script>
 <style>
@@ -323,6 +341,7 @@ a {
 									</div> <span th:text="${list.productName}"></span>
 								</td>
 								<td class="column-3" th:text="${list.productPrice}"></td>
+								<td class="column-3" th:text="${list.productId}" style="display:none;"></td>
 								<td class="column-5">
 									<div class="wrap-num-product flex-w m-l-auto m-r-0"
 										id="order-product">

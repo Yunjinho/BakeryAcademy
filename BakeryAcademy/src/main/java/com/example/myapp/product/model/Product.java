@@ -20,7 +20,6 @@ public class Product {
 	private int productStock;
 	private int productStatus;
 
-	// 추가 변수
 	private List<MultipartFile> image;
 	private int rowNumber;
 	
