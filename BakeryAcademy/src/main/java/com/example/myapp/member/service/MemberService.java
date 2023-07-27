@@ -57,7 +57,7 @@ public class MemberService implements IMemberService {
 	@Override
 	public Member duplicateMember(String memberId) {
 		return memberRepository.duplicateMember(memberId);
-
+	}
 	public String findMemberId(Member member) {
 		return memberRepository.findMemberId(member);
 	}
