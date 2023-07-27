@@ -161,34 +161,34 @@ public class BoardService implements IBoardService{
 	}	
 	
 	@Override
-	public void updateBoardArticle(int sessionBoardId) {
-		boardRepository.updateBoard(sessionBoardId);
+	public void updateBoardArticle(Board board) {
+		boardRepository.updateBoard(board);
 	}
 	
 	
 	
-	@Transactional
-	public void updateBoardArticle(int sessionBoardId, List<BoardImage> fileList ) {
-//		boardRepository.updateBoard(sessionBoardId);
-//		
-//		for(BoardImage file : fileList) {
-//		if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
-//			file.setBoardId(sessionBoardId);
-//			//file.setFileId(boardRepository.selectMaxFileId()+1);
-//			boardRepository.insertFileData(file);
-//		}
-//	}
-//		
-//	if(board.getProductId()!=null) {
-//		for(Integer list:board.getProductId()) {
-//			BoardPrep bp=new BoardPrep();
-//			bp.setBoardId(board.getBoardId());
-//			bp.setProductId(list);
-//			boardPrepRepository.insertBoardPrep(bp);
-//		}
-//	}
-//    return board.getBoardId();
-}
+//	@Transactional
+//	public void updateBoardArticle(int sessionBoardId, List<BoardImage> fileList ) {
+////		boardRepository.updateBoard(sessionBoardId);
+////		
+////		for(BoardImage file : fileList) {
+////		if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
+////			file.setBoardId(sessionBoardId);
+////			//file.setFileId(boardRepository.selectMaxFileId()+1);
+////			boardRepository.insertFileData(file);
+////		}
+////	}
+////		
+////	if(board.getProductId()!=null) {
+////		for(Integer list:board.getProductId()) {
+////			BoardPrep bp=new BoardPrep();
+////			bp.setBoardId(board.getBoardId());
+////			bp.setProductId(list);
+////			boardPrepRepository.insertBoardPrep(bp);
+////		}
+////	}
+////    return board.getBoardId();
+//}
 
 
 	@Override

@@ -1,6 +1,7 @@
 package com.example.myapp.board.controller;
 
 import java.io.UnsupportedEncodingException;
+
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -160,7 +161,7 @@ public class BoardController {
 		
 		System.out.println(board);
 		
-//		 session.setAttribute("board", board);
+		 session.setAttribute("board", board);
 		 
 		 
 		return "board/view";
@@ -228,8 +229,8 @@ public class BoardController {
 	//게시물 삭제
 	@RequestMapping(value="/board/delete", method=RequestMethod.GET)
 	public String deleteArticle(Board board, String memberId, int boardId, HttpSession session) {
-		session.setAttribute("boardId", boardId);
-		session.setAttribute("memberId", memberId);
+//		session.setAttribute("boardId", boardId);
+//		session.setAttribute("memberId", memberId);
 		return "board/delete";
 	}
 
@@ -271,8 +272,10 @@ public class BoardController {
 	
 	//게시물 수정
 	@RequestMapping(value="/board/update/{boardId}", method=RequestMethod.GET)
-	public String updateArticle(@PathVariable int boardId, Model model, String memberId, HttpSession session) {	
-
+	public String updateArticle(@PathVariable int boardId, Model model, HttpSession session) {	
+		
+		
+		
 		Integer sessionBoardId = (Integer) session.getAttribute("boardId");
 		System.out.println("sessionBoardId = " + sessionBoardId);
 
@@ -280,11 +283,60 @@ public class BoardController {
 //		System.out.println("sessionMemberId = " + sessionMemberId);
 		
 		Board board2 = boardService.selectArticle(boardId);
-		model.addAttribute("boardContent", board2.getBoardContent());
+		//model.addAttribute("boardContent", board2.getBoardContent());
 		board2.setBoardContent(board2.getBoardContent().replaceAll("<br>", "\r\n"));
-		model.addAttribute("board2", board2);
+		
+		model.addAttribute("board", board2);
 		return "board/board-update";
 	}
+	
+	
+	
+  @RequestMapping(value = "/board/update", method = RequestMethod.GET)
+  @ResponseBody
+  public ResponseEntity<String> updateArticle(Model model, String boardId, String memberId, HttpSession session) {
+  	try {
+  		
+  		
+  		String sessionMemberId = (String) session.getAttribute("memberId");  
+  		System.out.println("sessionMemberId = " + sessionMemberId);
+  		
+//  		String boardMemberId = board.getMemberId();
+//		System.out.println("boardMemberId = " + boardMemberId);
+  		System.out.println(boardId+",");
+  		
+  		int id=Integer.parseInt(boardId);
+  		
+  		Board board = boardService.selectArticle(id);
+  		
+  		//model.addAttribute("boardContent", board.getBoardContent());
+  		board.setBoardContent(board.getBoardContent().replaceAll("<br>", "\r\n"));
+  		board.setProductId(board.getProductId());
+  		board.setMemberId(board.getMemberId());
+  		
+  		
+  		String boardMemberId = board.getMemberId();
+		System.out.println("boardMemberId = " + boardMemberId);
+  		
+  		
+  		model.addAttribute("board", board);
+  		System.out.println("board = " + board);
+  		
+  		if (boardMemberId.equals(sessionMemberId)) {
+  			return new ResponseEntity<String>("수정되었습니다.", HttpStatus.OK);
+  		} else {
+  			return new ResponseEntity<String>("이 게시물의 작성자가 아니므로 수정이 불가능합니다.", HttpStatus.FORBIDDEN);
+  		}
+  	} 
+  	catch (Exception e) {
+  		e.printStackTrace();
+  		return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+  	}
+	
+  }        
+        
+	
+	
 	
 //	@RequestMapping(value="/board/update", method=RequestMethod.POST)
 //	public String updateArticle(Board board, HttpSession session, RedirectAttributes redirectAttrs) {
@@ -311,26 +363,43 @@ public class BoardController {
 //		return "redirect:/board/view";
 //	}
 	
-    @RequestMapping(value = "/board/update", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity<String> updateArticle(String memberId, HttpSession session) {
-    	try {
-    		String sessionMemberId = (String) session.getAttribute("memberId");  
-    		System.out.println("sessionMemberId = " + sessionMemberId);
-    		
-    		Integer sessionBoardId = (Integer) session.getAttribute("boardId");
-    		
-    		if (memberId.equals(sessionMemberId)) {
-    			boardService.updateBoardArticle(sessionBoardId);
-    			return new ResponseEntity<>("수정되었습니다.", HttpStatus.OK);
-    		} else {
-    			return new ResponseEntity<>("이 게시물의 작성자가 아니므로 수정이 불가능합니다.", HttpStatus.FORBIDDEN);
-    		}
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    	}
-}
+
+    
+//    @RequestMapping(value = "/board/update", method = RequestMethod.POST)
+//	public String updateArticle( Board board,BindingResult result, RedirectAttributes redirectAttrs, HttpSession session) {
+//		logger.info("/board/write : " + board.toString());
+//		board.setMemberId((String) session.getAttribute("memberId"));
+//		
+//		try {
+//			board.setBoardContent(board.getBoardContent().replace("\r\n", "<br>"));
+//			board.setBoardTitle(Jsoup.clean(board.getBoardTitle(), Safelist.basic()));
+//			board.setBoardContent(Jsoup.clean(board.getBoardContent(), Safelist.basic()));
+//			List<BoardImage> fileList =new ArrayList<BoardImage>();
+//			
+//			for(MultipartFile m : board.getFile()) {
+//				MultipartFile mfile=m;
+//				if(mfile != null && !mfile.isEmpty()) {
+//					BoardImage file = new BoardImage();
+//					file.setBoardImageName(mfile.getOriginalFilename());
+//					file.setBoardImageSize(mfile.getSize());
+//					file.setBoardImageType(mfile.getContentType());
+//					file.setBoardImage(mfile.getBytes());
+//					fileList.add(file);
+//				}
+//			}
+//			if (fileList.size()>0) {
+//				boardService.insertArticle(board, fileList);
+//			} else {
+//				boardService.insertArticle(board);
+//			}
+//			 }catch(Exception e) {
+//				 e.printStackTrace(); 
+//				 redirectAttrs.addFlashAttribute("message", e.getMessage()); 
+//				 } 
+//		 return "redirect:/board/" +  board.getBoardId();
+//
+//	 }
+//    
 	
 	
 }
