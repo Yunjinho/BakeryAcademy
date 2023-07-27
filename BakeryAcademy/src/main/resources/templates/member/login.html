@@ -10,8 +10,10 @@
 		<div class="loginpage-wrap">
 			<div class="section1">
 				<div class="d-div" style="width: 504px; margin: 0 auto;">
-					<span class="login-title" th:text="로그인"></span> 
-					<span th:if="${message != null}">[[${message}]]</span> <br>
+					<div style="display: grid; align-items: center; text-align:center;">
+						<span class="login-title" th:text="로그인"></span> 
+						<span th:if="${message != null}" style="margin:1%; color:red;">[[${message}]]</span>
+					</div>
 					<hr class="hr1">
 					<form th:action="@{/member/login}" method="post" id="login" class="form-horizontal">
 						<input type="text" name="memberId" id="memberId" class="signin"
