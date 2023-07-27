@@ -153,13 +153,13 @@
 	<insert id="insertProductImage"
 		parameterType="com.example.myapp.product.model.ProductImage">
 		INSERT INTO product_image
-		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,SEQ_PRODUCT_ID.CURRVAL,#{productImage},#{imageName},#{productImageSize},#{productImageType})
+		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,SEQ_PRODUCT_ID.CURRVAL,#{productImage},#{productImageName},#{productImageSize},#{productImageType})
 	</insert>
 
 	<insert id="updateProductImage"
 		parameterType="com.example.myapp.product.model.ProductImage">
 		INSERT INTO product_image
-		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,#{productId},#{productImage},#{imageName},#{productImageSize},#{productImageType})
+		VALUES(SEQ_PRODUCT_IMAGE_ID.NEXTVAL,#{productId},#{productImage},#{productImageName},#{productImageSize},#{productImageType})
 	</insert>
 
 	<update id="updateProduct"> 

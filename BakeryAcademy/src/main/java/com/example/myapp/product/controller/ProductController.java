@@ -117,7 +117,7 @@ public class ProductController {
 
 	// 상품 등록 처리
 	@RequestMapping(value = "/admin/insert-product", method = RequestMethod.POST)
-	public String productInsert(@Validated Product product, Model model) {
+	public String productInsert(Product product, Model model) {
 		productService.insertProduct(product);
 		return "redirect:/";
 	}
