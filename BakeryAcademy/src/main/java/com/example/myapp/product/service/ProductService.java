@@ -95,7 +95,7 @@ public class ProductService implements IProductService {
 
 	@Override
 	public List<Product> selectProductListByCategory(int categoryId, int page) {
-		int start = (page - 1) * 10 + 1;
+		int start = (page - 1) * 12 + 1;
 		return productRepository.getProductListByCategory(categoryId, start, start + 11);
 	}
 
@@ -121,7 +121,7 @@ public class ProductService implements IProductService {
 	
 	@Override
 	public List<Product> getAllProductList(int page) {
-		int start = (page - 1) * 10 + 1;
+		int start = (page - 1) * 12 + 1;
 		return productRepository.getAllProductList(start, start + 11);
 	}
 	
