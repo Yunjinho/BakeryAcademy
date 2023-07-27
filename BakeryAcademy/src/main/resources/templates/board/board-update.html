@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{header::head}"></head>
-<link rel="stylesheet" type="text/css" th:href="@{/css/board/boardwrite.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/board/boardwrite.css}">
 
 
 <style>
@@ -17,7 +18,6 @@
 	background-color: rgba(0, 0, 0, 0.5); /* 반투명한 배경 색상 */
 	text-align: center;
 }
-
 
 .modal-content {
 	background-color: #fefefe;
@@ -65,13 +65,13 @@
 	margin: 10px;
 }
 
-.search input{
-	border:1px solid;
-	display:inline-block;
+.search input {
+	border: 1px solid;
+	display: inline-block;
 }
 
 .search-img:hover {
-	cursor:pointer
+	cursor: pointer
 }
 
 .table {
@@ -110,11 +110,14 @@
 	width: 30%;
 	height: 300px;
 }
-#add-file:hover{
-	cursor:pointer;
+
+#add-file:hover {
+	cursor: pointer;
 }
 </style>
-<script>
+<script th:inline="javascript">	
+/*<![CDATA[*/
+	
 	function tableContent(data) {
 		var inputTableString = "";
 		var productCount = data.length - 1//한 페이지에 보여줄 상품의 수
@@ -206,13 +209,16 @@
 	function inputBoardContent(data) {
 		var product = $("#insert-product").html();
 		for (var i = 0; i < data.length; i++) {
-			product += '<tr>\n'
+			product = '<tr>\n'
 					+ '<td><input type="checkbox" name="select-board-product"></td>\n'
-					+ '<td style="display:none;">'+'<input type="text" name="productId" value=\"' +data[i].product.productId+'\" readonly>'
-					+ '</td>\n' + '<td>' +'<input type="text" name="productName" value=\"' +data[i].product.productName+'\" readonly>'
+					+ '<td>'
+					+ '<input type="hidden" name="productId" value=\"' +data[i].product.productId+'\" readonly>'
+					+ '</td>\n'
+					+ '<td>'
+					+ '<input type="text" name="productName" value=\"' +data[i].product.productName+'\" readonly>'
 					+ '</td>\n' + '</tr>\n'
+		$("#insert-product").append(product);
 		}
-		$("#insert-product").html(product);
 	}
 
 	function insertBoardProduct(productIdList) {
@@ -235,7 +241,26 @@
 			checkbox.eq(i).closest('tr').remove();
 		});
 	}
+	function settingBoardProduct(){
+		var product = $("#insert-product").html();
+		
+		var list= [[${boardPrepList}]];
+		
+		for (var i = 0; i < list.length; i++) {
+			product = '<tr>\n'
+					+ '<td><input type="checkbox" name="select-board-product"></td>\n'
+					+ '<td>'
+					+ '<input type="hidden" name="productId" value=\"' +list.at(i).productId+'\" readonly>'
+					+ '</td>\n'
+					+ '<td>'
+					+ '<input type="text" name="productName" value=\"' +list.at(i).productName+'\" readonly>'
+					+ '</td>\n' + '</tr>\n'
+		$("#insert-product").append(product); 
+		}
+	}
+	
 	window.onload = function() {
+		settingBoardProduct()
 		document.getElementById("mo").onclick = function() {
 			$('#myModal').css("display", "block");
 			paging(1)
@@ -271,13 +296,21 @@
 		$(".search-img").click(function() {
 			searchPaging(1);
 		});
+
+		$("#add-file").click(
+						function() {
+							var content = $("#board-file").html();
+							content = '<input type="file" id="boardImage" name="file" multiple>'
+							$("#board-file").append(content);
+						});
 		
-		$("#add-file").click(function(){
-			var content=$("#board-file").html();
-			content ='<input type="file" id="boardImage" name="file" multiple>'
-			$("#board-file").append(content);
-		});
+		$("#confirm-update").click(function(){
+			//$("#board-container").attr('action','/board/update-board')
+			//$("#board-container").attr('method','post')
+			//$("#board-container").submit()
+		})
 	}
+/* ]]> */
 </script>
 <meta charset="UTF-8">
 <body>
@@ -288,65 +321,62 @@
 			<div class="row">
 				<div class="p-r-45 p-r-0-lg">
 					<div class="p-t-40">
-						<h5 class="mtext-113 cl2 p-b-12" style="text-align:center;">게시글 수정</h5>
-						<!-- <form th:action="@{/board/update/{boardId}}" method="post"
-							enctype="multipart/form-data" class="form-horizontal"> -->
-								<div class="form-group">
-									<label class="title" for="boardTitle">제목</label>
-									<div class="col-sm-8">
-										<input type="text" name="boardTitle" id="boardTitle"
-											th:value="${board.boardTitle}" class="form-control" required >
-									</div>
-								</div>
+						<h5 class="mtext-113 cl2 p-b-12" style="text-align: center;">게시글
+							수정</h5>
+					<form id="board-container" th:action="@{/board/update-board}" method="post"
+							enctype="multipart/form-data" class="form-horizontal">
+						<div class="form-group">
+							<label class="title" for="boardTitle">제목</label>
+							<div class="col-sm-8">
+								<input type="text" name="boardTitle" id="boardTitle"
+									th:value="${board.boardTitle}" class="form-control" required>
+								<input type="hidden" name="boardId" id="boardId"
+									th:value="${board.boardId}" class="form-control" required>
+							</div>
+						</div>
 
-								<div class="form-group">
-									<label class="content" for="boardContent">내용</label>
-									<div class="col-sm-8">
-										<textarea name="boardContent" rows="15" cols="200"
-											class="form-control" th:text="${board.boardContent}" required></textarea>
-									</div>
-								</div>
+						<div class="form-group">
+							<label class="content" for="boardContent">내용</label>
+							<div class="col-sm-8">
+								<textarea name="boardContent" rows="15" cols="200"
+									class="form-control" th:text="${board.boardContent}" required></textarea>
+							</div>
+						</div>
 
-								<div class="form-group">
-									<label class="content" for="boardContent">상품</label>
-									<div class="col-sm-8"
-										id="insert-product"></div>
-								</div>
+						<div class="form-group">
+							<label class="content" for="boardContent">상품</label>
+							<div class="col-sm-8" id="insert-product">
+							</div>
+						</div>
 
-								<div class="form-group">
-									<button type="button" id="mo"
-										class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">등록</button>
-									<button
-										class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04"
-										id="deleteProduct" onclick="deleteBoardProduct()">삭제</button>
-								</div>
+						<div class="form-group">
+							<button type="button" id="mo"
+								class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">등록</button>
+							<input type="button" value="삭제"
+								class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04"
+								id="deleteProduct" onclick="deleteBoardProduct()">
+						</div>
 
-								<div class="form-group">
-									<label class="image" for="boardImage">첨부파일</label><br>
-									<div class="col-sm-8" id="board-file">
-										<div>
-											<input type="file" id="boardImage" name="file" multiple>
-										</div>
-									</div>
+						<div class="form-group">
+							<label class="image" for="boardImage">첨부파일</label><br>
+							<div class="col-sm-8" id="board-file">
+								<div>
+									<input type="file" id="boardImage" name="file" multiple>
 								</div>
+							</div>
+						</div>
 
-								<div class="form-group">
-									<div id="add-file" class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04" >파일 추가</div>
-								</div>
+						<div class="form-group">
+							<div id="add-file"
+								class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">파일
+								추가</div>
+						</div>
 
-								<div class="form-group2">
-								
-								
-												
-										<a th:href="@{/board/{boardId}(boardId=${board.boardId})}">
-										<button type="button" class="finish" onclick="updateArticleConfirmation()" >완료</button></a>
-										
-										
-										
-										
-									<input type="reset" class="board_write_cancel" value="취소">
-								</div>
-						<!-- </form> -->
+						<div class="form-group2">
+							<button type="submit" class="board_write_cancel" id="confirm-update">완료</button>
+							<input type="reset" class="board_write_cancel" value="취소">
+						</div>
+					</form>
 					</div>
 				</div>
 			</div>
@@ -358,16 +388,16 @@
 		<div class="modal-content">
 			<div class="paging-content">
 				<div class="search">
-					<input type="text" class="keyword" onkeyup="if(window.event.keyCode==13){searchPaging(1)}">
-						<img th:src="@{../../images/icons/search.png}" class="search-img">
+					<input type="text" class="keyword"
+						onkeyup="if(window.event.keyCode==13){searchPaging(1)}"> <img
+						th:src="@{../../images/icons/search.png}" class="search-img">
 				</div>
 			</div>
 			<!-- 여기에 넣어줘야함 -->
 			<div class="table-form"></div>
 			<div class="pagination-confirm">
 				<div class="pagination"></div>
-				<a href="#"><button class="confirm"
-						onclick="deleteBoardProduct()">등록</button></a>
+				<a href="#"><button class="confirm" >등록</button></a>
 			</div>
 		</div>
 	</div>
@@ -412,9 +442,9 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="../../js/main.js"></script>
-	
-	
-	
-	
+
+
+
+
 </body>
 </html>

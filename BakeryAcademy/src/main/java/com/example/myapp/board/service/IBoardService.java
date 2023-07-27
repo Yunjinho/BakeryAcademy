@@ -53,8 +53,8 @@ public interface IBoardService {
 	void deleteBoardReply(BoardReply boardreply);
 
 
-	
-
+	public int updateArticle(Board board);
+	public int updateArticle(Board board, List<BoardImage> fileList);
 
 	
 }

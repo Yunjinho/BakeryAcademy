@@ -54,8 +54,6 @@ public class BoardService implements IBoardService{
 		return 0;
 	}
 	
-
-	
 	@Transactional
 	public int insertArticle(Board board, List<BoardImage> fileList) {
 		//board.setBoardId(boardRepository.selectMaxArticleNo()+1);
@@ -64,6 +62,48 @@ public class BoardService implements IBoardService{
 			if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
 				file.setBoardId(board.getBoardId());
 				//file.setFileId(boardRepository.selectMaxFileId()+1);
+				boardRepository.insertFileData(file);
+			}
+		}
+		if(board.getProductId()!=null) {
+			for(Integer list:board.getProductId()) {
+				BoardPrep bp=new BoardPrep();
+				bp.setBoardId(board.getBoardId());
+				bp.setProductId(list);
+				boardPrepRepository.insertBoardPrep(bp);
+			}
+		}
+        return board.getBoardId();
+	}
+	
+	@Transactional
+	public int updateArticle(Board board) {
+		boardRepository.updateArticle(board);
+		
+		boardRepository.deleteBoardPrep(board.getBoardId());
+		boardRepository.deleteBoardImage(board.getBoardId());
+		if(board.getProductId()!=null) {
+			for(Integer list:board.getProductId()) {
+				BoardPrep bp=new BoardPrep();
+				bp.setBoardId(board.getBoardId());
+				bp.setProductId(list);
+				boardPrepRepository.insertBoardPrep(bp);
+			}
+		}
+		return 0;
+	}
+	
+
+	
+	@Transactional
+	public int updateArticle(Board board, List<BoardImage> fileList) {
+		boardRepository.updateArticle(board);
+		
+		boardRepository.deleteBoardPrep(board.getBoardId());
+		boardRepository.deleteBoardImage(board.getBoardId());
+		for(BoardImage file : fileList) {
+			if(file != null && file.getBoardImageName() != null && !file.getBoardImageName().equals("")) {
+				file.setBoardId(board.getBoardId());
 				boardRepository.insertFileData(file);
 			}
 		}
