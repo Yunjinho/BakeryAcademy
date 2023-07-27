@@ -76,7 +76,6 @@ var autoHypenPhone = function(str) {
 
 // 핸드폰번호 입력칸 요소를 가져옵니다.
 var phoneNum = document.getElementById('phoneNum');
-
 // 핸드폰번호 입력칸에 키를 누를 때마다 자동으로 하이픈을 추가하는 이벤트 리스너를 등록합니다.
 phoneNum.onkeyup = function() {
 	this.value = autoHypenPhone(this.value);
@@ -294,4 +293,8 @@ window.onload = function() {
 	document.getElementById("signupBtn").addEventListener("click", function(event) {
 		validateAndRedirect(event);
 	});
+}
+
+function goToLoginPage() { //가입 취소 버튼 클릭시 로그인 페이지로 이동
+   window.location.href = '/member/login';
 }
