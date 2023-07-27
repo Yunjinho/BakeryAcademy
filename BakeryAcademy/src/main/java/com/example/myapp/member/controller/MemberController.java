@@ -462,10 +462,11 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "member/write-review", method = RequestMethod.POST)
-	public String writeReview(@RequestParam int orderId, ProductReview productReview, HttpSession session) {
+	public String writeReview(@RequestParam int orderId,@RequestParam int productId, ProductReview productReview, HttpSession session) {
 		String memberId = (String) session.getAttribute("memberId");
 		productReview.setMemberId(memberId);
 		productReview.setOrderId(orderId);
+		productReview.setProductId(productId);
 		productReviewService.insertProductReview(productReview);
 		return "redirect:/member/my-orders";
 	}
