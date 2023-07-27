@@ -12,8 +12,6 @@ import lombok.Setter;
 public class ProductImage {
 	private int productImageId;
 	private int productId;
-	private String directoryName;
-	private String imageName;
 	private byte[] productImage;
 	private String productImageName;
 	private String productImageSize;

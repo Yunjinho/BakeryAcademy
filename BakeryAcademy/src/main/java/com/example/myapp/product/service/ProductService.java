@@ -26,7 +26,7 @@ public class ProductService implements IProductService {
 			ProductImage productImage = new ProductImage();
 			for(MultipartFile mfile:product.getImage()) {
 				if (mfile != null && !mfile.isEmpty()) {
-					productImage.setImageName(mfile.getOriginalFilename());
+					productImage.setProductImageName(mfile.getOriginalFilename());
 					productImage.setProductImage(mfile.getBytes());
 					productImage.setProductImageSize(String.valueOf(mfile.getSize()));
 					productImage.setProductImageType(mfile.getContentType());
@@ -49,7 +49,7 @@ public class ProductService implements IProductService {
 			ProductImage productImage = new ProductImage();
 			for(MultipartFile mfile:product.getImage()) {
 				if (mfile != null && !mfile.isEmpty()) {
-					productImage.setImageName(mfile.getOriginalFilename());
+					productImage.setProductImageName(mfile.getOriginalFilename());
 					productImage.setProductImage(mfile.getBytes());
 					productImage.setProductImageSize(String.valueOf(mfile.getSize()));
 					productImage.setProductImageType(mfile.getContentType());
@@ -117,5 +117,16 @@ public class ProductService implements IProductService {
 	@Override
 	public ProductImage getProductImageByImageId(int productImageId) {
 		return productRepository.getProductImageByImageId(productImageId);
+	}
+	
+	@Override
+	public List<Product> getAllProductList(int page) {
+		int start = (page - 1) * 10 + 1;
+		return productRepository.getAllProductList(start, start + 11);
+	}
+	
+	@Override
+	public int selectTotalProductCount() {
+		return productRepository.selectTotalProductCount();
 	}
 }

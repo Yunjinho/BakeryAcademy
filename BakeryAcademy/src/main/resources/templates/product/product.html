@@ -9,12 +9,13 @@
 	<div class="bg0 m-t-23 p-b-140">
 		<div class="container">
 			<div class="flex-w flex-sb-m p-b-52">
-				<div class="flex-w flex-l-m filter-tope-group m-tb-10" >
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter=".*" >모든 제품</button>
+				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
+<!-- 					<div class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter=".0">모든 제품</div> -->
+					<a th:href="@{/product/all/1}" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">모든 제품</a>
 					<div th:each="category:${categoryList}">
-						<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
-							data-filter=".${category.categoryId}"
-							th:text="${category.categoryName}">Category Name</button>
+						<!-- 						<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" th:attr="data-filter=${category.categoryId}" th:text="${category.categoryName}">Category Name</button> -->
+						<a th:href="@{/product/__${category.categoryId}__}" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
+							th:text="${category.categoryName}">Category Name</a>
 					</div>
 				</div>
 				<div class="flex-w flex-c-m m-tb-10">
@@ -39,11 +40,12 @@
 				</div>
 			</div>
 
-				<!-- 상품 리스트 반복 -->
+			<!-- 상품 리스트 반복 -->
 			<div class="row isotope-grid">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item"
+					th:classappend="${product.categoryId}"
 					th:each="product:${productList}">
-					<div class="block2"th:classappend="${product.categoryId}">
+					<div class="block2">
 						<div class="block2-pic hov-img0">
 							<a th:href="@{/product-detail/__${product.productId}__}"><img
 								th:src="@{/product-thumnail/__${product.productId}__}"
@@ -55,7 +57,8 @@
 									class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6"
 									th:text="${product.productName}"> Product Name </a> <span
 									class="stext-105 cl3" th:text="${product.productPrice}">
-									<span class="stext-105 cl3" th:text="|${#numbers.formatInteger(product.productPrice,0,'COMMA')} &#8361;|">
+									<span class="stext-105 cl3"
+									th:text="|${#numbers.formatInteger(product.productPrice,0,'COMMA')} &#8361;|">
 										Product Price </span>
 								</span>
 							</div>
@@ -74,14 +77,20 @@
 			</div>
 
 			<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
-				<a th:if="${nowPageBlock>1}" th:href="@{/product/__${categoryId}__/__${startPage-1}__}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1"> ◀ </a>
-					<span th:each="i: ${#numbers.sequence(startPage, endPage)}" th:classappend="${i==nowPage}?active">
-						<a th:href="@{/product/__${categoryId}__/__${i}__}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-							<span th:if=${i==nowPage} style="color: black;">[[${i}]]</span>
-							<span th:if=${i!=nowPage} style="color: white;">[[${i}]]</span>
-						</a>
-					</span> <a th:if="${nowPageBlock<totalPageBlock}" th:href="@{/product/__${categoryId}__/__${endPage+1}__}" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
-				▶ </a>
+				<a th:if="${nowPageBlock>1}"
+					th:href="@{/product/__${categoryId == null ? 'all' : categoryId}__/__${startPage-1}__}"
+					class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+					◀ </a> <span th:each="i: ${#numbers.sequence(startPage, endPage)}"
+					th:classappend="${i==nowPage}?active"> <a
+					th:href="@{/product/__${categoryId == null ? 'all' : categoryId}__/__${i}__}"
+					class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+						<span th:if=${i==nowPage} style="color: black;">[[${i}]]</span> <span
+						th:if=${i!=nowPage} style="color: white;">[[${i}]]</span>
+				</a>
+				</span> <a th:if="${nowPageBlock<totalPageBlock}"
+					th:href="@{/product/__${categoryId == null ? 'all' : categoryId}__/__${endPage+1}__}"
+					class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+					▶ </a>
 			</div>
 		</div>
 	</div>
@@ -108,6 +117,7 @@
 	<script src="/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
 	<!--===============================================================================================-->
 	<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script src="/vendor/isotope/isotope.pkgd.min.js"></script>
 	<script>
 		$('.js-pscroll').each(function() {
 			$(this).css('position', 'relative');

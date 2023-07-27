@@ -3,6 +3,42 @@
 <mapper
 	namespace="com.example.myapp.product.dao.IProductRepository">
 
+<select id="getAllProductList" parameterType="hashmap" resultType="com.example.myapp.product.model.Product">
+<![CDATA[
+	SELECT
+		product_id as "productId",
+		product_name as "productName",
+		product_price as "productPrice",
+		product_content as "productContent",
+		product_stock as "productStock"
+	FROM
+		(
+		SELECT
+			product_id,
+			product_name,
+			product_price,
+			product_content,
+			product_stock,
+			ROWNUM as rnum
+		FROM
+		(
+			SELECT
+				product_id,
+				product_name,
+				product_price,
+				product_content,
+				product_stock
+			FROM
+				product
+			ORDER BY
+				product_id DESC
+		)
+		)
+	WHERE
+		rnum BETWEEN #{start} AND #{end}
+]]>
+	</select>
+
 	<select id="getProductListByCategory" parameterType="hashmap"
 		resultType="com.example.myapp.product.model.Product">
 <![CDATA[
@@ -54,7 +90,14 @@
 	]]>
 	</select>
 
-
+	<select id="selectTotalProductCount" resultType="int">
+	<![CDATA[
+		SELECT
+			COUNT(*)
+		FROM
+			product
+	]]>
+	</select>
 
 	<select id="getProductImageMinId" parameterType="int"
 		resultType="com.example.myapp.product.model.ProductImage">
