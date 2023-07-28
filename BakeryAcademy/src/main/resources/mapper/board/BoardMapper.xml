@@ -129,7 +129,7 @@
 				visit_count AS "visitCount",
 				board_title AS "boardTitle",
 				board_content AS "boardContent"
-		FROM (SELECT rownum AS rowNumber,board_id,member_nickname,board_write_date AS, visit_count,board_title, board_content
+		FROM (SELECT rownum AS rowNumber,board_id,member_nickname,board_write_date, visit_count,board_title, board_content
 		      FROM (select * from board b JOIN member m ON b.member_id=m.member_id)
 		      )
 		WHERE rowNumber BETWEEN #{start} AND #{end}

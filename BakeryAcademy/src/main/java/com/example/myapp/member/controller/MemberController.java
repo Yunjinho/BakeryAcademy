@@ -332,14 +332,14 @@ public class MemberController {
 		int bbsCount = orderService.countOrder("상품 준비중");
 		int totalPage = 0;
 		if (bbsCount > 0) {
-			totalPage = (int) Math.ceil(bbsCount / 10.0);
+			totalPage = (int) Math.ceil(bbsCount / 5.0);
 		}
-		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
-		int nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
-		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int totalPageBlock = (int) (Math.ceil(totalPage / 5.0));
+		int nowPageBlock = (int) (Math.ceil(beforePage / 5.0));
+		int startPage = (nowPageBlock - 1) * 5 + 1;
 		int endPage=0;
-		if(totalPage>nowPageBlock*10) {
-			endPage=nowPageBlock*10;
+		if(totalPage>nowPageBlock*5) {
+			endPage=nowPageBlock*5;
 		}else {
 			endPage=totalPage;
 		}
@@ -356,14 +356,14 @@ public class MemberController {
 		bbsCount = orderService.countOrder("배송중");
 		totalPage = 0;
 		if (bbsCount > 0) {
-			totalPage = (int) Math.ceil(bbsCount / 10.0);
+			totalPage = (int) Math.ceil(bbsCount / 5.0);
 		}
-		totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
-		nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
-		startPage = (nowPageBlock - 1) * 10 + 1;
+		totalPageBlock = (int) (Math.ceil(totalPage / 5.0));
+		nowPageBlock = (int) (Math.ceil(beforePage / 5.0));
+		startPage = (nowPageBlock - 1) * 5 + 1;
 		endPage=0;
-		if(totalPage>nowPageBlock*10) {
-			endPage=nowPageBlock*10;
+		if(totalPage>nowPageBlock*5) {
+			endPage=nowPageBlock*5;
 		}else {
 			endPage=totalPage;
 		}
@@ -380,14 +380,14 @@ public class MemberController {
 		bbsCount = orderService.countOrder("배송 완료");
 		totalPage = 0;
 		if (bbsCount > 0) {
-			totalPage = (int) Math.ceil(bbsCount / 10.0);
+			totalPage = (int) Math.ceil(bbsCount / 5.0);
 		}
-		totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
-		nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
-		startPage = (nowPageBlock - 1) * 10 + 1;
+		totalPageBlock = (int) (Math.ceil(totalPage / 5.0));
+		nowPageBlock = (int) (Math.ceil(beforePage / 5.0));
+		startPage = (nowPageBlock - 1) * 5 + 1;
 		endPage=0;
-		if(totalPage>nowPageBlock*10) {
-			endPage=nowPageBlock*10;
+		if(totalPage>nowPageBlock*5) {
+			endPage=nowPageBlock*5;
 		}else {
 			endPage=totalPage;
 		}
@@ -401,20 +401,26 @@ public class MemberController {
 		//
 		orderList=orderService.selectAdminDeliveryList("환불 요청중");
 		model.addAttribute("refunList", orderList);
-		bbsCount = orderService.countOrder("배송중");
+		bbsCount = orderService.countOrder("환불 요청중");
 		totalPage = 0;
 		if (bbsCount > 0) {
-			totalPage = (int) Math.ceil(bbsCount / 10.0);
+			totalPage = (int) Math.ceil(bbsCount / 5.0);
 		}
-		totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
-		nowPageBlock = (int) (Math.ceil(beforePage / 10.0));
-		startPage = (nowPageBlock - 1) * 10 + 1;
+		totalPageBlock = (int) (Math.ceil(totalPage / 5.0));
+		nowPageBlock = (int) (Math.ceil(beforePage / 5.0));
+		startPage = (nowPageBlock - 1) * 5 + 1;
 		endPage=0;
-		if(totalPage>nowPageBlock*10) {
-			endPage=nowPageBlock*10;
+		if(totalPage>nowPageBlock*5) {
+			endPage=nowPageBlock*5;
 		}else {
 			endPage=totalPage;
 		}
+		System.out.println(totalPage);
+		System.out.println(beforePage);
+		System.out.println(totalPageBlock);
+		System.out.println(nowPageBlock);
+		System.out.println(startPage);
+		System.out.println(endPage);
 		model.addAttribute("refunTotalPageCount", totalPage);
 		model.addAttribute("refunNowPage", beforePage);
 		model.addAttribute("refunTotalPageBlock", totalPageBlock);

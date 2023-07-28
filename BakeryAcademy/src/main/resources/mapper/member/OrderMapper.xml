@@ -36,11 +36,18 @@
 
 <select id="selectAdminDeliveryList" parameterType="hashmap" resultType="com.example.myapp.member.model.Order">
 <![CDATA[
-	SELECT ol.order_id AS "orderId", ol.product_id AS "productId", ol.order_number AS "orderNumber", 
-			p.product_name AS "productName",ol.order_status AS "orderStatus", ol.order_count AS "orderCount",order_date AS "orderDate" 
-	FROM order_list ol JOIN product p ON ol.product_id=p.product_id  
-	WHERE ol.order_status  LIKE #{status} AND ol.order_date >= ADD_MONTHS(SYSDATE,-6)
-	ORDER BY ol.order_date
+	SELECT order_id AS "orderId", product_id AS "productId", order_number AS "orderNumber", 
+                product_name AS "productName",order_status AS "orderStatus", order_count AS "orderCount", order_date AS "orderDate",rowNumber
+	FROM ( SELECT rownum AS rowNumber,order_id, order_number,product_name,order_status, order_count,order_date,product_id
+            FROM (
+                SELECT ol.order_id, ol.product_id,ol.order_number,p.product_name,ol.order_status, ol.order_count,ol.order_date 
+                FROM order_list ol JOIN product p ON ol.product_id=p.product_id     
+                WHERE ol.order_status  LIKE #{status} AND ol.order_date >= ADD_MONTHS(SYSDATE,-6)
+                ORDER BY ol.order_date
+                ) 
+            WHERE rownum between 1 and 5
+                )
+	
 ]]>
 </select>
 
