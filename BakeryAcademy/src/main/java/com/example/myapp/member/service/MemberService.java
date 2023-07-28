@@ -65,7 +65,6 @@ public class MemberService implements IMemberService {
 
 	@Override
 	public void makeRandomNumber() {
-		// 난수의 범위 111111 ~ 999999 (6자리 난수)
 				Random random = new Random();
 		        StringBuffer key = new StringBuffer();
 
